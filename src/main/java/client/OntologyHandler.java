@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import org.semanticweb.HermiT.ReasonerFactory;
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -27,6 +29,7 @@ import org.semanticweb.owlapi.model.OWLDataPropertyRangeAxiom;
 import org.semanticweb.owlapi.model.OWLDatatype;
 import org.semanticweb.owlapi.model.OWLDeclarationAxiom;
 import org.semanticweb.owlapi.model.OWLDisjointClassesAxiom;
+import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
 import org.semanticweb.owlapi.model.OWLFunctionalDataPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
@@ -38,6 +41,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 import org.semanticweb.owlapi.model.OWLSubObjectPropertyOfAxiom;
+import org.semanticweb.owlapi.model.OWLSubPropertyChainOfAxiom;
 import org.semanticweb.owlapi.rdf.rdfxml.parser.RDFXMLParserFactory;
 import org.semanticweb.owlapi.reasoner.InferenceType;
 import org.semanticweb.owlapi.reasoner.NodeSet;
@@ -54,6 +58,7 @@ public class OntologyHandler {
 	public static SerializationType serializationType = SerializationType.RDFXML;
 	
 	private final static IRI IOR = IRI.create("http://projects.ke.appOntology");
+	private final static File fileout = new File("appOntology.owl");
    
 	public static void loadRemoteOntology(String stringIRI) throws OWLOntologyCreationException, OWLOntologyStorageException, FileNotFoundException {
 		
@@ -164,8 +169,6 @@ public class OntologyHandler {
 	
 	public static void saveOntology() throws OWLOntologyStorageException, FileNotFoundException {
 		
-		File fileout = new File("appOntology.owl");
-		
 		switch (serializationType) {
 			case RDFXML:
 				manager.saveOntology(appOntology, new RDFXMLDocumentFormat(),
@@ -185,7 +188,8 @@ public class OntologyHandler {
 				break;
 			default:
 				break;		
-		}	
+		}
+		
 	}
 	
 	private static OWLReasoner getReasoner() {
@@ -217,6 +221,36 @@ public class OntologyHandler {
 			return r.getInstances(df.getOWLObjectSomeValuesFrom(df.getOWLObjectProperty(IOR + "#" + objectPropertyId),
 					df.getOWLClass(IOR + "#" + classId)));
 		}
+	
+	}
+	
+	public static NodeSet<OWLNamedIndividual> getInstancesArtistsCreatingArtworks(){
+		
+		r = getReasoner();
+	
+		OWLClass artist = df.getOWLClass(IOR + "#Artist");
+		OWLObjectProperty isArtist = df.getOWLObjectProperty(IOR + "#isArtist");
+		OWLEquivalentClassesAxiom is_a_self = df.getOWLEquivalentClassesAxiom(artist,
+				df.getOWLObjectHasSelf(isArtist));
+		appOntology.add(is_a_self);
+		
+		OWLClass artwork = df.getOWLClass(IOR + "#ArtWork");
+		OWLObjectProperty isArtwork = df.getOWLObjectProperty(IOR + "#isArtWork");
+		OWLEquivalentClassesAxiom is_aw_self = df.getOWLEquivalentClassesAxiom(artwork,
+				df.getOWLObjectHasSelf(isArtwork));
+		appOntology.add(is_aw_self);
+		
+		OWLObjectProperty a_c = df.getOWLObjectProperty(IOR + "a_c");
+		OWLObjectProperty crafts = df.getOWLObjectProperty(IOR + "#crafts");
+		List<OWLObjectProperty> chain = new ArrayList<>();
+		chain.add(isArtist);
+		chain.add(crafts);
+		chain.add(isArtwork);
+		OWLSubPropertyChainOfAxiom s_a_c = df.getOWLSubPropertyChainOfAxiom(chain, a_c);
+		appOntology.add(s_a_c);
+		
+		r.flush();
+		return r.getInstances(df.getOWLObjectSomeValuesFrom(a_c, df.getOWLThing()));
 	
 	}
 	
@@ -277,8 +311,8 @@ public class OntologyHandler {
 						"Prefix(rdf:=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)\n" + 
 						"Prefix(xml:=<http://www.w3.org/XML/1998/namespace>)\n" + 
 						"Prefix(xsd:=<http://www.w3.org/2001/XMLSchema#>)\n" + 
-						"Prefix(rdfs:=<http://www.w3.org/2000/01/rdf-schema#>)\n"
-						+ "Ontology(<http://projects.ke.appOntology>\n" +
+						"Prefix(rdfs:=<http://www.w3.org/2000/01/rdf-schema#>)\n" +
+						"Ontology(<http://projects.ke.appOntology>\n" +
 						axiom + "\n)";
 				parser = new OWLFunctionalSyntaxOWLParserFactory().createParser();
 				break;

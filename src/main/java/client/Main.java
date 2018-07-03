@@ -23,6 +23,7 @@ public class Main {
 		
 		startApp();
 		
+		System.out.println("\nPaint(x)");
 		OntologyHandler.getInstances("Paint").forEach(System.out::println);
 		
 		String contentRDFXML =
@@ -34,18 +35,26 @@ public class Main {
            		"     <paints rdf:resource=\"#Cenacolo\"/>\n" + 
            		"</owl:NamedIndividual>";
 		
-		String contentFUNCTIONAL = "Declaration(NamedIndividual(:Dama-con-Ermellino))\n"
-				+ "ClassAssertion(:Paint :Dama-con-Ermellino)\n" + 
-				"DataPropertyAssertion(:id :Dama-con-Ermellino \"Dama con Ermellino\"^^xsd:string)\n"
-				+ "ObjectPropertyAssertion(:paints :Leonardo :Dama-con-Ermellino)";
+		String contentFUNCTIONAL = "Declaration(NamedIndividual(:VanGogh))\n" + 
+				"Declaration(NamedIndividual(:StanzaAdArles))\n" + 
+				"ClassAssertion(:Painter :VanGogh)\n" + 
+				"ClassAssertion(:Paint :StanzaAdArles)\n" +
+				"DataPropertyAssertion(:name :VanGogh \"Van Gogh\"^^xsd:string)\n" +
+				"DataPropertyAssertion(:name :StanzaAdArles \"Stanza Ad Arles\"^^xsd:string)\n" +
+				"ObjectPropertyAssertion(:paints :VanGogh :StanzaAdArles)";
 		
 		OntologyHandler.addStringAxiom(contentRDFXML, SerializationType.RDFXML);
 		System.out.println("\nAxioms ADDED");
+		System.out.println("\nPaint(x)");
 		OntologyHandler.getInstances("Paint").forEach(System.out::println);
 		
 		OntologyHandler.addStringAxiom(contentFUNCTIONAL, SerializationType.FUNCTIONAL);
 		System.out.println("\nAxioms ADDED");
+		System.out.println("\nPaint(x)");
 		OntologyHandler.getInstances("Paint").forEach(System.out::println);
+		
+		System.out.println("\nq(x) := Artist(x) and creates(x,y) and ArtWork(y)");
+		OntologyHandler.getInstancesArtistsCreatingArtworks().forEach(System.out::println);
 		
 		OntologyHandler.saveOntology();
 		
