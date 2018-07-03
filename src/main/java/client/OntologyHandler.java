@@ -9,8 +9,10 @@ import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.formats.FunctionalSyntaxDocumentFormat;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDataProperty;
+import org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLDataPropertyDomainAxiom;
 import org.semanticweb.owlapi.model.OWLDataPropertyRangeAxiom;
 import org.semanticweb.owlapi.model.OWLDatatype;
@@ -146,7 +148,7 @@ public class OntologyHandler {
 		
 	}
 	
-	public void addProperty(String idFrom, String idTo, String propertyName) {
+	public static void addObjectProperty(String idFrom, String idTo, String propertyName) {
 		
 		OWLNamedIndividual idFromInd = df.getOWLNamedIndividual(IOR + "#" + idFrom);
 		OWLNamedIndividual idToInd = df.getOWLNamedIndividual(IOR + "#" + idTo);
@@ -157,8 +159,22 @@ public class OntologyHandler {
 		
 	}
 	
-	public void createIndividual(String idFrom, String idTo, String propertyName) {
+	public static void addStringDataProperty(String idFrom, String toValue, String propertyName) {
 		
+		OWLNamedIndividual idFromInd = df.getOWLNamedIndividual(IOR + "#" + idFrom);
+		OWLDataProperty property = df.getOWLDataProperty(IOR + "#" + propertyName);
+		
+		OWLDataPropertyAssertionAxiom p_ass = df.getOWLDataPropertyAssertionAxiom(property, idFromInd, toValue);
+		appOntology.add(p_ass);
+		
+	}
+	
+	public static void createIndividual(String id, String classId) {
+		
+		OWLNamedIndividual ind = df.getOWLNamedIndividual(IOR + "#" + id);
+		OWLClass c = df.getOWLClass(IOR + "#" + classId);
+		OWLClassAssertionAxiom ax = df.getOWLClassAssertionAxiom(c, ind);
+		appOntology.add(ax);
 		
 	}
 

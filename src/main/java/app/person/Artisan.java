@@ -6,8 +6,12 @@ import java.util.List;
 import app.thing.Product;
 
 public class Artisan extends Person {
-	
+
 	private List<Product> produces = new ArrayList<>();
+	
+	public Artisan(String name) {
+		super(name);
+	}
 	
 	public void produces(Product product) {
 		produces.add(product);

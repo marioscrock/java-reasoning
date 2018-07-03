@@ -26,27 +26,21 @@ public class Main {
 	
 	private static void startApp() {
 		
-		Painter leonardo = new Painter();
-		leonardo.identifier = "Leonardo";
+		Painter leonardo = new Painter("Leonardo");
 		
-		Paint monnaLisa = new Paint();
-		monnaLisa.identifier = "MonnaLisa";
+		Paint monnaLisa = new Paint("MonnaLisa");
 		
 		leonardo.paints(monnaLisa);
 		
-		Sculptor bernini = new Sculptor();
-		bernini.identifier = "Bernini";
+		Sculptor bernini = new Sculptor("Bernini");
 		
-		Sculpt david = new Sculpt();
-		david.identifier = "David";
+		Sculpt david = new Sculpt("David");
 		
 		bernini.sculpts(david);
 		
-		Artisan belfiore = new Artisan();
-		belfiore.identifier = "Belfiore";
+		Artisan belfiore = new Artisan("Belfiore");
 		
-		Product product05714 = new Product();
-		product05714.identifier = "Product05714";
+		Product product05714 = new Product("Product05714");
 		
 		belfiore.produces(product05714);
 			
