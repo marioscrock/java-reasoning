@@ -8,7 +8,7 @@ public abstract class Thing {
 	
 	public Thing (String id) {
 		this.identifier = id;
-		OntologyHandler.createIndividual(id, this.getClass().getSimpleName());
+		OntologyHandler.createIndividual(id.replaceAll("\\s","-"), this.getClass().getSimpleName());
 		OntologyHandler.addStringDataProperty(identifier, identifier, "id");
 	}
 

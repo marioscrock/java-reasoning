@@ -34,14 +34,20 @@ public class Main {
            		"     <paints rdf:resource=\"#Cenacolo\"/>\n" + 
            		"</owl:NamedIndividual>";
 		
-		String contentFUNCTIONAL = "Declaration(NamedIndividual(:Cenacolo))\n"
-				+ "ClassAssertion(:Paint :Cenacolo)\n" + 
-				"DataPropertyAssertion(:id :Cenacolo \"Cenacolo\"^^xsd:string)\n"
-				+ "ObjectPropertyAssertion(:paints :Leonardo :Cenacolo)";
+		String contentFUNCTIONAL = "Declaration(NamedIndividual(:Dama-con-Ermellino))\n"
+				+ "ClassAssertion(:Paint :Dama-con-Ermellino)\n" + 
+				"DataPropertyAssertion(:id :Dama-con-Ermellino \"Dama con Ermellino\"^^xsd:string)\n"
+				+ "ObjectPropertyAssertion(:paints :Leonardo :Dama-con-Ermellino)";
 		
 		OntologyHandler.addStringAxiom(contentRDFXML, SerializationType.RDFXML);
 		System.out.println("\nAxioms ADDED");
 		OntologyHandler.getInstances("Paint").forEach(System.out::println);
+		
+		OntologyHandler.addStringAxiom(contentFUNCTIONAL, SerializationType.FUNCTIONAL);
+		System.out.println("\nAxioms ADDED");
+		OntologyHandler.getInstances("Paint").forEach(System.out::println);
+		
+		OntologyHandler.saveOntology();
 		
 	}
 	
