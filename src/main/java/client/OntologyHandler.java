@@ -1,13 +1,18 @@
 package client;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.HashSet;
 
 import org.semanticweb.HermiT.ReasonerFactory;
 import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.formats.FunctionalSyntaxDocumentFormat;
+import org.semanticweb.owlapi.formats.RDFXMLDocumentFormat;
+import org.semanticweb.owlapi.functional.parser.OWLFunctionalSyntaxOWLParserFactory;
+import org.semanticweb.owlapi.io.OWLParser;
+import org.semanticweb.owlapi.io.StreamDocumentSource;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
@@ -25,10 +30,12 @@ import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyLoaderConfiguration;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 import org.semanticweb.owlapi.model.OWLSubObjectPropertyOfAxiom;
+import org.semanticweb.owlapi.rdf.rdfxml.parser.RDFXMLParserFactory;
 import org.semanticweb.owlapi.reasoner.InferenceType;
 import org.semanticweb.owlapi.reasoner.NodeSet;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
@@ -43,24 +50,28 @@ public class OntologyHandler {
 	
 	private final static IRI IOR = IRI.create("http://projects.ke.appOntology");
    
-	public static void loadOntology(String stringIRI) throws OWLOntologyCreationException, OWLOntologyStorageException, FileNotFoundException {
+	public static void loadRemoteOntology(String stringIRI) throws OWLOntologyCreationException, OWLOntologyStorageException, FileNotFoundException {
 		
 		manager = OWLManager.createOWLOntologyManager();
-		
-		File fileout = new File("appOntology.owl");
-		
 		IRI importOntology = IRI.create(stringIRI);
-		OWLOntology importedOntology = manager.loadOntology(importOntology);
+		appOntology = manager.loadOntology(importOntology);
 		
-		manager.saveOntology(importedOntology, new FunctionalSyntaxDocumentFormat(), new FileOutputStream(fileout));
+		saveOntology();
+		
+	}
+	
+	public static void loadOntologyFromFile(String filePath) throws OWLOntologyCreationException, OWLOntologyStorageException, FileNotFoundException {
+		
+		manager = OWLManager.createOWLOntologyManager();
+		appOntology =  manager.loadOntologyFromOntologyDocument(new File(filePath));
+		
+		saveOntology();
 		
 	}
 	
 	public static void initOntology() throws OWLOntologyStorageException, FileNotFoundException, OWLOntologyCreationException {
 		
 		manager = OWLManager.createOWLOntologyManager();
-		
-		File fileout = new File("appOntology.owl");
 		appOntology = manager.createOntology(IOR);
 		
 		df = appOntology.getOWLOntologyManager().getOWLDataFactory();
@@ -77,23 +88,6 @@ public class OntologyHandler {
 		OWLClass product = declareClass("Product");
 		OWLClass paint = declareClass("Paint");
 		OWLClass sculpt = declareClass("Sculpt");
-		
-		OWLDatatype stringDatatype = df.getStringOWLDatatype();
-		OWLDataProperty name = df.getOWLDataProperty(IOR + "#name");
-		OWLDataPropertyDomainAxiom name_domain = df.getOWLDataPropertyDomainAxiom(name, person);
-		appOntology.add(name_domain);
-		OWLDataPropertyRangeAxiom name_range = df.getOWLDataPropertyRangeAxiom(name, stringDatatype);
-		appOntology.add(name_range);
-		OWLFunctionalDataPropertyAxiom fun_name = df.getOWLFunctionalDataPropertyAxiom(name);
-		appOntology.add(fun_name);
-		
-		OWLDataProperty identifier = df.getOWLDataProperty(IOR + "#id");
-		OWLDataPropertyDomainAxiom id_domain = df.getOWLDataPropertyDomainAxiom(identifier, thing);
-		appOntology.add(id_domain);
-		OWLDataPropertyRangeAxiom id_range = df.getOWLDataPropertyRangeAxiom(identifier, stringDatatype);
-		appOntology.add(id_range);
-		OWLFunctionalDataPropertyAxiom fun_id = df.getOWLFunctionalDataPropertyAxiom(identifier);
-		appOntology.add(fun_id);
 		
 		OWLSubClassOfAxiom artist_sub_p = df.getOWLSubClassOfAxiom(artist, person);
 		appOntology.add(artist_sub_p);
@@ -113,6 +107,7 @@ public class OntologyHandler {
 		OWLSubClassOfAxiom sculpt_sub_a = df.getOWLSubClassOfAxiom(sculpt, artwork);
 		appOntology.add(sculpt_sub_a);
 		
+		//OBJECT PROPERTIES
 		OWLObjectProperty crafts = df.getOWLObjectProperty(IOR + "#crafts");
 		//OWLObjectPropertyRangeAxiom c_range = df.getOWLObjectPropertyRangeAxiom(crafts, artwork);
 		OWLObjectProperty produces = df.getOWLObjectProperty(IOR + "#produces");
@@ -123,6 +118,24 @@ public class OntologyHandler {
 		appOntology.add(p_sub_c);
 		OWLSubObjectPropertyOfAxiom s_sub_c = df.getOWLSubObjectPropertyOfAxiom(sculpts, crafts);
 		appOntology.add(s_sub_c);
+		
+		//DATA PROPERTIES
+		OWLDatatype stringDatatype = df.getStringOWLDatatype();
+		OWLDataProperty name = df.getOWLDataProperty(IOR + "#name");
+		OWLDataPropertyDomainAxiom name_domain = df.getOWLDataPropertyDomainAxiom(name, person);
+		appOntology.add(name_domain);
+		OWLDataPropertyRangeAxiom name_range = df.getOWLDataPropertyRangeAxiom(name, stringDatatype);
+		appOntology.add(name_range);
+		OWLFunctionalDataPropertyAxiom fun_name = df.getOWLFunctionalDataPropertyAxiom(name);
+		appOntology.add(fun_name);
+		
+		OWLDataProperty identifier = df.getOWLDataProperty(IOR + "#id");
+		OWLDataPropertyDomainAxiom id_domain = df.getOWLDataPropertyDomainAxiom(identifier, thing);
+		appOntology.add(id_domain);
+		OWLDataPropertyRangeAxiom id_range = df.getOWLDataPropertyRangeAxiom(identifier, stringDatatype);
+		appOntology.add(id_range);
+		OWLFunctionalDataPropertyAxiom fun_id = df.getOWLFunctionalDataPropertyAxiom(identifier);
+		appOntology.add(fun_id);
 		
 		OWLSubClassOfAxiom a_some_ca = df.getOWLSubClassOfAxiom(df.getOWLObjectSomeValuesFrom(crafts, artwork), artist);
 		appOntology.add(a_some_ca);
@@ -140,11 +153,18 @@ public class OntologyHandler {
 		OWLDisjointClassesAxiom discla = df.getOWLDisjointClassesAxiom(disclasses);
 	    appOntology.add(discla);
 		
-		manager.saveOntology(appOntology, new FunctionalSyntaxDocumentFormat(),
-				new FileOutputStream(fileout));
+	    saveOntology();
 		
 	}
 	
+	public static void saveOntology() throws OWLOntologyStorageException, FileNotFoundException {
+		
+		File fileout = new File("appOntology.owl");
+		
+		manager.saveOntology(appOntology, new RDFXMLDocumentFormat(),
+				new FileOutputStream(fileout));
+		
+	}
 	private static OWLReasoner getReasoner() {
 		
 		if (r == null) {
@@ -219,6 +239,37 @@ public class OntologyHandler {
 		OWLClassAssertionAxiom ax = df.getOWLClassAssertionAxiom(c, ind);
 		appOntology.add(ax);
 		
+	}
+	
+	public static void addStringAxiom(String axiom, ParserType type) {
+		
+		OWLParser parser = null;
+		switch (type) {
+		//	case MANCHESTER : 
+		//		parser = new ManchesterOWLSyntaxOntologyParserFactory().createParser();
+		//		break;
+			case FUNCTIONAL : 
+				parser = new OWLFunctionalSyntaxOWLParserFactory().createParser();
+				break;
+		//	case TURTLE : 
+		//		parser = new TurtleOntologyParserFactory().createParser();
+		//		break;
+			case RDFXML :
+				parser = new RDFXMLParserFactory().createParser();
+				break;
+			default:
+				break;
+		}
+        
+       if (parser != null) {
+    	   
+    	   InputStream in = new ByteArrayInputStream(axiom.getBytes());
+    	   parser.parse( new StreamDocumentSource( in ), appOntology, new OWLOntologyLoaderConfiguration());
+    	   
+    	   r.flush();
+    	   
+       }
+       
 	}
 
 }

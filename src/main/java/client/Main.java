@@ -14,14 +14,35 @@ public class Main {
 		
 		switch (args.length) {
         case 1:
-            OntologyHandler.loadOntology(args[0]);
+            OntologyHandler.loadOntologyFromFile(args[0]);
         case 0:
         	OntologyHandler.initOntology();
 		}
 		
 		startApp();
 		
-		OntologyHandler.getInstances("crafts", null).forEach(System.out::println);
+		OntologyHandler.getInstances("Paint").forEach(System.out::println);
+		
+		String content = ""
+    	   		+ "<rdf:RDF xmlns=\"http://projects.ke.appOntology#\"\n" + 
+    	   		"     xml:base=\"http://projects.ke.appOntology\"\n" + 
+    	   		"     xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n" + 
+    	   		"     xmlns:owl=\"http://www.w3.org/2002/07/owl#\"\n" + 
+    	   		"     xmlns:xml=\"http://www.w3.org/XML/1998/namespace\"\n" + 
+    	   		"     xmlns:xsd=\"http://www.w3.org/2001/XMLSchema#\"\n" + 
+    	   		"     xmlns:rdfs=\"http://www.w3.org/2000/01/rdf-schema#\">" +
+    	   		"<owl:NamedIndividual rdf:about=\"http://projects.ke.appOntology#Cenacolo\">\n" + 
+           		"     <rdf:type rdf:resource=\"http://projects.ke.appOntology#Paint\"/>\n" + 
+           		"     <id rdf:datatype=\"http://www.w3.org/2001/XMLSchema#string\">Cenacolo</id>\n" + 
+           		"</owl:NamedIndividual>" +
+           		"<owl:NamedIndividual rdf:about=\"http://projects.ke.appOntology#Leonardo\">\n" + 
+           		"     <paints rdf:resource=\"http://projects.ke.appOntology#Cenacolo\"/>\n" + 
+           		"</owl:NamedIndividual>"
+           		+ "</rdf:RDF>";
+		
+		OntologyHandler.addStringAxiom(content, ParserType.RDFXML);
+		System.out.println("\nAxioms ADDED");
+		OntologyHandler.getInstances("Paint").forEach(System.out::println);
 		
 	}
 	
