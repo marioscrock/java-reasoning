@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.HashSet;
 
+import org.semanticweb.HermiT.ReasonerFactory;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.formats.FunctionalSyntaxDocumentFormat;
 import org.semanticweb.owlapi.model.IRI;
@@ -28,12 +29,17 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 import org.semanticweb.owlapi.model.OWLSubObjectPropertyOfAxiom;
+import org.semanticweb.owlapi.reasoner.InferenceType;
+import org.semanticweb.owlapi.reasoner.NodeSet;
+import org.semanticweb.owlapi.reasoner.OWLReasoner;
+import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 
 public class OntologyHandler {
 	
 	private static OWLOntologyManager manager;
 	private static OWLOntology appOntology;
 	private static OWLDataFactory df;
+	private static OWLReasoner r;
 	
 	private final static IRI IOR = IRI.create("http://projects.ke.appOntology");
    
@@ -137,6 +143,43 @@ public class OntologyHandler {
 		manager.saveOntology(appOntology, new FunctionalSyntaxDocumentFormat(),
 				new FileOutputStream(fileout));
 		
+	}
+	
+	private static OWLReasoner getReasoner() {
+		
+		if (r == null) {
+			OWLReasonerFactory rf = new ReasonerFactory();
+			r = rf.createReasoner(appOntology);
+			r.precomputeInferences(InferenceType.CLASS_HIERARCHY);	
+		} 
+	
+		return r;
+	}
+	
+	public static NodeSet<OWLNamedIndividual> getInstances(String classId){
+		
+		r = getReasoner();
+		return r.getInstances(df.getOWLClass(IOR + "#" + classId));
+	
+	}
+	
+	public static NodeSet<OWLNamedIndividual> getInstances(String objectPropertyId, String classId){
+		
+		r = getReasoner();
+		
+		if (classId == null) {
+			return r.getInstances(df.getOWLObjectSomeValuesFrom(df.getOWLObjectProperty(IOR + "#" + objectPropertyId),
+					df.getOWLThing()));
+		} else {
+			return r.getInstances(df.getOWLObjectSomeValuesFrom(df.getOWLObjectProperty(IOR + "#" + objectPropertyId),
+					df.getOWLClass(IOR + "#" + classId)));
+		}
+	
+	}
+	
+	public static boolean isConsistent() {
+		r = getReasoner();
+		return r.isConsistent();
 	}
 	
 	private static OWLClass declareClass(String id) { 

@@ -1,6 +1,5 @@
 package client;
 
-
 import java.io.FileNotFoundException;
 
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
@@ -21,6 +20,8 @@ public class Main {
 		}
 		
 		startApp();
+		
+		OntologyHandler.getInstances("crafts", null).forEach(System.out::println);
 		
 	}
 	
