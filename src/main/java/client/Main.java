@@ -12,6 +12,8 @@ public class Main {
 
 	public static void main(String[] args) throws OWLOntologyCreationException, OWLOntologyStorageException, FileNotFoundException {
 		
+		OntologyHandler.serializationType = SerializationType.FUNCTIONAL;
+		
 		switch (args.length) {
         case 1:
             OntologyHandler.loadOntologyFromFile(args[0]);
@@ -23,24 +25,21 @@ public class Main {
 		
 		OntologyHandler.getInstances("Paint").forEach(System.out::println);
 		
-		String content = ""
-    	   		+ "<rdf:RDF xmlns=\"http://projects.ke.appOntology#\"\n" + 
-    	   		"     xml:base=\"http://projects.ke.appOntology\"\n" + 
-    	   		"     xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n" + 
-    	   		"     xmlns:owl=\"http://www.w3.org/2002/07/owl#\"\n" + 
-    	   		"     xmlns:xml=\"http://www.w3.org/XML/1998/namespace\"\n" + 
-    	   		"     xmlns:xsd=\"http://www.w3.org/2001/XMLSchema#\"\n" + 
-    	   		"     xmlns:rdfs=\"http://www.w3.org/2000/01/rdf-schema#\">" +
-    	   		"<owl:NamedIndividual rdf:about=\"http://projects.ke.appOntology#Cenacolo\">\n" + 
-           		"     <rdf:type rdf:resource=\"http://projects.ke.appOntology#Paint\"/>\n" + 
+		String contentRDFXML =
+    	   		"<owl:NamedIndividual rdf:about=\"#Cenacolo\">\n" + 
+           		"     <rdf:type rdf:resource=\"#Paint\"/>\n" + 
            		"     <id rdf:datatype=\"http://www.w3.org/2001/XMLSchema#string\">Cenacolo</id>\n" + 
            		"</owl:NamedIndividual>" +
-           		"<owl:NamedIndividual rdf:about=\"http://projects.ke.appOntology#Leonardo\">\n" + 
-           		"     <paints rdf:resource=\"http://projects.ke.appOntology#Cenacolo\"/>\n" + 
-           		"</owl:NamedIndividual>"
-           		+ "</rdf:RDF>";
+           		"<owl:NamedIndividual rdf:about=\"#Leonardo\">\n" + 
+           		"     <paints rdf:resource=\"#Cenacolo\"/>\n" + 
+           		"</owl:NamedIndividual>";
 		
-		OntologyHandler.addStringAxiom(content, ParserType.RDFXML);
+		String contentFUNCTIONAL = "Declaration(NamedIndividual(:Cenacolo))\n"
+				+ "ClassAssertion(:Paint :Cenacolo)\n" + 
+				"DataPropertyAssertion(:id :Cenacolo \"Cenacolo\"^^xsd:string)\n"
+				+ "ObjectPropertyAssertion(:paints :Leonardo :Cenacolo)";
+		
+		OntologyHandler.addStringAxiom(contentRDFXML, SerializationType.RDFXML);
 		System.out.println("\nAxioms ADDED");
 		OntologyHandler.getInstances("Paint").forEach(System.out::println);
 		

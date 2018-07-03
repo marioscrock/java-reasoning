@@ -1,6 +1,6 @@
 package client;
 
-public enum ParserType {
+public enum SerializationType {
     
     MANCHESTER,
     FUNCTIONAL,
