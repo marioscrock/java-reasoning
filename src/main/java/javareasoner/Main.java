@@ -1,4 +1,4 @@
-package client;
+package javareasoner;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -8,8 +8,10 @@ import java.util.Scanner;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 
-import app.person.*;
-import app.thing.*;
+import com.sun.jdi.AbsentInformationException;
+import com.sun.jdi.IncompatibleThreadStateException;
+import com.sun.jdi.connect.IllegalConnectorArgumentsException;
+
 
 public class Main {
 
@@ -18,22 +20,46 @@ public class Main {
 		OntologyHandler.serializationType = SerializationType.FUNCTIONAL;
 		
 		switch (args.length) {
-        case 1:
-            OntologyHandler.loadOntologyFromFile(args[0]);
-        case 0:
-        	OntologyHandler.initOntology();
+			case 2:
+				switch (args[2].toLowerCase()) {
+					case "functional":
+						OntologyHandler.serializationType = SerializationType.FUNCTIONAL;
+					case "manchester":
+						OntologyHandler.serializationType = SerializationType.MANCHESTER;
+					case "rdfxml":
+						OntologyHandler.serializationType = SerializationType.RDFXML;
+					case "turtle":
+						OntologyHandler.serializationType = SerializationType.TURTLE;
+				}
+	        case 1:
+	            OntologyHandler.loadOntologyFromFile(args[0]);
+	        case 0:
+	        	OntologyHandler.initOntology();
 		}
 		
-		//To attach debugger run the class with following options and then launch a proper debugger to be attached
-		//-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=y
-		System.out.println("Is debugger attached? (y/n)");
+		System.out.println("Do you want to attach to application (y/n)");
 		Scanner scan = new Scanner(System.in);
 		String s = scan.next();
 		
-		if (s != "y") 
-			System.out.println("No active instances check enabled");
+		if (s.toLowerCase().equals("y")) {
+			
+			Thread debugger = new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					try {
+						DebugAttach.startDebug(8000, "app.client.ArtMarket", "startApp");
+					} catch (IOException | IllegalConnectorArgumentsException | InterruptedException
+							| IncompatibleThreadStateException | AbsentInformationException e) {
+						e.printStackTrace();
+					} 		
+				}
 		
-		startApp();
+			});
+			
+			debugger.start();
+			
+		}
 		
 		System.out.println("\nPaint(x)");
 		OntologyHandler.getInstances("Paint").forEach(System.out::println);
@@ -74,8 +100,6 @@ public class Main {
 					+ "If NO type \"exit\"");
 			s = scan.next();
 			
-			startApp();
-			
 			if (s.toLowerCase() == "exit")
 				break;
 		
@@ -101,31 +125,6 @@ public class Main {
 		
 		scan.close();
 		
-	}
-	
-	private static void startApp() {
-		
-		Painter leonardo = new Painter("Leonardo");
-		
-		Paint monnaLisa = new Paint("MonnaLisa");
-		
-		leonardo.paints(monnaLisa);
-		
-		Sculptor bernini = new Sculptor("Bernini");
-
-		Sculpt david = new Sculpt("David");
-		
-		bernini.sculpts(david);
-		
-		Artisan belfiore = new Artisan("Belfiore");
-		
-		Product product05714 = new Product("Product05714");
-		
-		belfiore.produces(product05714);
-		
-		//To enable breakpoint before returning
-		return;
-			
 	}
 
 

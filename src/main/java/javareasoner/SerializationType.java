@@ -1,4 +1,4 @@
-package client;
+package javareasoner;
 
 public enum SerializationType {
     

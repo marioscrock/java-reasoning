@@ -1,4 +1,4 @@
-package client;
+package javareasoner;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import app.thing.ArtWork;
-import client.OntologyHandler;
 
 public class Artist extends Person {
 
@@ -16,7 +15,7 @@ public class Artist extends Person {
 	
 	public void crafts(ArtWork artwork) {
 		crafts.add(artwork);
-		OntologyHandler.addObjectProperty(this.getName(), artwork.getIdentifier(), "crafts");
+		//OntologyHandler.addObjectProperty(this.getName(), artwork.getIdentifier(), "crafts");
 	}
 
 	public List<ArtWork> getCrafts() {

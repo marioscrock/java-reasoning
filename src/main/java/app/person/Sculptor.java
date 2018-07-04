@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import app.thing.Sculpt;
-import client.OntologyHandler;
 
 public class Sculptor extends Artist {
 	
@@ -16,7 +15,7 @@ public class Sculptor extends Artist {
 	
 	public void sculpts(Sculpt sculpt) {
 		sculpts.add(sculpt);
-		OntologyHandler.addObjectProperty(this.getName(), sculpt.getIdentifier(), "sculpts");
+		//OntologyHandler.addObjectProperty(this.getName(), sculpt.getIdentifier(), "sculpts");
 	}
 
 	public List<Sculpt> getSculpts() {
