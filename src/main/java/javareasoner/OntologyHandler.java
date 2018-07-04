@@ -68,6 +68,8 @@ public class OntologyHandler {
 		
 		saveOntology();
 		
+		getReasoner();
+		
 	}
 	
 	public static void loadOntologyFromFile(String filePath) throws OWLOntologyCreationException, OWLOntologyStorageException, FileNotFoundException {
@@ -76,6 +78,8 @@ public class OntologyHandler {
 		appOntology =  manager.loadOntologyFromOntologyDocument(new File(filePath));
 		
 		saveOntology();
+		
+		getReasoner();
 		
 	}
 	
@@ -164,6 +168,8 @@ public class OntologyHandler {
 	    appOntology.add(discla);
 		
 	    saveOntology();
+	    
+	    getReasoner();
 		
 	}
 	
@@ -205,14 +211,11 @@ public class OntologyHandler {
 	
 	public static NodeSet<OWLNamedIndividual> getInstances(String classId){
 		
-		r = getReasoner();
 		return r.getInstances(df.getOWLClass(IOR + "#" + classId));
 	
 	}
 	
 	public static NodeSet<OWLNamedIndividual> getInstances(String objectPropertyId, String classId){
-		
-		r = getReasoner();
 		
 		if (classId == null) {
 			return r.getInstances(df.getOWLObjectSomeValuesFrom(df.getOWLObjectProperty(IOR + "#" + objectPropertyId),
@@ -226,8 +229,6 @@ public class OntologyHandler {
 	
 	public static NodeSet<OWLNamedIndividual> getInstancesArtistsCreatingArtworks(){
 		
-		r = getReasoner();
-	
 		OWLClass artist = df.getOWLClass(IOR + "#Artist");
 		OWLObjectProperty isArtist = df.getOWLObjectProperty(IOR + "#isArtist");
 		OWLEquivalentClassesAxiom is_a_self = df.getOWLEquivalentClassesAxiom(artist,
@@ -255,8 +256,9 @@ public class OntologyHandler {
 	}
 	
 	public static boolean isConsistent() {
-		r = getReasoner();
+
 		return r.isConsistent();
+		
 	}
 	
 	private static OWLClass declareClass(String id) { 
@@ -264,6 +266,7 @@ public class OntologyHandler {
 		OWLClass owlClass = df.getOWLClass(IOR + "#" + id);		
 		OWLDeclarationAxiom da = df.getOWLDeclarationAxiom(owlClass);
 		appOntology.add(da);
+		
 		return owlClass;
 		
 	}
@@ -277,6 +280,8 @@ public class OntologyHandler {
 		OWLObjectPropertyAssertionAxiom p_ass = df.getOWLObjectPropertyAssertionAxiom(property, idFromInd, idToInd);
 		appOntology.add(p_ass);
 		
+		r.flush();
+		
 	}
 	
 	public static void addStringDataProperty(String idFrom, String toValue, String propertyName) {
@@ -287,6 +292,8 @@ public class OntologyHandler {
 		OWLDataPropertyAssertionAxiom p_ass = df.getOWLDataPropertyAssertionAxiom(property, idFromInd, toValue);
 		appOntology.add(p_ass);
 		
+		r.flush();
+		
 	}
 	
 	public static void createIndividual(String id, String classId) {
@@ -295,6 +302,8 @@ public class OntologyHandler {
 		OWLClass c = df.getOWLClass(IOR + "#" + classId);
 		OWLClassAssertionAxiom ax = df.getOWLClassAssertionAxiom(c, ind);
 		appOntology.add(ax);
+		
+		r.flush();
 		
 	}
 	
