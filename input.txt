@@ -1,0 +1,4 @@
+Declaration(NamedIndividual(:VanGogh))
+Declaration(NamedIndividual(:StanzaAdArles))
+ClassAssertion(:Painter :VanGogh)
+ClassAssertion(:Paint :StanzaAdArles)

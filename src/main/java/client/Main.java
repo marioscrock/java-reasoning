@@ -1,6 +1,9 @@
 package client;
 
-import java.io.FileNotFoundException;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Scanner;
 
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
@@ -10,7 +13,7 @@ import app.thing.*;
 
 public class Main {
 
-	public static void main(String[] args) throws OWLOntologyCreationException, OWLOntologyStorageException, FileNotFoundException {
+	public static void main(String[] args) throws OWLOntologyCreationException, OWLOntologyStorageException, IOException {
 		
 		OntologyHandler.serializationType = SerializationType.FUNCTIONAL;
 		
@@ -20,6 +23,15 @@ public class Main {
         case 0:
         	OntologyHandler.initOntology();
 		}
+		
+		//To attach debugger run the class with following options and then launch a proper debugger to be attached
+		//-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=y
+		System.out.println("Is debugger attached? (y/n)");
+		Scanner scan = new Scanner(System.in);
+		String s = scan.next();
+		
+		if (s != "y") 
+			System.out.println("No active instances check enabled");
 		
 		startApp();
 		
@@ -56,7 +68,38 @@ public class Main {
 		System.out.println("\nq(x) := Artist(x) and creates(x,y) and ArtWork(y)");
 		OntologyHandler.getInstancesArtistsCreatingArtworks().forEach(System.out::println);
 		
+		while (true) {
+			
+			System.out.println("\nDo you want me to read <input.txt> to parse additional axioms?\n"
+					+ "If NO type \"exit\"");
+			s = scan.next();
+			
+			startApp();
+			
+			if (s.toLowerCase() == "exit")
+				break;
+		
+			try(BufferedReader br = new BufferedReader(new FileReader("input.txt"))) {
+			    StringBuilder sb = new StringBuilder();
+			    String line = br.readLine();
+	
+			    while (line != null) {
+			        sb.append(line);
+			        sb.append(System.lineSeparator());
+			        line = br.readLine();
+			    }
+			    
+			    String content = sb.toString();
+			    OntologyHandler.addStringAxiom(content, SerializationType.FUNCTIONAL);
+			    
+			    System.out.println("Is ontology still consistent? " + OntologyHandler.isConsistent());
+			    
+			}
+		}
+		
 		OntologyHandler.saveOntology();
+		
+		scan.close();
 		
 	}
 	
@@ -69,7 +112,7 @@ public class Main {
 		leonardo.paints(monnaLisa);
 		
 		Sculptor bernini = new Sculptor("Bernini");
-		
+
 		Sculpt david = new Sculpt("David");
 		
 		bernini.sculpts(david);
@@ -79,6 +122,9 @@ public class Main {
 		Product product05714 = new Product("Product05714");
 		
 		belfiore.produces(product05714);
+		
+		//To enable breakpoint before returning
+		return;
 			
 	}
 
