@@ -2,16 +2,16 @@ package app.thing;
 
 public abstract class Thing {
 	
-	private String identifier;
+	private String id;
 	
 	public Thing (String id) {
-		this.identifier = id;
+		this.id = id;
 		//OntologyHandler.createIndividual(id.replaceAll("\\s","-"), this.getClass().getSimpleName());
 		//OntologyHandler.addStringDataProperty(identifier, identifier, "id");
 	}
 
 	public String getIdentifier() {
-		return identifier;
+		return id;
 	}	
 
 }

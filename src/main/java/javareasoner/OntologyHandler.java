@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.semanticweb.HermiT.ReasonerFactory;
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -55,7 +57,7 @@ public class OntologyHandler {
 	private static OWLDataFactory df;
 	private static OWLReasoner r;
 	
-	public static SerializationType serializationType = SerializationType.RDFXML;
+	public static SerializationType serializationType = SerializationType.FUNCTIONAL;
 	
 	private final static IRI IOR = IRI.create("http://projects.ke.appOntology");
 	private final static File fileout = new File("appOntology.owl");
@@ -173,6 +175,16 @@ public class OntologyHandler {
 		
 	}
 	
+	private static OWLClass declareClass(String id) { 
+		
+		OWLClass owlClass = df.getOWLClass(IOR + "#" + id);		
+		OWLDeclarationAxiom da = df.getOWLDeclarationAxiom(owlClass);
+		appOntology.add(da);
+		
+		return owlClass;
+		
+	}
+	
 	public static void saveOntology() throws OWLOntologyStorageException, FileNotFoundException {
 		
 		switch (serializationType) {
@@ -241,7 +253,7 @@ public class OntologyHandler {
 				df.getOWLObjectHasSelf(isArtwork));
 		appOntology.add(is_aw_self);
 		
-		OWLObjectProperty a_c = df.getOWLObjectProperty(IOR + "a_c");
+		OWLObjectProperty a_c = df.getOWLObjectProperty(IOR + "#a_c");
 		OWLObjectProperty crafts = df.getOWLObjectProperty(IOR + "#crafts");
 		List<OWLObjectProperty> chain = new ArrayList<>();
 		chain.add(isArtist);
@@ -258,16 +270,6 @@ public class OntologyHandler {
 	public static boolean isConsistent() {
 
 		return r.isConsistent();
-		
-	}
-	
-	private static OWLClass declareClass(String id) { 
-		
-		OWLClass owlClass = df.getOWLClass(IOR + "#" + id);		
-		OWLDeclarationAxiom da = df.getOWLDeclarationAxiom(owlClass);
-		appOntology.add(da);
-		
-		return owlClass;
 		
 	}
 	
@@ -304,6 +306,12 @@ public class OntologyHandler {
 		appOntology.add(ax);
 		
 		r.flush();
+		
+	}
+	
+	public static Set<OWLClass> allClassesInOntology() {
+		
+		return appOntology.classesInSignature().collect(Collectors.toSet());
 		
 	}
 	
