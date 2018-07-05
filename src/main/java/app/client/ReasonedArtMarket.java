@@ -104,9 +104,15 @@ public class ReasonedArtMarket implements InspectToAxiom {
 		        				ObjectReference objRefEl = (ObjectReference) arrayRef.getValue(i);
 		        				ReferenceType refTypeEl = objRefEl.referenceType();
 		        				
-		        				//TODO Exploit signature to understand right field
-		        				Value valEl = objRefEl.getValue(refTypeEl.fieldByName("id"));
-		        				System.out.println(arrayRef.getValue(i).type().signature());
+		        				//Retrieve class of target and related fieldId
+		        				//Assuming all fully-qualified-classes signature since object properties
+		        				//L fully-qualified-class ;	 (e.g. for a string) Ljava/lang/String;
+		        				String[] classSignatureName = arrayRef.getValue(i).type().signature().replaceFirst("L", "").split("/");
+		        				String classTargetName = classSignatureName[classSignatureName.length - 1].replace(";", "");
+		        				String fieldIdTarget = getMapClassToFieldId().get(classTargetName);
+		  
+		        				Value valEl = objRefEl.getValue(refTypeEl.fieldByName(fieldIdTarget));
+		        				
 		        				OntologyHandler.addObjectProperty(instanceId, ( (StringReference) valEl).value(), objProperty);
 		        				
 		        			}
@@ -128,13 +134,8 @@ public class ReasonedArtMarket implements InspectToAxiom {
 	
 		for (OWLClass c : set) {
 			
+			//Get only #Fragment
 			String classId = c.toStringID().split("#")[1];
-			
-			System.out.println(classId);
-			System.out.println(ontToAppClasses.get(classId));
-			System.out.println(classToFieldId.get(classId));
-			System.out.println(classToObjProp.get(classId));
-			System.out.println(classToDataProp.get(classId));
 			
 			if(ontToAppClasses.get(classId) != null) {
 				inspectClass(vm, classId, ontToAppClasses.get(classId),

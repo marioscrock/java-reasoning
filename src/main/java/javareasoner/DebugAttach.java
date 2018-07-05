@@ -115,18 +115,6 @@ public class DebugAttach {
 	                
 	                if (event instanceof BreakpointEvent) {
 	                	
-	                    // Disable the breakpoint event
-	                    // event.request().disable();
-	
-	                    // ThreadReference thread = ((BreakpointEvent) event).thread();
-	                    // StackFrame stackFrame = thread.frame(0);
-	
-	                    // Inspecting Stack Variables
-	                    // Map<LocalVariable, Value> visibleVariables = (Map<LocalVariable, Value>) stackFrame.getValues(stackFrame.visibleVariables());
-	                    // for (Map.Entry<LocalVariable, Value> entry : visibleVariables.entrySet()) {
-	                    //     System.out.println(entry.getKey() + ":" + entry.getValue());
-	                    // }
-	                	
 	                	inspector.inspectClasses(vm);               
 	                    
 	                }
