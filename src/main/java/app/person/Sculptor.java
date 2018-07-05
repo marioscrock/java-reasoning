@@ -15,6 +15,7 @@ public class Sculptor extends Artist {
 	
 	public void sculpts(Sculpt sculpt) {
 		sculpts.add(sculpt);
+		crafts(sculpt);
 	}
 
 	public List<Sculpt> getSculpts() {

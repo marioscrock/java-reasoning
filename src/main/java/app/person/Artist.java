@@ -5,7 +5,7 @@ import java.util.List;
 
 import app.thing.ArtWork;
 
-public class Artist extends Person {
+public abstract class Artist extends Person {
 
 	private List<ArtWork> crafts = new ArrayList<>();
 	

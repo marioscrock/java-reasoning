@@ -1,0 +1,7 @@
+Declaration(NamedIndividual(:VanGogh)) 
+Declaration(NamedIndividual(:StanzaAdArles))
+ClassAssertion(:Painter :VanGogh)
+ClassAssertion(:Paint :StanzaAdArles)
+DataPropertyAssertion(:name :VanGogh "Van Gogh"^^xsd:string)
+DataPropertyAssertion(:id :StanzaAdArles "Stanza Ad Arles"^^xsd:string)
+ObjectPropertyAssertion(:paints :VanGogh :StanzaAdArles)

@@ -107,11 +107,35 @@ public class AMOntologyHandler extends OntologyHandler implements ReasoningServe
 		appOntology.add(s_some_ss);
 		
 		HashSet<OWLClass> disclasses = new HashSet<>();
-		disclasses.add(paint);
-		disclasses.add(sculpt);
-		disclasses.add(product);
+		disclasses.add(person);
+		disclasses.add(thing);
 		OWLDisjointClassesAxiom discla = df.getOWLDisjointClassesAxiom(disclasses);
 	    appOntology.add(discla);
+	    
+		HashSet<OWLClass> disclassesThings = new HashSet<>();
+		disclassesThings.add(paint);
+		disclassesThings.add(sculpt);
+		disclassesThings.add(product);
+		OWLDisjointClassesAxiom discla2 = df.getOWLDisjointClassesAxiom(disclassesThings);
+	    appOntology.add(discla2);
+	    
+		OWLObjectProperty isArtist = df.getOWLObjectProperty(IOR + "#isArtist");
+		OWLEquivalentClassesAxiom is_a_self = df.getOWLEquivalentClassesAxiom(artist,
+				df.getOWLObjectHasSelf(isArtist));
+		appOntology.add(is_a_self);
+		
+		OWLObjectProperty isArtwork = df.getOWLObjectProperty(IOR + "#isArtWork");
+		OWLEquivalentClassesAxiom is_aw_self = df.getOWLEquivalentClassesAxiom(artwork,
+				df.getOWLObjectHasSelf(isArtwork));
+		appOntology.add(is_aw_self);
+		
+		OWLObjectProperty a_crafts_a = df.getOWLObjectProperty(IOR + "#a_crafts_a");
+		List<OWLObjectProperty> chain = new ArrayList<>();
+		chain.add(isArtist);
+		chain.add(crafts);
+		chain.add(isArtwork);
+		OWLSubPropertyChainOfAxiom s_a_c_a = df.getOWLSubPropertyChainOfAxiom(chain, a_crafts_a);
+		appOntology.add(s_a_c_a);
 		
 	    saveOntology();
 	    
@@ -131,30 +155,45 @@ public class AMOntologyHandler extends OntologyHandler implements ReasoningServe
 	
 	public NodeSet<OWLNamedIndividual> getInstancesArtistsCreatingArtworks(){
 		
-		OWLClass artist = df.getOWLClass(IOR + "#Artist");
-		OWLObjectProperty isArtist = df.getOWLObjectProperty(IOR + "#isArtist");
-		OWLEquivalentClassesAxiom is_a_self = df.getOWLEquivalentClassesAxiom(artist,
-				df.getOWLObjectHasSelf(isArtist));
-		appOntology.add(is_a_self);
-		
-		OWLClass artwork = df.getOWLClass(IOR + "#ArtWork");
-		OWLObjectProperty isArtwork = df.getOWLObjectProperty(IOR + "#isArtWork");
-		OWLEquivalentClassesAxiom is_aw_self = df.getOWLEquivalentClassesAxiom(artwork,
-				df.getOWLObjectHasSelf(isArtwork));
-		appOntology.add(is_aw_self);
-		
-		OWLObjectProperty a_c = df.getOWLObjectProperty(IOR + "#a_c");
-		OWLObjectProperty crafts = df.getOWLObjectProperty(IOR + "#crafts");
-		List<OWLObjectProperty> chain = new ArrayList<>();
-		chain.add(isArtist);
-		chain.add(crafts);
-		chain.add(isArtwork);
-		OWLSubPropertyChainOfAxiom s_a_c = df.getOWLSubPropertyChainOfAxiom(chain, a_c);
-		appOntology.add(s_a_c);
-		
 		r.flush();
-		return r.getInstances(df.getOWLObjectSomeValuesFrom(a_c, df.getOWLThing()));
+		return r.getInstances(df.getOWLObjectSomeValuesFrom(df.getOWLObjectProperty(IOR + "#a_crafts_a"),
+				df.getOWLThing()));
 	
+	}
+
+	@Override
+	public void breakpointRoutine() {
+		
+		boolean consistent = isConsistent();
+		System.out.println("\nIs ontology still consistent? " + consistent);
+		
+		if (consistent) {
+			System.out.println("\nReasoning Routine");
+			
+			System.out.println("\nPainter(x)");
+			getInstances("Painter").forEach(System.out::println);
+			
+			System.out.println("\nPaint(x)");
+			getInstances("Paint").forEach(System.out::println);
+			
+			System.out.println("\nThing(x)");
+			getInstances("Thing").forEach(System.out::println);
+			
+			System.out.println("\nsome produces(x,y)");
+			getInstances("produces", null).forEach(System.out::println);
+			
+			System.out.println("\nsome paints(x,y.Paint)");
+			getInstances("paints", null).forEach(System.out::println);
+			
+			System.out.println("\nsome crafts(x,y.Sculpt)");
+			getInstances("crafts", "Sculpt").forEach(System.out::println);
+			
+			System.out.println("\nq(x) := Artist(x) and creates(x,y) and ArtWork(y)");
+			getInstancesArtistsCreatingArtworks().forEach(System.out::println);
+		}
+		
+		System.out.println("*******************************************************");
+		
 	}
 
 }

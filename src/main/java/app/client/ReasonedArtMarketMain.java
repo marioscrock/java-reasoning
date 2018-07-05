@@ -14,6 +14,7 @@ public class ReasonedArtMarketMain {
 		System.out.println("Is listening for debugger to be attached? (y/n)");
 		Scanner scan = new Scanner(System.in);
 		String s = scan.next();
+		scan.close();
 		
 		if (!s.toLowerCase().equals("y")) 
 			System.out.println("No active instances check enabled!");
@@ -25,12 +26,7 @@ public class ReasonedArtMarketMain {
 		//Catalogue2
 		artMarket.startApp(2);
 		
-		while(!s.toLowerCase().equals("exit")) {
-			System.out.println("\nType \"exit\" to stop");
-			s = scan.next(); 			
-		}
-		
-		scan.close();
+		System.out.println("\nStopping app!");
 		
 	}
 

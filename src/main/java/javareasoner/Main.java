@@ -22,89 +22,62 @@ public class Main {
 	
 	private static AMOntologyHandler oh = new AMOntologyHandler();
 	private static InspectToAxiom app = new ReasonedArtMarketInspector(oh);
-	private static String inputFilePath = "input.owl";
 
-	public static void main(String[] args) throws OWLOntologyCreationException, OWLOntologyStorageException, IOException {
+	public static void main(String[] args) throws OWLOntologyCreationException, OWLOntologyStorageException, IOException, InterruptedException {
 		
 		//Init ontology and determine serialization type from args
 		initOntologyHandler(args);
 		
+		oh.printOntology();
+		System.out.println("\nConceptual Model loaded\n");
+		
+		oh.breakpointRoutine();
+		
+		System.out.println("Parsing file input-rdfxml.owl");
+		parseAxioms("input-rdfxml.owl", SerializationType.RDFXML);
+		System.out.println("Axioms ADDED");
+		oh.breakpointRoutine();
+		
+		System.out.println("Parsing file input-functional.owl");
+		parseAxioms("input-functional.owl", SerializationType.FUNCTIONAL);
+		System.out.println("\nAxioms ADDED");
+		oh.breakpointRoutine();
+		oh.saveOntology();
+		
 		//Ask for connection to debuggable app
 		Scanner scan = new Scanner(System.in);
-		initDebugger(scan);
-		
-		System.out.println("\nPaint(x)");
-		oh.getInstances("Paint").forEach(System.out::println);
-		
-		String contentRDFXML =
-    	   		"<owl:NamedIndividual rdf:about=\"#Cenacolo\">\n" + 
-           		"     <rdf:type rdf:resource=\"#Paint\"/>\n" + 
-           		"     <id rdf:datatype=\"http://www.w3.org/2001/XMLSchema#string\">Cenacolo</id>\n" + 
-           		"</owl:NamedIndividual>" +
-           		"<owl:NamedIndividual rdf:about=\"#Leonardo\">\n" + 
-           		"     <paints rdf:resource=\"#Cenacolo\"/>\n" + 
-           		"</owl:NamedIndividual>";
-		
-		String contentFUNCTIONAL = "Declaration(NamedIndividual(:VanGogh))\n" + 
-				"Declaration(NamedIndividual(:StanzaAdArles))\n" + 
-				"ClassAssertion(:Painter :VanGogh)\n" + 
-				"ClassAssertion(:Paint :StanzaAdArles)\n" +
-				"DataPropertyAssertion(:name :VanGogh \"Van Gogh\"^^xsd:string)\n" +
-				"DataPropertyAssertion(:name :StanzaAdArles \"Stanza Ad Arles\"^^xsd:string)\n" +
-				"ObjectPropertyAssertion(:paints :VanGogh :StanzaAdArles)";
-		
-		oh.addStringAxiom(contentRDFXML, SerializationType.RDFXML);
-		System.out.println("\nAxioms ADDED");
-		System.out.println("\nPaint(x)");
-		oh.getInstances("Paint").forEach(System.out::println);
-		
-		oh.addStringAxiom(contentFUNCTIONAL, SerializationType.FUNCTIONAL);
-		System.out.println("\nAxioms ADDED");
-		System.out.println("\nPaint(x)");
-		oh.getInstances("Paint").forEach(System.out::println);
-		
-		System.out.println("\nq(x) := Artist(x) and creates(x,y) and ArtWork(y)");
-		oh.getInstancesArtistsCreatingArtworks().forEach(System.out::println);
+		initDebugger(scan);	
 		
 		while (true) {
 			
-			System.out.println("\nDo you want me to read <input.txt> to parse additional axioms?\n"
-					+ "If NO type \"exit\"");
+			System.out.println("\nDo you want me to read <input.owl> to parse additional axioms?\n"
+					+ "If NO type \"exit\"\nFor RDFXML write \"RDFXML\" (any other string FUNCTIONAL parsing)");
 			String s;
 			s = scan.next();
 			
-			if (s.toLowerCase().equals("exit"))
+			if (s.toLowerCase().equals("exit")) {
 				break;
-		
-			try(BufferedReader br = new BufferedReader(new FileReader(inputFilePath))) {
-			    StringBuilder sb = new StringBuilder();
-			    String line = br.readLine();
-	
-			    while (line != null) {
-			        sb.append(line);
-			        sb.append(System.lineSeparator());
-			        line = br.readLine();
-			    }
-			    
-			    String content = sb.toString();
-			    oh.addStringAxiom(content, SerializationType.FUNCTIONAL);
-			    
-			    System.out.println("Is ontology still consistent? " + oh.isConsistent());
-			    
-			    //TO be DELETED
-			    oh.getInstancesArtistsCreatingArtworks().forEach(System.out::println);
-			    oh.getInstances("Paint").forEach(System.out::println);
-			    
 			}
+			else {
+				if (s.toLowerCase().equals("rdfxml")) {
+					parseAxioms("input.owl", SerializationType.RDFXML);
+				}
+				else {
+					parseAxioms("input.owl", SerializationType.FUNCTIONAL);
+				}
+			}
+			
+			System.out.println("\nAxioms ADDED");
+			oh.breakpointRoutine();
+			    
 		}
 		
 		oh.saveOntology();
-		
 		scan.close();
 		
 	}
 
-	private static void initDebugger(Scanner scan) {
+	private static void initDebugger(Scanner scan) throws InterruptedException {
 		
 		System.out.println("Do you want to attach to application (y/n)");
 		String s = scan.next();
@@ -128,6 +101,8 @@ public class Main {
 			});
 			
 			debugger.start();
+			debugger.join();
+			
 		}
 		
 		return;
@@ -156,6 +131,26 @@ public class Main {
 	            oh.loadOntologyFromFile(args[0]);
 	        case 0:
 	        	oh.initOntology();
+		}
+		
+	}
+	
+	private static void parseAxioms(String filePath, SerializationType serType) throws FileNotFoundException, IOException {
+		
+		try(BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+			
+		    StringBuilder sb = new StringBuilder();
+		    String line = br.readLine();
+
+		    while (line != null) {
+		        sb.append(line);
+		        sb.append(System.lineSeparator());
+		        line = br.readLine();
+		    }
+		    
+		    String content = sb.toString();
+		    oh.addStringAxiom(content, serType);
+		    
 		}
 		
 	}

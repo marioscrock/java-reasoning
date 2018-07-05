@@ -237,5 +237,9 @@ public class OntologyHandler {
        }
        
 	}
+	
+	public void printOntology() {
+		appOntology.logicalAxioms().forEach(System.out::println);
+	}
 
 }

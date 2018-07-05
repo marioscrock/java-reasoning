@@ -18,8 +18,10 @@ public class ArtMarket {
 		switch (catalogue) {
 			case 1:
 				importCatalogue1();
+				break;
 			case 2:
 				importCatalogue2();
+				break;
 		}
 		
 		//To enable breakpoint before returning
@@ -49,9 +51,6 @@ public class ArtMarket {
 		things.add(product05714);
 		
 		belfiore.produces(product05714);
-		
-		//To enable breakpoint before returning
-		return;
 			
 	}
 
@@ -73,16 +72,12 @@ public class ArtMarket {
 			}
 		}
 		
-		
 		Artisan travisanutto = new Artisan("Travisanutto");
 		persons.add(travisanutto);
 		Product mosaic134 = new Product("Mosaic134");
 		things.add(mosaic134);
 		
 		travisanutto.produces(mosaic134);
-		
-		//To enable breakpoint before returning
-		return;
 			
 	}
 	

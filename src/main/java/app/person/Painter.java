@@ -15,6 +15,7 @@ public class Painter extends Artist {
 
 	public void paints(Paint paint) {
 		paints.add(paint);
+		crafts(paint);
 	}
 	
 	public List<Paint> getPaints() {

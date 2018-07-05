@@ -20,6 +20,7 @@ import com.sun.jdi.ClassType;
 import com.sun.jdi.IncompatibleThreadStateException;
 import com.sun.jdi.Location;
 import com.sun.jdi.Method;
+import com.sun.jdi.VMDisconnectedException;
 import com.sun.jdi.VirtualMachine;
 import com.sun.jdi.VirtualMachineManager;
 import com.sun.jdi.connect.AttachingConnector;
@@ -68,66 +69,74 @@ public class DebugAttach {
 
 		if (socketConnector != null) {
 			
-		    Map<String, Argument> paramsMap = socketConnector.defaultArguments();
-		    Connector.IntegerArgument portArg = (Connector.IntegerArgument)paramsMap.get("port");
-		    portArg.setValue(inspector.getDebugPort());
-		    VirtualMachine vm = socketConnector.attach(paramsMap);
-		    System.out.println("Attached to process '" + vm.name() + "'");
-
-
-	        // Create a class prepare request
-		    // We want to be sure class already loaded before registering BreakpointEvent Request
-	        EventRequestManager erm = vm.eventRequestManager();
-	        ClassPrepareRequest r = erm.createClassPrepareRequest();
-	        r.addClassFilter(inspector.getClassPattern());
-	        r.enable();
+			try {
+			    Map<String, Argument> paramsMap = socketConnector.defaultArguments();
+			    Connector.IntegerArgument portArg = (Connector.IntegerArgument)paramsMap.get("port");
+			    portArg.setValue(inspector.getDebugPort());
+			    VirtualMachine vm = socketConnector.attach(paramsMap);
+			    System.out.println("Attached to process '" + vm.name() + "'");
 	
-	        EventQueue queue = vm.eventQueue();
-	        while (true) {
-	        	
-	            EventSet eventSet = queue.remove();
-	            EventIterator it = eventSet.eventIterator();
-	            while (it.hasNext()) {
-	            	
-	                Event event = it.nextEvent();
-	                
-	                if (event instanceof ClassPrepareEvent) {
-	                    ClassPrepareEvent evt = (ClassPrepareEvent) event;
-	                    ClassType classType = (ClassType) evt.referenceType();
 	
-	                    classType.methodsByName(inspector.getMethodName()).forEach(new Consumer<Method>() {
-	                    	
-	                        @Override
-	                        public void accept(Method m) {
-	                            List<Location> locations = null;
-	                            try {
-	                                locations = m.allLineLocations();
-	                            } catch (AbsentInformationException ex) {
-	                                Logger.getLogger(DebugAttach.class.getName()).log(Level.SEVERE, null, ex);
-	                            }
-	                            // get the last line location of the function and enable the 
-	                            // break point
-	                            Location location = locations.get(locations.size() - 1);
-	                            BreakpointRequest bpReq = erm.createBreakpointRequest(location);
-	                            bpReq.enable();
-	                        }
-	                        
-	                    });
-	
-	                }
-	                
-	                if (event instanceof BreakpointEvent) {
-	                	
-	                	inspector.inspectClasses(vm);               
-	                    
-	                }
-	                
-	                //All threads are resumed
-	                vm.resume();
-	            }
-	            
-	        }
-	     }
+		        // Create a class prepare request
+			    // We want to be sure class already loaded before registering BreakpointEvent Request
+		        EventRequestManager erm = vm.eventRequestManager();
+		        ClassPrepareRequest r = erm.createClassPrepareRequest();
+		        r.addClassFilter(inspector.getClassPattern());
+		        r.enable();
+		
+		        EventQueue queue = vm.eventQueue();
+		        while (true) {
+		        	
+		            EventSet eventSet = queue.remove();
+		            EventIterator it = eventSet.eventIterator();
+		            while (it.hasNext()) {
+		            	
+		                Event event = it.nextEvent();
+		                
+		                if (event instanceof ClassPrepareEvent) {
+		                    ClassPrepareEvent evt = (ClassPrepareEvent) event;
+		                    ClassType classType = (ClassType) evt.referenceType();
+		
+		                    classType.methodsByName(inspector.getMethodName()).forEach(new Consumer<Method>() {
+		                    	
+		                        @Override
+		                        public void accept(Method m) {
+		                            List<Location> locations = null;
+		                            try {
+		                                locations = m.allLineLocations();
+		                            } catch (AbsentInformationException ex) {
+		                                Logger.getLogger(DebugAttach.class.getName()).log(Level.SEVERE, null, ex);
+		                            }
+		                            // get the last line location of the function and enable the 
+		                            // break point
+		                            Location location = locations.get(locations.size() - 1);
+		                            BreakpointRequest bpReq = erm.createBreakpointRequest(location);
+		                            bpReq.enable();
+		                        }
+		                        
+		                    });
+		
+		                }
+		                
+		                if (event instanceof BreakpointEvent) {
+		                	
+		                	inspector.inspectClasses(vm);
+		                	rs.breakpointRoutine();
+		                    
+		                }
+		                
+		                //All threads are resumed
+		                vm.resume();
+		            }
+		            
+		        }
+			} catch (VMDisconnectedException exception) {
+				System.out.println("Disconnected VM");
+				return;
+			}
+		}
 	}
+		
+	
 
 }

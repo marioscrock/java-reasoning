@@ -1,0 +1,7 @@
+<owl:NamedIndividual rdf:about="#Cenacolo">
+	<rdf:type rdf:resource="#Paint"/>
+	<id rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cenacolo</id>
+</owl:NamedIndividual>
+<owl:NamedIndividual rdf:about="#Leonardo"> 
+	<paints rdf:resource="#Cenacolo"/>
+</owl:NamedIndividual>
