@@ -1,4 +1,4 @@
-package javareasoner;
+package javareasoner.inspect;
 
 import com.sun.jdi.VirtualMachine;
 

@@ -15,7 +15,6 @@ public class Artist extends Person {
 	
 	public void crafts(ArtWork artwork) {
 		crafts.add(artwork);
-		//OntologyHandler.addObjectProperty(this.getName(), artwork.getIdentifier(), "crafts");
 	}
 
 	public List<ArtWork> getCrafts() {

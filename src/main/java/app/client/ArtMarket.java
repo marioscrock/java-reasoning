@@ -8,10 +8,26 @@ import app.thing.*;
 
 public class ArtMarket {
 	
+	//To avoid garbage collection
+	//It mimics references of the application
 	private List<Person> persons = new ArrayList<>();
 	private List<Thing> things = new ArrayList<>();
 	
-	public void startApp() {
+	public void startApp(int catalogue) {
+		
+		switch (catalogue) {
+			case 1:
+				importCatalogue1();
+			case 2:
+				importCatalogue2();
+		}
+		
+		//To enable breakpoint before returning
+		return;
+			
+	}
+	
+	public void importCatalogue1() {
 		
 		Painter leonardo = new Painter("Leonardo");
 		persons.add(leonardo);
@@ -38,6 +54,39 @@ public class ArtMarket {
 		return;
 			
 	}
+
+	public void importCatalogue2() {
+		
+		Painter caravaggio = new Painter("Caravaggio");
+		persons.add(caravaggio);
+		Paint sanMatteo = new Paint("Vocazione di san Matteo");
+		things.add(sanMatteo);
+		
+		caravaggio.paints(sanMatteo);
+		
+		Sculpt santaTeresa = new Sculpt("Estasi di Santa Teresa");
+		things.add(santaTeresa);
+		
+		for(Person p : persons) {
+			if (p.getName().equals("Bernini")) {
+				((Sculptor) p).sculpts(santaTeresa);
+			}
+		}
+		
+		
+		Artisan travisanutto = new Artisan("Travisanutto");
+		persons.add(travisanutto);
+		Product mosaic134 = new Product("Mosaic134");
+		things.add(mosaic134);
+		
+		travisanutto.produces(mosaic134);
+		
+		//To enable breakpoint before returning
+		return;
+			
+	}
+	
+	
 
 
 }

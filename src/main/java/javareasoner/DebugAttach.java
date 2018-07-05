@@ -36,6 +36,9 @@ import com.sun.jdi.request.BreakpointRequest;
 import com.sun.jdi.request.ClassPrepareRequest;
 import com.sun.jdi.request.EventRequestManager;
 
+import javareasoner.inspect.InspectToAxiom;
+import javareasoner.server.ReasoningServer;
+
 
 public class DebugAttach {
 	
@@ -49,7 +52,7 @@ public class DebugAttach {
 	 * @throws IncompatibleThreadStateException
 	 * @throws AbsentInformationException
 	 */
-	public static void startDebug(InspectToAxiom inspector) 
+	public static void startDebug(InspectToAxiom inspector, ReasoningServer rs) 
 			throws IOException, IllegalConnectorArgumentsException, InterruptedException, IncompatibleThreadStateException, AbsentInformationException {
 		
 		

@@ -13,12 +13,15 @@ import com.sun.jdi.AbsentInformationException;
 import com.sun.jdi.IncompatibleThreadStateException;
 import com.sun.jdi.connect.IllegalConnectorArgumentsException;
 
-import app.client.ReasonedArtMarket;
+import javareasoner.inspect.InspectToAxiom;
+import javareasoner.inspect.ReasonedArtMarketInspector;
+import javareasoner.ontology.AMOntologyHandler;
 
 
 public class Main {
 	
-	private static InspectToAxiom app = new ReasonedArtMarket();
+	private static AMOntologyHandler oh = new AMOntologyHandler();
+	private static InspectToAxiom app = new ReasonedArtMarketInspector(oh);
 	private static String inputFilePath = "input.owl";
 
 	public static void main(String[] args) throws OWLOntologyCreationException, OWLOntologyStorageException, IOException {
@@ -31,7 +34,7 @@ public class Main {
 		initDebugger(scan);
 		
 		System.out.println("\nPaint(x)");
-		OntologyHandler.getInstances("Paint").forEach(System.out::println);
+		oh.getInstances("Paint").forEach(System.out::println);
 		
 		String contentRDFXML =
     	   		"<owl:NamedIndividual rdf:about=\"#Cenacolo\">\n" + 
@@ -50,18 +53,18 @@ public class Main {
 				"DataPropertyAssertion(:name :StanzaAdArles \"Stanza Ad Arles\"^^xsd:string)\n" +
 				"ObjectPropertyAssertion(:paints :VanGogh :StanzaAdArles)";
 		
-		//OntologyHandler.addStringAxiom(contentRDFXML, SerializationType.RDFXML);
+		oh.addStringAxiom(contentRDFXML, SerializationType.RDFXML);
 		System.out.println("\nAxioms ADDED");
 		System.out.println("\nPaint(x)");
-		OntologyHandler.getInstances("Paint").forEach(System.out::println);
+		oh.getInstances("Paint").forEach(System.out::println);
 		
-		//OntologyHandler.addStringAxiom(contentFUNCTIONAL, SerializationType.FUNCTIONAL);
+		oh.addStringAxiom(contentFUNCTIONAL, SerializationType.FUNCTIONAL);
 		System.out.println("\nAxioms ADDED");
 		System.out.println("\nPaint(x)");
-		OntologyHandler.getInstances("Paint").forEach(System.out::println);
+		oh.getInstances("Paint").forEach(System.out::println);
 		
 		System.out.println("\nq(x) := Artist(x) and creates(x,y) and ArtWork(y)");
-		OntologyHandler.getInstancesArtistsCreatingArtworks().forEach(System.out::println);
+		oh.getInstancesArtistsCreatingArtworks().forEach(System.out::println);
 		
 		while (true) {
 			
@@ -84,18 +87,18 @@ public class Main {
 			    }
 			    
 			    String content = sb.toString();
-			    OntologyHandler.addStringAxiom(content, SerializationType.FUNCTIONAL);
+			    oh.addStringAxiom(content, SerializationType.FUNCTIONAL);
 			    
-			    System.out.println("Is ontology still consistent? " + OntologyHandler.isConsistent());
+			    System.out.println("Is ontology still consistent? " + oh.isConsistent());
 			    
 			    //TO be DELETED
-			    OntologyHandler.getInstancesArtistsCreatingArtworks().forEach(System.out::println);
-			    OntologyHandler.getInstances("Paint").forEach(System.out::println);
+			    oh.getInstancesArtistsCreatingArtworks().forEach(System.out::println);
+			    oh.getInstances("Paint").forEach(System.out::println);
 			    
 			}
 		}
 		
-		OntologyHandler.saveOntology();
+		oh.saveOntology();
 		
 		scan.close();
 		
@@ -114,7 +117,7 @@ public class Main {
 				public void run() {
 					try {
 						
-						DebugAttach.startDebug(app);
+						DebugAttach.startDebug(app, oh);
 						
 					} catch (IOException | IllegalConnectorArgumentsException | InterruptedException
 							| IncompatibleThreadStateException | AbsentInformationException e) {
@@ -137,22 +140,22 @@ public class Main {
 			case 2:
 				switch (args[2].toLowerCase()) {
 					case "functional":
-						OntologyHandler.serializationType = SerializationType.FUNCTIONAL;
+						oh.serializationType = SerializationType.FUNCTIONAL;
 						break;
 					case "manchester":
-						OntologyHandler.serializationType = SerializationType.MANCHESTER;
+						oh.serializationType = SerializationType.MANCHESTER;
 						break;
 					case "rdfxml":
-						OntologyHandler.serializationType = SerializationType.RDFXML;
+						oh.serializationType = SerializationType.RDFXML;
 						break;
 					case "turtle":
-						OntologyHandler.serializationType = SerializationType.TURTLE;
+						oh.serializationType = SerializationType.TURTLE;
 						break;
 				}
 	        case 1:
-	            OntologyHandler.loadOntologyFromFile(args[0]);
+	            oh.loadOntologyFromFile(args[0]);
 	        case 0:
-	        	OntologyHandler.initOntology();
+	        	oh.initOntology();
 		}
 		
 	}

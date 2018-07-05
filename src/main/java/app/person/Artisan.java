@@ -15,7 +15,6 @@ public class Artisan extends Person {
 	
 	public void produces(Product product) {
 		produces.add(product);
-		//OntologyHandler.addObjectProperty(this.getName(), product.getIdentifier(), "produces");
 	}
 
 	public List<Product> getProduces() {

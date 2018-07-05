@@ -1,9 +1,8 @@
-package app.client;
+package javareasoner.inspect;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 
 import org.semanticweb.owlapi.model.OWLClass;
@@ -16,40 +15,21 @@ import com.sun.jdi.StringReference;
 import com.sun.jdi.Value;
 import com.sun.jdi.VirtualMachine;
 
+import app.client.ArtMarket;
 import app.person.*;
 import app.thing.*;
-import javareasoner.InspectToAxiom;
-import javareasoner.OntologyHandler;
+import javareasoner.ontology.OntologyHandler;
 
-public class ReasonedArtMarket implements InspectToAxiom {
+public class ReasonedArtMarketInspector implements InspectToAxiom {
 	
-	public int debugPort = 8000;
-	public String classPattern = ArtMarket.class.getName();
-	public String methodName = "startApp";
+	private int debugPort = 8000;
+	private String classPattern = ArtMarket.class.getName();
+	private String methodName = "startApp";
 	
-	private static ArtMarket artMarket;
+	private OntologyHandler oh;
 	
-	public static void main(String[] args) {
-		
-		//To attach debugger run the class with following options and then launch a proper debugger to be attached
-		//-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=y
-		System.out.println("Is listening for debugger to be attached? (y/n)");
-		Scanner scan = new Scanner(System.in);
-		String s = scan.next();
-		
-		if (!s.toLowerCase().equals("y")) 
-			System.out.println("No active instances check enabled!");
-		
-		artMarket = new ArtMarket();
-		artMarket.startApp();
-		
-		while(!s.toLowerCase().equals("exit")) {
-			System.out.println("\nType \"exit\" to stop");
-			s = scan.next(); 			
-		}
-		
-		scan.close();
-		
+	public ReasonedArtMarketInspector(OntologyHandler oh) {
+		this.oh = oh;
 	}
 
 	@Override
@@ -71,7 +51,7 @@ public class ReasonedArtMarket implements InspectToAxiom {
 		        	//Create individual determining IRI through field named fieldId
 		        	Value val = objRef.getValue(refType.fieldByName(fieldId));
 		        	String instanceId = ( (StringReference) val).value();
-		        	OntologyHandler.createIndividual(instanceId, ontClassId);
+		        	oh.createIndividual(instanceId, ontClassId);
 		        	
 		        	//Create data properties, up to know only to xsd:string 
 		        	if (dataProperties != null && dataProperties.length > 0)
@@ -81,7 +61,7 @@ public class ReasonedArtMarket implements InspectToAxiom {
 		        			
 		        			if (valData != null) {
 			        			if (valData instanceof StringReference)
-			        			   OntologyHandler.addStringDataProperty(instanceId,
+			        			   oh.addStringDataProperty(instanceId,
 			        					   ( (StringReference) valData).value(), dataProperty);
 			
 			        			  //else if (value instanceof BooleanValue)
@@ -113,7 +93,7 @@ public class ReasonedArtMarket implements InspectToAxiom {
 		  
 		        				Value valEl = objRefEl.getValue(refTypeEl.fieldByName(fieldIdTarget));
 		        				
-		        				OntologyHandler.addObjectProperty(instanceId, ( (StringReference) valEl).value(), objProperty);
+		        				oh.addObjectProperty(instanceId, ( (StringReference) valEl).value(), objProperty);
 		        				
 		        			}
 		        		}
@@ -126,7 +106,7 @@ public class ReasonedArtMarket implements InspectToAxiom {
 	@Override
 	public void inspectClasses(VirtualMachine vm) {
 		
-		Set<OWLClass> set = OntologyHandler.allClassesInOntology();
+		Set<OWLClass> set = oh.allClassesInOntology();
 		Map<String, String> ontToAppClasses = getMapOntToAppClasses();
 		Map<String, String> classToFieldId = getMapClassToFieldId();
 		Map<String, String[]> classToObjProp = getMapClassToObjProp();
