@@ -36,11 +36,14 @@ public class ReasonedArtMarketInspector implements InspectToAxiom {
 	public void inspectClass(VirtualMachine vm, String ontClassId, String className,
 			String fieldId, String[] objProperties, String[] dataProperties) {
 		
+		//Get all classes matching a given string
 		List<ReferenceType> classesByName = vm.classesByName(className);
 		
 		if (!classesByName.isEmpty()) {
 			
+			//Get the first class returned assuming only one class related to a given string
 	        ReferenceType refType = classesByName.get(0);
+	        //Get all active instances of the given refType
 	        List<ObjectReference> objRefs = refType.instances(0);
 	        
 	        if(!objRefs.isEmpty()) {
@@ -63,7 +66,8 @@ public class ReasonedArtMarketInspector implements InspectToAxiom {
 			        			if (valData instanceof StringReference)
 			        			   oh.addStringDataProperty(instanceId,
 			        					   ( (StringReference) valData).value(), dataProperty);
-			
+			        			
+			        			  //TODO
 			        			  //else if (value instanceof BooleanValue)
 			        			  //{...} ...
 		        			}
@@ -105,6 +109,8 @@ public class ReasonedArtMarketInspector implements InspectToAxiom {
 
 	@Override
 	public void inspectClasses(VirtualMachine vm) {
+		
+		oh.deleteFromOntAxiomsInBuffer();
 		
 		Set<OWLClass> set = oh.allClassesInOntology();
 		Map<String, String> ontToAppClasses = getMapOntToAppClasses();

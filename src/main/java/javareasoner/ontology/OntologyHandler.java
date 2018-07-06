@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,6 +20,7 @@ import org.semanticweb.owlapi.functional.parser.OWLFunctionalSyntaxOWLParserFact
 import org.semanticweb.owlapi.io.OWLParser;
 import org.semanticweb.owlapi.io.StreamDocumentSource;
 import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLDataFactory;
@@ -50,6 +53,8 @@ public class OntologyHandler {
 	
 	protected final IRI IOR = IRI.create("http://projects.ke.appOntology");
 	protected final File fileout = new File("appOntology.owl");
+	
+	private List<OWLAxiom> bufferAxioms = new ArrayList<>();
    
 	public void loadRemoteOntology(String stringIRI) throws OWLOntologyCreationException, OWLOntologyStorageException, FileNotFoundException {
 		
@@ -157,6 +162,7 @@ public class OntologyHandler {
 		
 		OWLObjectPropertyAssertionAxiom p_ass = df.getOWLObjectPropertyAssertionAxiom(property, idFromInd, idToInd);
 		appOntology.add(p_ass);
+		bufferAxioms.add(p_ass);
 		
 		r.flush();
 		
@@ -169,6 +175,7 @@ public class OntologyHandler {
 		
 		OWLDataPropertyAssertionAxiom p_ass = df.getOWLDataPropertyAssertionAxiom(property, idFromInd, toValue);
 		appOntology.add(p_ass);
+		bufferAxioms.add(p_ass);
 		
 		r.flush();
 		
@@ -180,6 +187,7 @@ public class OntologyHandler {
 		OWLClass c = df.getOWLClass(IOR + "#" + classId.replaceAll("\\s","-"));
 		OWLClassAssertionAxiom ax = df.getOWLClassAssertionAxiom(c, ind);
 		appOntology.add(ax);
+		bufferAxioms.add(ax);
 		
 		r.flush();
 		
@@ -240,6 +248,15 @@ public class OntologyHandler {
 	
 	public void printOntology() {
 		appOntology.logicalAxioms().forEach(System.out::println);
+	}
+	
+	public void emptyBuffer() {
+		bufferAxioms.clear();
+	}
+	
+	public void deleteFromOntAxiomsInBuffer() {		
+		appOntology.remove(bufferAxioms);
+		emptyBuffer();	
 	}
 
 }

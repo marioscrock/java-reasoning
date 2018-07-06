@@ -20,6 +20,8 @@ public class ArtMarket {
 				importCatalogue1();
 				break;
 			case 2:
+				persons.clear();
+				things.clear();
 				importCatalogue2();
 				break;
 		}
