@@ -19,6 +19,7 @@ import org.semanticweb.owlapi.formats.TurtleDocumentFormat;
 import org.semanticweb.owlapi.functional.parser.OWLFunctionalSyntaxOWLParserFactory;
 import org.semanticweb.owlapi.io.OWLParser;
 import org.semanticweb.owlapi.io.StreamDocumentSource;
+import org.semanticweb.owlapi.manchestersyntax.parser.ManchesterOWLSyntaxOntologyParserFactory;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
@@ -35,6 +36,7 @@ import org.semanticweb.owlapi.model.OWLOntologyLoaderConfiguration;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.rdf.rdfxml.parser.RDFXMLParserFactory;
+import org.semanticweb.owlapi.rdf.turtle.parser.TurtleOntologyParserFactory;
 import org.semanticweb.owlapi.reasoner.InferenceType;
 import org.semanticweb.owlapi.reasoner.NodeSet;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
@@ -49,7 +51,7 @@ public class OntologyHandler {
 	protected OWLDataFactory df;
 	protected OWLReasoner r;
 	
-	public SerializationType serializationType = SerializationType.FUNCTIONAL;
+	public SerializationType serializationType = SerializationType.RDFXML;
 	
 	protected final IRI IOR = IRI.create("http://projects.ke.appOntology");
 	protected final File fileout = new File("appOntology.owl");
@@ -203,9 +205,16 @@ public class OntologyHandler {
 		
 		OWLParser parser = null;
 		switch (type) {
-		//	case MANCHESTER : 
-		//		parser = new ManchesterOWLSyntaxOntologyParserFactory().createParser();
-		//		break;
+			case MANCHESTER : 
+				axiom = "Prefix: owl: <http://www.w3.org/2002/07/owl#>\n" + 
+						"Prefix: rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" + 
+						"Prefix: rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" + 
+						"Prefix: xml: <http://www.w3.org/XML/1998/namespace>\n" + 
+						"Prefix: xsd: <http://www.w3.org/2001/XMLSchema#>\n" + 
+						"Ontology: <http://projects.ke.appOntology>\n" + 
+						axiom;
+				parser = new ManchesterOWLSyntaxOntologyParserFactory().createParser();
+				break;
 			case FUNCTIONAL : 
 				axiom = "Prefix(:=<http://projects.ke.appOntology#>)\n" + 
 						"Prefix(owl:=<http://www.w3.org/2002/07/owl#>)\n" + 
@@ -217,9 +226,18 @@ public class OntologyHandler {
 						axiom + "\n)";
 				parser = new OWLFunctionalSyntaxOWLParserFactory().createParser();
 				break;
-		//	case TURTLE : 
-		//		parser = new TurtleOntologyParserFactory().createParser();
-		//		break;
+			case TURTLE : 
+				axiom = "@prefix : <http://projects.ke.appOntology#> .\n" + 
+						"@prefix owl: <http://www.w3.org/2002/07/owl#> .\n" + 
+						"@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n" + 
+						"@prefix xml: <http://www.w3.org/XML/1998/namespace> .\n" + 
+						"@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n" + 
+						"@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n" + 
+						"@base <http://projects.ke.appOntology> .\n" + 
+						"<http://projects.ke.appOntology> rdf:type owl:Ontology .\n" +
+						axiom;
+				parser = new TurtleOntologyParserFactory().createParser();
+				break;
 			case RDFXML :
 				axiom = "<rdf:RDF xmlns=\"http://projects.ke.appOntology#\"\n" + 
 		    	   		"     xml:base=\"http://projects.ke.appOntology\"\n" + 
