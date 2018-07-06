@@ -170,7 +170,7 @@ public class OntologyHandler {
 		
 	}
 	
-	public void addStringDataProperty(String idFrom, String toValue, String propertyName) {
+	public void addDataProperty(String idFrom, String toValue, String propertyName) {
 		
 		OWLNamedIndividual idFromInd = df.getOWLNamedIndividual(IOR + "#" + idFrom.replaceAll("\\s","-"));
 		OWLDataProperty property = df.getOWLDataProperty(IOR + "#" + propertyName.replaceAll("\\s","-"));
