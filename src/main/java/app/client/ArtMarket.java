@@ -22,6 +22,7 @@ public class ArtMarket {
 			case 2:
 				persons.clear();
 				things.clear();
+				System.out.println("\n****  Clear Catalogue  ****");
 				importCatalogue2();
 				break;
 		}

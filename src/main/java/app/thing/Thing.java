@@ -6,6 +6,7 @@ public abstract class Thing {
 	
 	public Thing (String id) {
 		this.id = id;
+		System.out.println("Adding " + id + " of class " + this.getClass().getSimpleName());
 	}
 
 	public String getIdentifier() {

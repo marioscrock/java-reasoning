@@ -16,14 +16,18 @@ import com.sun.jdi.connect.IllegalConnectorArgumentsException;
 import javareasoner.inspect.InspectToAxiom;
 import javareasoner.inspect.ReasonedArtMarketInspector;
 import javareasoner.ontology.AMOntologyHandler;
+import javareasoner.ontology.DLQueryEngine;
 
 
 public class Main {
 	
-	private static AMOntologyHandler oh = new AMOntologyHandler();
-	private static InspectToAxiom app = new ReasonedArtMarketInspector(oh);
+	private static AMOntologyHandler oh;
+	private static InspectToAxiom app;
+	private static DLQueryEngine query;
 
 	public static void main(String[] args) throws OWLOntologyCreationException, OWLOntologyStorageException, IOException, InterruptedException {
+		
+		oh = new AMOntologyHandler();
 		
 		//Init ontology and determine serialization type from args
 		initOntologyHandler(args);
@@ -72,6 +76,9 @@ public class Main {
 			    
 		}
 		
+		query = new DLQueryEngine(oh);
+		query.doQueryLoop();
+		
 		oh.saveOntology();
 		scan.close();
 		
@@ -84,6 +91,7 @@ public class Main {
 		
 		if (s.toLowerCase().equals("y")) {
 			
+			app = new ReasonedArtMarketInspector(oh);
 			Thread debugger = new Thread(new Runnable() {
 				
 				@Override

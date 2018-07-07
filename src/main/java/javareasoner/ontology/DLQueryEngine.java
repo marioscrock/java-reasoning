@@ -1,15 +1,22 @@
+/*
+ * This class has been coded thanks to code from:
+ * - https://github.com/phillord/owl-api/blob/master/contract/src/test/java/org/coode/owlapi/examples/DLQueryExample.java
+ * 	 (Merge in a class + OWL API update to avoid deprecated methods)
+*/
 package javareasoner.ontology;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.semanticweb.owlapi.expression.OWLEntityChecker;
 import org.semanticweb.owlapi.expression.ShortFormEntityChecker;
 import org.semanticweb.owlapi.manchestersyntax.parser.ManchesterOWLSyntaxParserImpl;
+import org.semanticweb.owlapi.manchestersyntax.renderer.ParserException;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLEntity;
@@ -79,7 +86,7 @@ public class DLQueryEngine {
      * @return The superclasses of the specified class expression
      * @throws ParserException
      *             If there was a problem parsing the class expression. */
-    public Stream<OWLClass> getSuperClasses(String classExpressionString, boolean direct) {
+    public Stream<OWLClass> getSuperClasses(String classExpressionString, boolean direct) throws ParserException {
     	
         if (classExpressionString.trim().length() == 0) {
             return Stream.empty();
@@ -97,7 +104,7 @@ public class DLQueryEngine {
      * @return The equivalent classes of the specified class expression
      * @throws ParserException
      *             If there was a problem parsing the class expression. */
-    public Stream<OWLClass> getEquivalentClasses(String classExpressionString) {
+    public Stream<OWLClass> getEquivalentClasses(String classExpressionString) throws ParserException {
         if (classExpressionString.trim().length() == 0) {
             return Stream.empty();
         }
@@ -121,7 +128,7 @@ public class DLQueryEngine {
      * @return The subclasses of the specified class expression
      * @throws ParserException
      *             If there was a problem parsing the class expression. */
-    public Stream<OWLClass> getSubClasses(String classExpressionString, boolean direct) {
+    public Stream<OWLClass> getSubClasses(String classExpressionString, boolean direct) throws ParserException {
         if (classExpressionString.trim().length() == 0) {
             return Stream.empty();
         }
@@ -139,7 +146,7 @@ public class DLQueryEngine {
      * @return The instances of the specified class expression
      * @throws ParserException
      *             If there was a problem parsing the class expression. */
-    public Stream<OWLNamedIndividual> getInstances(String classExpressionString, boolean direct) {
+    public Stream<OWLNamedIndividual> getInstances(String classExpressionString, boolean direct) throws ParserException {
         if (classExpressionString.trim().length() == 0) {
             return Stream.empty();
         }
@@ -175,25 +182,29 @@ public class DLQueryEngine {
         if (classExpression.length() == 0) {
             System.out.println("No class expression specified");
         } else {
-
-            StringBuilder sb = new StringBuilder();
-            sb.append("\n--------------------------------------------------------------------------------\n");
-            sb.append("QUERY:   ");
-            sb.append(classExpression);
-            sb.append("\n");
-            sb.append("--------------------------------------------------------------------------------\n\n");
-            // Ask for the subclasses, superclasses etc. of the specified
-            // class expression. Print out the results.
-            Stream<OWLClass> superClasses = getSuperClasses(classExpression, true);
-            printEntities("SuperClasses", superClasses, sb);
-            Stream<OWLClass> equivalentClasses = getEquivalentClasses(classExpression);
-            printEntities("EquivalentClasses", equivalentClasses, sb);
-            Stream<OWLClass> subClasses = getSubClasses(classExpression, true);
-            printEntities("SubClasses", subClasses, sb);
-            Stream<OWLNamedIndividual> individuals = getInstances(classExpression, true);
-            printEntities("Instances", individuals, sb);
-             
-            System.out.println(sb.toString());
+        	try {
+	            StringBuilder sb = new StringBuilder();
+	            sb.append("\n--------------------------------------------------------------------------------\n");
+	            sb.append("QUERY:   ");
+	            sb.append(classExpression);
+	            sb.append("\n");
+	            sb.append("--------------------------------------------------------------------------------\n\n");
+	            // Ask for the subclasses, superclasses etc. of the specified
+	            // class expression. Print out the results.
+	            Stream<OWLClass> superClasses = getSuperClasses(classExpression, false);
+	            printEntities("SuperClasses", superClasses, sb);
+	            Stream<OWLClass> equivalentClasses = getEquivalentClasses(classExpression);
+	            printEntities("EquivalentClasses", equivalentClasses, sb);
+	            Stream<OWLClass> subClasses = getSubClasses(classExpression, false);
+	            printEntities("SubClasses", subClasses, sb);
+	            Stream<OWLNamedIndividual> individuals = getInstances(classExpression, false);
+	            printEntities("Instances", individuals, sb);
+	            
+	            System.out.println(sb.toString());
+	            
+        	} catch (ParserException e){
+        		System.out.println("Wrong query!");
+        	}     
         }
 
     }
@@ -207,16 +218,16 @@ public class DLQueryEngine {
         }
         sb.append("\n\n");
         
-	    if (entities.findAny().isPresent()) {
-	    	entities.forEach(x -> {
-		    	sb.append("\t");
-		    	sb.append(shortFormProvider.getShortForm(x));
-		    	sb.append("\n");  
-		    });
-	    }
-	    else {   
-	    	sb.append("\t[NONE]\n");
-	    }
+        Set<? extends OWLEntity> entitiesSet = entities.collect(Collectors.toSet());
+        if (!entitiesSet.isEmpty()) {
+            for (OWLEntity entity : entitiesSet) {
+                sb.append("\t");
+                sb.append(shortFormProvider.getShortForm(entity));
+                sb.append("\n");
+            }
+        } else {
+            sb.append("\t[NONE]\n");
+        }
 	    
         sb.append("\n");
     }
