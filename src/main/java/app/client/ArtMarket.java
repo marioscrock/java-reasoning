@@ -5,7 +5,11 @@ import java.util.List;
 
 import app.person.*;
 import app.thing.*;
-
+/**
+ * Example Application related to the ArtMarket ontology.
+ * @author Mario
+ *
+ */
 public class ArtMarket {
 	
 	//To avoid garbage collection
@@ -13,17 +17,28 @@ public class ArtMarket {
 	private List<Person> persons = new ArrayList<>();
 	private List<Thing> things = new ArrayList<>();
 	
+	/**
+	 * Main method of the example application
+	 * @param catalogue 	Integer parameter to switch modalities of execution
+	 * 		1: Import first catalogue
+	 * 		2: Import second catalogue
+	 * 		3: Clear catalogue (delete references)
+	 */
 	public void startApp(int catalogue) {
 		
 		switch (catalogue) {
 			case 1:
+				System.out.println("\n****  Import Catalogue 1  ****");
 				importCatalogue1();
 				break;
 			case 2:
-				persons.clear();
-				things.clear();
-				System.out.println("\n****  Clear Catalogue  ****");
+				System.out.println("\n****  Import Catalogue 2  ****");
 				importCatalogue2();
+				break;
+			case 3:
+				System.out.println("\n****  Clear Catalogue  ****");
+				persons.clear();
+				things.clear();			
 				break;
 		}
 		
@@ -32,7 +47,10 @@ public class ArtMarket {
 			
 	}
 	
-	public void importCatalogue1() {
+	/**
+	 * Method to import catalogue1 instances in the app.
+	 */
+	private void importCatalogue1() {
 		
 		Painter leonardo = new Painter("Leonardo");
 		persons.add(leonardo);
@@ -56,8 +74,11 @@ public class ArtMarket {
 		belfiore.produces(product05714);
 			
 	}
-
-	public void importCatalogue2() {
+	
+	/**
+	 * Method to import catalogue2 instances in the app.
+	 */
+	private void importCatalogue2() {
 		
 		Painter caravaggio = new Painter("Caravaggio");
 		persons.add(caravaggio);

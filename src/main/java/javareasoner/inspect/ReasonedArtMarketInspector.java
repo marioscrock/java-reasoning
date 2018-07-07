@@ -15,7 +15,7 @@ public class ReasonedArtMarketInspector extends InspectToAxiom {
 	private String methodName = "startApp";
 	
 	public ReasonedArtMarketInspector(OntologyHandler oh) {
-		this.oh = oh;
+		super(oh);
 	}
 	
 	@Override
@@ -34,7 +34,7 @@ public class ReasonedArtMarketInspector extends InspectToAxiom {
 	}
 	
 	@Override
-	public Map<String, String> getMapOntToAppClasses() {
+	protected Map<String, String> getMapOntToAppClasses() {
 		
 		Map<String, String> ontToAppClasses = new HashMap<>();
 		ontToAppClasses.put("Person", Person.class.getName());
@@ -53,7 +53,7 @@ public class ReasonedArtMarketInspector extends InspectToAxiom {
 	}
 	
 	@Override
-	public Map<String, String[]> getMapClassToObjProp() {
+	protected Map<String, String[]> getMapClassToObjProp() {
 		
 		Map<String, String[]> classToProp = new HashMap<>();
 		classToProp.put("Person", new String[0]);
@@ -67,7 +67,7 @@ public class ReasonedArtMarketInspector extends InspectToAxiom {
 	}
 	
 	@Override
-	public Map<String, String[]> getMapClassToDataProp() {
+	protected Map<String, String[]> getMapClassToDataProp() {
 		
 		Map<String, String[]> classToProp = new HashMap<>();
 		classToProp.put("Person", new String[]{"name"});
@@ -87,7 +87,7 @@ public class ReasonedArtMarketInspector extends InspectToAxiom {
 	
 	//For each class determines name of field to be used as identifier in the IRI
 	@Override
-	public Map<String, String> getMapClassToFieldId() {
+	protected Map<String, String> getMapClassToFieldId() {
 		
 		Map<String, String> classToFieldId = new HashMap<>();
 		classToFieldId.put("Person", "name");
