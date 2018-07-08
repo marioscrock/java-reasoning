@@ -44,8 +44,18 @@ import javareasoner.server.ReasoningServer;
 public class DebugAttach {
 	
 	/**
-	 * Every time the method of the class specified by inspector is executed, a breakpointEvent
-	   is triggered on the last instruction and virtual machine is stopped and passed to the inspector.
+	 * The inspectors is attached through a socketConnector to the application
+	 * specified by {@link javareasoner.inspect.InspectToAxiom#getDebugPort() inspector.getDebugPort()}.
+	 * Every time the method
+	 * {@link javareasoner.inspect.InspectToAxiom#getMethodName() inspector.getMethodName()} 
+	 * of the class 
+	 * {@link javareasoner.inspect.InspectToAxiom#getClassPattern() inspector.getClassPattern()} 
+	 * specified by inspector is executed, a breakpointEvent is triggered on the last instruction
+	 * and the virtual machine {@link com.sun.jdi.VirtualMachine VirtualMachine} is suspended and the method
+	 * {@link javareasoner.inspect.InspectToAxiom#inspectClasses(VirtualMachine) inspector.inspectClasses}
+	 * is called. Before the execution of the virtual machine is resumed the reasoning routine
+	 * {@link javareasoner.server.ReasoningServer#reasoningRoutine() reasoningRoutine()}
+	 * specified by the ReasoningServer is executed.
 	 * @param inspector The inspector for the application to debug
 	 * @throws IOException
 	 * @throws IllegalConnectorArgumentsException
@@ -75,7 +85,6 @@ public class DebugAttach {
 			    portArg.setValue(inspector.getDebugPort());
 			    VirtualMachine vm = socketConnector.attach(paramsMap);
 			    System.out.println("Attached to process '" + vm.name() + "'");
-	
 	
 		        // Create a class prepare request
 			    // We want to be sure class already loaded before registering BreakpointEvent Request
@@ -121,7 +130,7 @@ public class DebugAttach {
 		                if (event instanceof BreakpointEvent) {
 		                	
 		                	inspector.inspectClasses(vm);
-		                	rs.breakpointRoutine();
+		                	rs.reasoningRoutine();
 		                    
 		                }
 		                

@@ -24,7 +24,18 @@ public class Main {
 	private static AMOntologyHandler oh;
 	private static InspectToAxiom app;
 	private static DLQueryEngine query;
-
+	
+	/**
+	 * Example Main to deal with ArtMarket ontology and related java application.
+	 * @param args	If no args: init default ontology, if {@code args.length} equal to 1:
+	 * 1st arg specifies the serialization type to save the ontology (functional, manchester,
+	 * rdfxml, turtle), if {@code args.length} equal to 2: 2nd arg is used as file path to load the ontology 
+	 * instead of default one
+	 * @throws OWLOntologyCreationException
+	 * @throws OWLOntologyStorageException
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
 	public static void main(String[] args) throws OWLOntologyCreationException, OWLOntologyStorageException, IOException, InterruptedException {
 		
 		oh = new AMOntologyHandler();
@@ -35,17 +46,17 @@ public class Main {
 		oh.printOntology();
 		System.out.println("\nConceptual Model loaded\n");
 		
-		oh.breakpointRoutine();
+		oh.reasoningRoutine();
 		
 		System.out.println("Parsing file input-rdfxml.owl");
 		parseAxioms("input-rdfxml.owl", SerializationType.RDFXML);
 		System.out.println("Axioms ADDED");
-		oh.breakpointRoutine();
+		oh.reasoningRoutine();
 		
 		System.out.println("Parsing file input-functional.owl");
 		parseAxioms("input-functional.owl", SerializationType.FUNCTIONAL);
 		System.out.println("\nAxioms ADDED");
-		oh.breakpointRoutine();
+		oh.reasoningRoutine();
 		oh.saveOntology();
 		
 		//Ask for connection to debuggable app
@@ -72,7 +83,7 @@ public class Main {
 			}
 			
 			System.out.println("\nAxioms ADDED");
-			oh.breakpointRoutine();
+			oh.reasoningRoutine();
 			    
 		}
 		
@@ -83,7 +94,12 @@ public class Main {
 		scan.close();
 		
 	}
-
+	
+	/**
+	 * Manage connection to observed java application
+	 * @param scan Scanner to receive inputs (usually System.in)
+	 * @throws InterruptedException
+	 */
 	private static void initDebugger(Scanner scan) throws InterruptedException {
 		
 		System.out.println("Do you want to attach to application (y/n)");
@@ -116,26 +132,33 @@ public class Main {
 		return;
 		
 	}
-
+	
+	/**
+	 * Parse args of main.
+	 * @param args Args of main method
+	 * @throws OWLOntologyCreationException
+	 * @throws OWLOntologyStorageException
+	 * @throws FileNotFoundException
+	 */
 	private static void initOntologyHandler(String[] args) throws OWLOntologyCreationException, OWLOntologyStorageException, FileNotFoundException {
 
 		switch (args.length) {
-			case 2:
+			case 1:
 				switch (args[2].toLowerCase()) {
 					case "functional":
-						oh.serializationType = SerializationType.FUNCTIONAL;
+						oh.setSerializationType(SerializationType.FUNCTIONAL);
 						break;
 					case "manchester":
-						oh.serializationType = SerializationType.MANCHESTER;
+						oh.setSerializationType(SerializationType.MANCHESTER);
 						break;
 					case "rdfxml":
-						oh.serializationType = SerializationType.RDFXML;
+						oh.setSerializationType(SerializationType.RDFXML);
 						break;
 					case "turtle":
-						oh.serializationType = SerializationType.TURTLE;
+						oh.setSerializationType(SerializationType.TURTLE);
 						break;
 				}
-	        case 1:
+	        case 2:
 	            oh.loadOntologyFromFile(args[0]);
 	        case 0:
 	        	oh.initOntology();
@@ -143,6 +166,13 @@ public class Main {
 		
 	}
 	
+	/**
+	 * Parse axioms from file.
+	 * @param filePath	File path of the file to be parsed
+	 * @param serType	Serialization type to identify correct parser
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	private static void parseAxioms(String filePath, SerializationType serType) throws FileNotFoundException, IOException {
 		
 		try(BufferedReader br = new BufferedReader(new FileReader(filePath))) {

@@ -3,17 +3,26 @@ package javareasoner.inspect;
 import java.util.HashMap;
 import java.util.Map;
 
-import app.client.ArtMarket;
+import app.artmarket.ArtMarket;
 import app.person.*;
 import app.thing.*;
 import javareasoner.ontology.OntologyHandler;
 
+/**
+ * Extension of InspectToAxiom class for ArtMarket application and ontology.
+ * @author Mario
+ *
+ */
 public class ReasonedArtMarketInspector extends InspectToAxiom {
 	
 	private int debugPort = 8000;
 	private String classPattern = ArtMarket.class.getName();
 	private String methodName = "startApp";
 	
+	/**
+	 * Constructor of the class ReasonedArtMarketInspector. It implements super() constructor.
+	 * @param oh
+	 */
 	public ReasonedArtMarketInspector(OntologyHandler oh) {
 		super(oh);
 	}
@@ -31,6 +40,25 @@ public class ReasonedArtMarketInspector extends InspectToAxiom {
 	@Override
 	public String getMethodName() {
 		return methodName;
+	}
+	
+	@Override
+	protected Map<String, String> getMapClassToFieldId() {
+		
+		Map<String, String> classToFieldId = new HashMap<>();
+		classToFieldId.put("Person", "name");
+		classToFieldId.put("Painter", "name");
+		classToFieldId.put("Artist", "name");
+		classToFieldId.put("Artisan", "name");
+		classToFieldId.put("Sculptor", "name");
+		classToFieldId.put("Thing", "id");
+		classToFieldId.put("ArtWork", "id");
+		classToFieldId.put("Paint", "id");
+		classToFieldId.put("Product", "id");
+		classToFieldId.put("Sculpt", "id");
+		
+		return classToFieldId;
+		
 	}
 	
 	@Override
@@ -82,26 +110,6 @@ public class ReasonedArtMarketInspector extends InspectToAxiom {
 		classToProp.put("Sculpt", new String[]{"id"});
 		
 		return classToProp;
-		
-	}
-	
-	//For each class determines name of field to be used as identifier in the IRI
-	@Override
-	protected Map<String, String> getMapClassToFieldId() {
-		
-		Map<String, String> classToFieldId = new HashMap<>();
-		classToFieldId.put("Person", "name");
-		classToFieldId.put("Painter", "name");
-		classToFieldId.put("Artist", "name");
-		classToFieldId.put("Artisan", "name");
-		classToFieldId.put("Sculptor", "name");
-		classToFieldId.put("Thing", "id");
-		classToFieldId.put("ArtWork", "id");
-		classToFieldId.put("Paint", "id");
-		classToFieldId.put("Product", "id");
-		classToFieldId.put("Sculpt", "id");
-		
-		return classToFieldId;
 		
 	}
 

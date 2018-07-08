@@ -28,6 +28,10 @@ import javareasoner.server.ReasoningServer;
 
 public class AMOntologyHandler extends OntologyHandler implements ReasoningServer {
 	
+	/**
+	 * Override the method specifying the ArtMarket ontology's axioms through
+	 * the OWLAPI.
+	 */
 	@Override
 	public void initOntology() throws OWLOntologyStorageException, FileNotFoundException, OWLOntologyCreationException {
 		
@@ -143,6 +147,11 @@ public class AMOntologyHandler extends OntologyHandler implements ReasoningServe
 		
 	}
 	
+	/**
+	 * Utility method to declare a class with the IRI fragment given as string.
+	 * @param id	String representing IRI fragment
+	 * @return The OWLClass declared
+	 */
 	private OWLClass declareClass(String id) { 
 		
 		OWLClass owlClass = df.getOWLClass(IOR + "#" + id);		
@@ -153,6 +162,10 @@ public class AMOntologyHandler extends OntologyHandler implements ReasoningServe
 		
 	}
 	
+	/**
+	 * Query the reasoner to obtain instances of artists creating artworks.
+	 * @return instances of artists creating artworks.
+	 */
 	public NodeSet<OWLNamedIndividual> getInstancesArtistsCreatingArtworks(){
 		
 		r.flush();
@@ -160,9 +173,9 @@ public class AMOntologyHandler extends OntologyHandler implements ReasoningServe
 				df.getOWLThing()));
 	
 	}
-
+	
 	@Override
-	public void breakpointRoutine() {
+	public void reasoningRoutine() {
 		
 		boolean consistent = isConsistent();
 		System.out.println("\nIs ontology still consistent? " + consistent);

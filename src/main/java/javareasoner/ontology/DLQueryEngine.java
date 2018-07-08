@@ -1,7 +1,7 @@
 /*
  * This class has been coded thanks to code from:
  * - https://github.com/phillord/owl-api/blob/master/contract/src/test/java/org/coode/owlapi/examples/DLQueryExample.java
- * 	 (Merge in a class + OWL API update to avoid deprecated methods)
+ * (My contributions: Integrate my OntologyHandler component + Merge classes + OWL API update to avoid deprecated methods)
 */
 package javareasoner.ontology;
 
@@ -38,12 +38,14 @@ public class DLQueryEngine {
 	private final OntologyHandler oh;
 
     /** Constructs a DLQueryEngine. This will answer "DL queries" using the
-     * specified reasoner. A short form provider specifies how entities are
-     * rendered.
-     * @param reasoner The reasoner to be used for answering the queries. */
+     * specified reasoner. A simple short form provider 
+     * {@link org.semanticweb.owlapi.util.SimpleShortFormProvider SimpleShortFormProvider}
+     * is used to specify how entities are rendered.
+     * @param oh	The OntologyHandler managing the ontology to query. */
     public DLQueryEngine(OntologyHandler oh) {
-    	shortFormProvider = new SimpleShortFormProvider();
     	this.oh = oh;
+    	
+    	shortFormProvider = new SimpleShortFormProvider();
         Stream<OWLOntology> importsClosure = oh.appOntology.importsClosure();
         // Create a bidirectional short form provider to do the actual mapping.
         // It will generate names using the input
@@ -51,7 +53,11 @@ public class DLQueryEngine {
         bidiShortFormProvider = new BidirectionalShortFormProviderAdapter(oh.manager,
         			importsClosure.collect(Collectors.toSet()), shortFormProvider);
     }
-
+    
+    /**
+     * Enable query loop asking input from System.in to answer queries.
+     * @throws IOException
+     */
     public void doQueryLoop() throws IOException {
         while (true) {
             // Prompt the user to enter a class expression
@@ -67,7 +73,12 @@ public class DLQueryEngine {
             System.out.println();
         }
     }
-
+    
+    /**
+     * Read a string in UTF-8 from System.in.
+     * @return The string read
+     * @throws IOException
+     */
     private static String readInput() throws IOException {
         InputStream is = System.in;
         InputStreamReader reader;
@@ -81,8 +92,7 @@ public class DLQueryEngine {
      * @param classExpressionString
      *            The string from which the class expression will be parsed.
      * @param direct
-     *            Specifies whether direct superclasses should be returned or
-     *            not.
+     *            Specifies whether only direct superclasses should be returned.
      * @return The superclasses of the specified class expression
      * @throws ParserException
      *             If there was a problem parsing the class expression. */
@@ -124,7 +134,7 @@ public class DLQueryEngine {
      * @param classExpressionString
      *            The string from which the class expression will be parsed.
      * @param direct
-     *            Specifies whether direct subclasses should be returned or not.
+     *            Specifies whether only direct subclasses should be returned.
      * @return The subclasses of the specified class expression
      * @throws ParserException
      *             If there was a problem parsing the class expression. */
@@ -142,7 +152,7 @@ public class DLQueryEngine {
      * @param classExpressionString
      *            The string from which the class expression will be parsed.
      * @param direct
-     *            Specifies whether direct instances should be returned or not.
+     *            Specifies whether only direct instances should be returned.
      * @return The instances of the specified class expression
      * @throws ParserException
      *             If there was a problem parsing the class expression. */
@@ -176,8 +186,11 @@ public class DLQueryEngine {
         return parser.parseClassExpression();
     }
 
-    /** @param classExpression
-     *            the class expression to use for interrogation */
+    /**
+     * Given the {@code classExpression} perform the query asking for super classes,
+     * equivalent classes, sub classes and instances. Print results on System.out.
+     * @param classExpression	the class expression to use for interrogation
+     */
     public void askQuery(String classExpression) {
         if (classExpression.length() == 0) {
             System.out.println("No class expression specified");
@@ -206,9 +219,15 @@ public class DLQueryEngine {
         		System.out.println("Wrong query!");
         	}     
         }
-
     }
-
+    
+    /**
+     * Define how to print a stream of entities
+     * {@link org.semanticweb.owlapi.model.OWLEntity OWLEntity}.
+     * @param name String describing what the entities in the stream represent
+     * @param entities The stream of entities
+     * @param sb The string builder to append the built string to
+     */
     private void printEntities(String name, Stream<? extends OWLEntity> entities, StringBuilder sb) {
     	
         sb.append(name);

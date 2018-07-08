@@ -1,4 +1,4 @@
-package app.client;
+package app.artmarket;
 
 import java.util.Scanner;
 
@@ -12,7 +12,7 @@ public class ReasonedArtMarketMain {
 	
 	/**
 	 * Main method to run ReasonedArtMarketMain
-	 * @param args No args required
+	 * @param args	No args required
 	 */
 	public static void main(String[] args) {
 		

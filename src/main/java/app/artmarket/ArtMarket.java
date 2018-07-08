@@ -1,4 +1,4 @@
-package app.client;
+package app.artmarket;
 
 import java.util.ArrayList;
 import java.util.List;

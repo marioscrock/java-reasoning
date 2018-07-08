@@ -44,6 +44,11 @@ import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 
 import javareasoner.SerializationType;
 
+/**
+ * Ontology handler provides an high level API to deal with OWL API.
+ * @author Mario
+ *
+ */
 public class OntologyHandler {
 	
 	protected OWLOntologyManager manager;
@@ -51,13 +56,19 @@ public class OntologyHandler {
 	protected OWLDataFactory df;
 	protected OWLReasoner r;
 	
-	public SerializationType serializationType = SerializationType.RDFXML;
-	
 	protected final IRI IOR = IRI.create("http://projects.ke.appOntology");
-	protected final File fileout = new File("appOntology.owl");
-	
+	protected File fileout = new File("appOntology.owl");
+	protected SerializationType serializationType = SerializationType.RDFXML;
+
 	private List<OWLAxiom> bufferAxioms = new ArrayList<>();
-   
+	
+	/**
+	 * Load a remote ontology given the string of the IRI.
+	 * @param stringIRI
+	 * @throws OWLOntologyCreationException
+	 * @throws OWLOntologyStorageException
+	 * @throws FileNotFoundException
+	 */
 	public void loadRemoteOntology(String stringIRI) throws OWLOntologyCreationException, OWLOntologyStorageException, FileNotFoundException {
 		
 		manager = OWLManager.createOWLOntologyManager();
@@ -70,6 +81,13 @@ public class OntologyHandler {
 		
 	}
 	
+	/**
+	 * Load an ontology from an .owl file.
+	 * @param filePath
+	 * @throws OWLOntologyCreationException
+	 * @throws OWLOntologyStorageException
+	 * @throws FileNotFoundException
+	 */
 	public void loadOntologyFromFile(String filePath) throws OWLOntologyCreationException, OWLOntologyStorageException, FileNotFoundException {
 		
 		manager = OWLManager.createOWLOntologyManager();
@@ -81,6 +99,12 @@ public class OntologyHandler {
 		
 	}
 	
+	/**
+	 * Init an empty ontology.
+	 * @throws OWLOntologyStorageException
+	 * @throws FileNotFoundException
+	 * @throws OWLOntologyCreationException
+	 */
 	public void initOntology() throws OWLOntologyStorageException, FileNotFoundException, OWLOntologyCreationException {
 		
 		//EMPTY ONTOLOGY
@@ -95,6 +119,13 @@ public class OntologyHandler {
 		
 	}
 	
+	/**
+	 * Save ontology to file. <br>
+	 * Output file determined by class field {@code fileout}, serialization format
+	 * determined by class field {@code serializationType}.
+	 * @throws OWLOntologyStorageException
+	 * @throws FileNotFoundException
+	 */
 	public void saveOntology() throws OWLOntologyStorageException, FileNotFoundException {
 		
 		switch (serializationType) {
@@ -120,6 +151,10 @@ public class OntologyHandler {
 		
 	}
 	
+	/**
+	 * Return the OWLReasoner instance inferring on the related ontology.
+	 * @return OWLReasoner instance inferring on the related ontology
+	 */
 	protected OWLReasoner getReasoner() {
 		
 		if (r == null) {
@@ -131,12 +166,27 @@ public class OntologyHandler {
 		return r;
 	}
 	
+	/**
+	 * Return all individuals of class with IRI fragment as input string
+	 * in the ontology. Reasoning enabled.<br>
+	 * Manchester syntax DL query: {@code classId}
+	 * @param classId	IRI fragment of the class
+	 * @return individuals of the atomic class
+	 */
 	public NodeSet<OWLNamedIndividual> getInstances(String classId){
 		
 		return r.getInstances(df.getOWLClass(IOR + "#" + classId));
 	
 	}
 	
+	/**
+	 * Return all individuals having a property with IRI fragment as input objectPropertyId string
+	 * and targeting a class with IRI fragment classId in the ontology. Reasoning enabled.<br>
+	 * Manchester syntax DL query: {@code classId} some {@code objectPropertyId}
+	 * @param objectPropertyId	IRI fragment of the property
+	 * @param classId	If null OWLThing is considered
+	 * @return individuals of the class defined by the query
+	 */
 	public NodeSet<OWLNamedIndividual> getInstances(String objectPropertyId, String classId){
 		
 		if (classId == null) {
@@ -149,13 +199,24 @@ public class OntologyHandler {
 	
 	}
 	
-	
+	/**
+	 * Ask the reasoner to check whether the ontology is consistent
+	 * @return {@code true}	If the ontology is consistent, {@code false} otherwise.
+	 */
 	public boolean isConsistent() {
 
 		return r.isConsistent();
 		
 	}
 	
+	/**
+	 * Add an ABox axiom stating object property {@code propertyName} holds between individual
+	 * {@code idFrom} and {@code idTo}, sync the reasoner and keeps track of the axiom 
+	 * inserted in the OntologyHandler's buffer. 
+	 * @param idFrom	IRI fragment of the source individual
+	 * @param idTo	IRI fragment of the target individual
+	 * @param propertyName IRI fragment of the property
+	 */
 	public void addObjectProperty(String idFrom, String idTo, String propertyName) {
 		
 		OWLNamedIndividual idFromInd = df.getOWLNamedIndividual(IOR + "#" + idFrom.replaceAll("\\s","-"));
@@ -170,6 +231,14 @@ public class OntologyHandler {
 		
 	}
 	
+	/**
+	 * Add an ABox axiom stating data property {@code propertyName} holds between individual
+	 * {@code idFrom} and value {@code toValue}, sync the reasoner and keeps track of the axiom 
+	 * inserted in the OntologyHandler's buffer.
+	 * @param idFrom	IRI fragment of the source individual
+	 * @param toValue	String representing data value
+	 * @param propertyName	IRI fragment of the property
+	 */
 	public void addDataProperty(String idFrom, String toValue, String propertyName) {
 		
 		OWLNamedIndividual idFromInd = df.getOWLNamedIndividual(IOR + "#" + idFrom.replaceAll("\\s","-"));
@@ -183,6 +252,13 @@ public class OntologyHandler {
 		
 	}
 	
+	/**
+	 * Add an ABox axiom stating individual {@code id} belongs to class
+	 * {@code classId}, sync the reasoner and keeps track of the axiom 
+	 * inserted in the OntologyHandler's buffer.
+	 * @param id	IRI fragment of the individual
+	 * @param classId	IRI fragment of the class
+	 */
 	public void createIndividual(String id, String classId) {
 		
 		OWLNamedIndividual ind = df.getOWLNamedIndividual(IOR + "#" + id.replaceAll("\\s","-"));
@@ -195,12 +271,22 @@ public class OntologyHandler {
 		
 	}
 	
+	/**
+	 * Returns a set of all OWLClass in the ontology.
+	 * @return	set of all OWLClass in the ontology
+	 */
 	public Set<OWLClass> allClassesInOntology() {
 		
 		return appOntology.classesInSignature().collect(Collectors.toSet());
 		
 	}
 	
+	/**
+	 * Parse the string {@code axiom} given the SerializationType {@code type}.
+	 * The method add to the string the prefixes 
+	 * @param axiom The string to parse
+	 * @param type The serialization type 
+	 */
 	public void addStringAxiom(String axiom, SerializationType type) {
 		
 		OWLParser parser = null;
@@ -211,36 +297,36 @@ public class OntologyHandler {
 						"Prefix: rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" + 
 						"Prefix: xml: <http://www.w3.org/XML/1998/namespace>\n" + 
 						"Prefix: xsd: <http://www.w3.org/2001/XMLSchema#>\n" + 
-						"Ontology: <http://projects.ke.appOntology>\n" + 
+						"Ontology: <" + IOR + ">\n" + 
 						axiom;
 				parser = new ManchesterOWLSyntaxOntologyParserFactory().createParser();
 				break;
 			case FUNCTIONAL : 
-				axiom = "Prefix(:=<http://projects.ke.appOntology#>)\n" + 
+				axiom = "Prefix(:=<" + IOR + "#>)\n" + 
 						"Prefix(owl:=<http://www.w3.org/2002/07/owl#>)\n" + 
 						"Prefix(rdf:=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)\n" + 
 						"Prefix(xml:=<http://www.w3.org/XML/1998/namespace>)\n" + 
 						"Prefix(xsd:=<http://www.w3.org/2001/XMLSchema#>)\n" + 
 						"Prefix(rdfs:=<http://www.w3.org/2000/01/rdf-schema#>)\n" +
-						"Ontology(<http://projects.ke.appOntology>\n" +
+						"Ontology(<" + IOR + ">\n" +
 						axiom + "\n)";
 				parser = new OWLFunctionalSyntaxOWLParserFactory().createParser();
 				break;
 			case TURTLE : 
-				axiom = "@prefix : <http://projects.ke.appOntology#> .\n" + 
+				axiom = "@prefix : <" + IOR + "#> .\n" + 
 						"@prefix owl: <http://www.w3.org/2002/07/owl#> .\n" + 
 						"@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n" + 
 						"@prefix xml: <http://www.w3.org/XML/1998/namespace> .\n" + 
 						"@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n" + 
 						"@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n" + 
-						"@base <http://projects.ke.appOntology> .\n" + 
-						"<http://projects.ke.appOntology> rdf:type owl:Ontology .\n" +
+						"@base <" + IOR + "> .\n" + 
+						"<" + IOR + "> rdf:type owl:Ontology .\n" +
 						axiom;
 				parser = new TurtleOntologyParserFactory().createParser();
 				break;
 			case RDFXML :
-				axiom = "<rdf:RDF xmlns=\"http://projects.ke.appOntology#\"\n" + 
-		    	   		"     xml:base=\"http://projects.ke.appOntology\"\n" + 
+				axiom = "<rdf:RDF xmlns=\"" + IOR + "#\"\n" + 
+		    	   		"     xml:base=\"" + IOR + "\"\n" + 
 		    	   		"     xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n" + 
 		    	   		"     xmlns:owl=\"http://www.w3.org/2002/07/owl#\"\n" + 
 		    	   		"     xmlns:xml=\"http://www.w3.org/XML/1998/namespace\"\n" + 
@@ -264,17 +350,68 @@ public class OntologyHandler {
        
 	}
 	
+	/**
+	 * Print the ontology axioms on System.out
+	 */
 	public void printOntology() {
 		appOntology.logicalAxioms().forEach(System.out::println);
 	}
 	
+	/**
+	 * Empty the buffer associated to the OntologyHandler
+	 */
 	public void emptyBuffer() {
 		bufferAxioms.clear();
 	}
 	
+	/**
+	 * Delete from the ontology the axioms in buffer and empty the buffer.
+	 */
 	public void deleteFromOntAxiomsInBuffer() {		
 		appOntology.remove(bufferAxioms);
 		emptyBuffer();	
+	}
+	
+	/**
+	 * Get the IRI of the ontology.
+	 * @return	IRI of the ontology
+	 */
+	public IRI getIOR() {
+		return IOR;
+	}
+	
+	/**
+	 * Get the string representation of output file where ontology is saved
+	 * by {@link #saveOntology()}.
+	 * @return string representation of output file
+	 */
+	public String getFileout() {
+		return fileout.getPath();
+	}
+	
+	/**
+	 * Allow to set output file where ontology is saved by {@link #saveOntology()}
+	 * given the string {@code fileout} representing the file path.
+	 * @param fileout	string output file path
+	 */
+	public void setFileout(String fileout) {
+		this.fileout = new File(fileout);
+	}
+	
+	/**
+	 * Return the serialization type used by {@link #saveOntology()}.
+	 * @return serialization type used to save the ontology
+	 */
+	public SerializationType getSerializationType() {
+		return serializationType;
+	}
+	
+	/**
+	 * Allow to set the serialization type used by {@link #saveOntology()}.
+	 * @param serializationType serialization type to save the ontology
+	 */
+	public void setSerializationType(SerializationType serializationType) {
+		this.serializationType = serializationType;
 	}
 
 }
