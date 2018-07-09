@@ -5,7 +5,7 @@ A java project to exploit [Java Debug Interface](https://docs.oracle.com/javase/
 ## How to run the demo ##
 
 ### The application ###
-The project contains two example application in packages ```app.artmarket``` and ```app.eshop```, for each of the following applications an ontology is provided through the OWLAPI in the respective extension of ```OntologyHandler``` ( ```AMOntologyHandler``` and ```ESOntologyHandler```).
+The project contains two example application in packages ```app.artmarket``` and ```app.eshop```. For each application an ontology is described through the OWLAPI in the respective extension of ```OntologyHandler``` ( ```AMOntologyHandler``` and ```ESOntologyHandler```).
 
 The two applications are two toy example and their execution is managed respectively by ```ReasonedArtMarketMain``` and ```ReasonedEshopMain``` that must be run with following options to enable remote debug mode:
 
@@ -15,7 +15,9 @@ The two applications are two toy example and their execution is managed respecti
 
 The ```javareasoner``` package contains the main components of the debugger connecting to the application that can be executed respectively through the classes ```MainAM``` and ```MainES```.
 
-  * ```MainAM``` shows in particular examples of integration between ABox axioms parsed from file and ABox axioms generated from active instances.
+ * Both examples show how the ontology changes with respect to the runtime evolution of the application.
+ * ```MainAM``` shows in particular examples of integration between ABox axioms parsed from file and ABox axioms generated from active instances.
+ * ```MainEs``` shows in particular how an higher level ontology can be exploited to extract information from the application (e.g. classes not represented in the application).
 
 **Note** The user is expected to provide inputs from the console in both running executables to enable connection and ensure debugger is ready when the application actually starts its execution.
 
