@@ -7,9 +7,7 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 
 import javareasoner.inspect.InspectToAxiom;
-import javareasoner.inspect.ReasonedArtMarketInspector;
 import javareasoner.inspect.ReasonedEShopInspector;
-import javareasoner.ontology.AMOntologyHandler;
 import javareasoner.ontology.DLQueryEngine;
 import javareasoner.ontology.ESOntologyHandler;
 
@@ -42,17 +40,6 @@ public class MainES {
 		System.out.println("\nConceptual Model loaded\n");
 		
 		oh.reasoningRoutine();
-		
-		System.out.println("Parsing file input-rdfxml.owl");
-		Main.parseAxioms(oh, "input-rdfxml.owl", SerializationType.RDFXML);
-		System.out.println("Axioms ADDED");
-		oh.reasoningRoutine();
-		
-		System.out.println("Parsing file input-functional.owl");
-		Main.parseAxioms(oh, "input-functional.owl", SerializationType.FUNCTIONAL);
-		System.out.println("\nAxioms ADDED");
-		oh.reasoningRoutine();
-		oh.saveOntology();
 		
 		//Ask for connection to debuggable app
 		Scanner scan = new Scanner(System.in);

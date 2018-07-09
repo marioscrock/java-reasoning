@@ -1,9 +1,7 @@
 package javareasoner.ontology;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLClass;
@@ -17,11 +15,12 @@ import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
 import org.semanticweb.owlapi.model.OWLFunctionalDataPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLObjectPropertyDomainAxiom;
+import org.semanticweb.owlapi.model.OWLObjectPropertyRangeAxiom;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 import org.semanticweb.owlapi.model.OWLSubObjectPropertyOfAxiom;
-import org.semanticweb.owlapi.model.OWLSubPropertyChainOfAxiom;
 import org.semanticweb.owlapi.reasoner.NodeSet;
 
 import javareasoner.server.ReasoningServer;
@@ -29,7 +28,7 @@ import javareasoner.server.ReasoningServer;
 public class ESOntologyHandler extends OntologyHandler implements ReasoningServer {
 	
 	/**
-	 * Override the method specifying the ArtMarket ontology's axioms through
+	 * Override the method specifying the EShop ontology's axioms through
 	 * the OWLAPI.
 	 */
 	@Override
@@ -40,106 +39,119 @@ public class ESOntologyHandler extends OntologyHandler implements ReasoningServe
 		
 		df = appOntology.getOWLOntologyManager().getOWLDataFactory();
 		
-//		//CLASSES
-//		//Note: Declare Axiom can be omitted because triggered by subclass axioms
-//		OWLClass person = declareClass("Person");
-//		OWLClass artist = declareClass("Artist");
-//		OWLClass painter = declareClass("Painter");
-//		OWLClass sculptor = declareClass("Sculptor");
-//		OWLClass artisan = declareClass("Artisan");
-//		OWLClass thing = declareClass("Thing");
-//		OWLClass artwork = declareClass("ArtWork");
-//		OWLClass product = declareClass("Product");
-//		OWLClass paint = declareClass("Paint");
-//		OWLClass sculpt = declareClass("Sculpt");
-//		
-//		OWLSubClassOfAxiom artist_sub_p = df.getOWLSubClassOfAxiom(artist, person);
-//		appOntology.add(artist_sub_p);
-//		OWLSubClassOfAxiom artisan_sub_p = df.getOWLSubClassOfAxiom(artisan, person);
-//		appOntology.add(artisan_sub_p);
-//		OWLSubClassOfAxiom p_sub_a = df.getOWLSubClassOfAxiom(painter, artist);
-//		appOntology.add(p_sub_a);
-//		OWLSubClassOfAxiom s_sub_a = df.getOWLSubClassOfAxiom(sculptor, artist);
-//		appOntology.add(s_sub_a);
-//		
-//		OWLSubClassOfAxiom a_sub_t = df.getOWLSubClassOfAxiom(artwork, thing);
-//		appOntology.add(a_sub_t);
-//		OWLSubClassOfAxiom p_sub_t = df.getOWLSubClassOfAxiom(product, thing);
-//		appOntology.add(p_sub_t);
-//		OWLSubClassOfAxiom paint_sub_a = df.getOWLSubClassOfAxiom(paint, artwork);
-//		appOntology.add(paint_sub_a);
-//		OWLSubClassOfAxiom sculpt_sub_a = df.getOWLSubClassOfAxiom(sculpt, artwork);
-//		appOntology.add(sculpt_sub_a);
-//		
-//		//OBJECT PROPERTIES
-//		OWLObjectProperty crafts = df.getOWLObjectProperty(IOR + "#crafts");
-//		//OWLObjectPropertyRangeAxiom c_range = df.getOWLObjectPropertyRangeAxiom(crafts, artwork);
-//		OWLObjectProperty produces = df.getOWLObjectProperty(IOR + "#produces");
-//		OWLObjectProperty paints = df.getOWLObjectProperty(IOR + "#paints");
-//		OWLObjectProperty sculpts = df.getOWLObjectProperty(IOR + "#sculpts");
-//		
-//		OWLSubObjectPropertyOfAxiom p_sub_c = df.getOWLSubObjectPropertyOfAxiom(paints, crafts);
-//		appOntology.add(p_sub_c);
-//		OWLSubObjectPropertyOfAxiom s_sub_c = df.getOWLSubObjectPropertyOfAxiom(sculpts, crafts);
-//		appOntology.add(s_sub_c);
-//		
-//		//DATA PROPERTIES
-//		OWLDatatype stringDatatype = df.getStringOWLDatatype();
-//		OWLDataProperty name = df.getOWLDataProperty(IOR + "#name");
-//		OWLDataPropertyDomainAxiom name_domain = df.getOWLDataPropertyDomainAxiom(name, person);
-//		appOntology.add(name_domain);
-//		OWLDataPropertyRangeAxiom name_range = df.getOWLDataPropertyRangeAxiom(name, stringDatatype);
-//		appOntology.add(name_range);
-//		OWLFunctionalDataPropertyAxiom fun_name = df.getOWLFunctionalDataPropertyAxiom(name);
-//		appOntology.add(fun_name);
-//		
-//		OWLDataPropery identifier = df.getOWLDataProperty(IOR + "#id");
-//		OWLDataPropertyDomainAxiom id_domain = df.getOWLDataPropertyDomainAxiom(identifier, thing);
-//		appOntology.add(id_domain);
-//		OWLDataPropertyRangeAxiom id_range = df.getOWLDataPropertyRangeAxiom(identifier, stringDatatype);
-//		appOntology.add(id_range);
-//		OWLFunctionalDataPropertyAxiom fun_id = df.getOWLFunctionalDataPropertyAxiom(identifier);
-//		appOntology.add(fun_id);
-//		
-//		OWLSubClassOfAxiom a_some_ca = df.getOWLSubClassOfAxiom(df.getOWLObjectSomeValuesFrom(crafts, artwork), artist);
-//		appOntology.add(a_some_ca);
-//		OWLSubClassOfAxiom a_some_pp = df.getOWLSubClassOfAxiom(df.getOWLObjectSomeValuesFrom(produces, product), artisan);
-//		appOntology.add(a_some_pp);
-//		OWLSubClassOfAxiom p_some_pp = df.getOWLSubClassOfAxiom(df.getOWLObjectSomeValuesFrom(paints, paint), painter);
-//		appOntology.add(p_some_pp);
-//		OWLSubClassOfAxiom s_some_ss = df.getOWLSubClassOfAxiom(df.getOWLObjectSomeValuesFrom(sculpts, sculpt), sculptor);
-//		appOntology.add(s_some_ss);
-//		
-//		HashSet<OWLClass> disclasses = new HashSet<>();
-//		disclasses.add(person);
-//		disclasses.add(thing);
-//		OWLDisjointClassesAxiom discla = df.getOWLDisjointClassesAxiom(disclasses);
-//	    appOntology.add(discla);
-//	    
-//		HashSet<OWLClass> disclassesThings = new HashSet<>();
-//		disclassesThings.add(paint);
-//		disclassesThings.add(sculpt);
-//		disclassesThings.add(product);
-//		OWLDisjointClassesAxiom discla2 = df.getOWLDisjointClassesAxiom(disclassesThings);
-//	    appOntology.add(discla2);
-//	    
-//		OWLObjectProperty isArtist = df.getOWLObjectProperty(IOR + "#isArtist");
-//		OWLEquivalentClassesAxiom is_a_self = df.getOWLEquivalentClassesAxiom(artist,
-//				df.getOWLObjectHasSelf(isArtist));
-//		appOntology.add(is_a_self);
-//		
-//		OWLObjectProperty isArtwork = df.getOWLObjectProperty(IOR + "#isArtWork");
-//		OWLEquivalentClassesAxiom is_aw_self = df.getOWLEquivalentClassesAxiom(artwork,
-//				df.getOWLObjectHasSelf(isArtwork));
-//		appOntology.add(is_aw_self);
-//		
-//		OWLObjectProperty a_crafts_a = df.getOWLObjectProperty(IOR + "#a_crafts_a");
-//		List<OWLObjectProperty> chain = new ArrayList<>();
-//		chain.add(isArtist);
-//		chain.add(crafts);
-//		chain.add(isArtwork);
-//		OWLSubPropertyChainOfAxiom s_a_c_a = df.getOWLSubPropertyChainOfAxiom(chain, a_crafts_a);
-//		appOntology.add(s_a_c_a);
+		//CLASSES
+		//Note: Declare Axiom can be omitted because triggered by subclass axioms
+		OWLClass user = declareClass("User");
+		OWLClass guest = declareClass("Guest");
+		OWLClass customer = declareClass("Customer");
+		OWLClass simpleCustomer = declareClass("SimpleCustomer");
+		OWLClass vipCustomer = declareClass("VIPCustomer");
+		OWLClass product = declareClass("Product");
+		OWLClass productA = declareClass("ProductA");
+		OWLClass productB = declareClass("ProductB");
+		OWLClass productC = declareClass("ProductC");
+		
+		OWLSubClassOfAxiom g_sub_u = df.getOWLSubClassOfAxiom(guest, user);
+		appOntology.add(g_sub_u);
+		OWLSubClassOfAxiom c_sub_u = df.getOWLSubClassOfAxiom(customer, user);
+		appOntology.add(c_sub_u);
+		OWLSubClassOfAxiom sc_sub_c = df.getOWLSubClassOfAxiom(simpleCustomer, customer);
+		appOntology.add(sc_sub_c);
+		OWLSubClassOfAxiom vc_sub_c = df.getOWLSubClassOfAxiom(vipCustomer, customer);
+		appOntology.add(vc_sub_c);
+		
+		OWLSubClassOfAxiom pA_sub_P = df.getOWLSubClassOfAxiom(productA, product);
+		appOntology.add(pA_sub_P);
+		OWLSubClassOfAxiom pB_sub_P = df.getOWLSubClassOfAxiom(productB, product);
+		appOntology.add(pB_sub_P);
+		OWLSubClassOfAxiom pC_sub_P = df.getOWLSubClassOfAxiom(productC, product);
+		appOntology.add(pC_sub_P);
+		
+		//OBJECT PROPERTIES
+		OWLObjectProperty interestedIn = df.getOWLObjectProperty(IOR + "#interestedIn");
+		OWLObjectPropertyDomainAxiom i_domain = df.getOWLObjectPropertyDomainAxiom(interestedIn, user);
+		appOntology.add(i_domain);
+		OWLObjectPropertyRangeAxiom i_range = df.getOWLObjectPropertyRangeAxiom(interestedIn, product);
+		appOntology.add(i_range);
+		OWLObjectProperty productOnOffer = df.getOWLObjectProperty(IOR + "#productOnOffer");
+		OWLObjectPropertyDomainAxiom p_domain = df.getOWLObjectPropertyDomainAxiom(productOnOffer, customer);
+		appOntology.add(p_domain);
+		OWLObjectPropertyRangeAxiom p_range = df.getOWLObjectPropertyRangeAxiom(productOnOffer, product);
+		appOntology.add(p_range);
+		OWLObjectProperty perc10Offer = df.getOWLObjectProperty(IOR + "#perc10Offer");
+		OWLObjectProperty perc20Offer = df.getOWLObjectProperty(IOR + "#perc20Offer");
+		OWLObjectPropertyDomainAxiom p20_domain = df.getOWLObjectPropertyDomainAxiom(perc20Offer, vipCustomer);
+		appOntology.add(p20_domain);
+		
+		OWLSubObjectPropertyOfAxiom p10_sub_p = df.getOWLSubObjectPropertyOfAxiom(perc10Offer, productOnOffer);
+		appOntology.add(p10_sub_p);
+		OWLSubObjectPropertyOfAxiom p20_sub_p = df.getOWLSubObjectPropertyOfAxiom(perc20Offer, productOnOffer);
+		appOntology.add(p20_sub_p);
+		
+		//DATA PROPERTIES
+		OWLDatatype stringDatatype = df.getStringOWLDatatype();
+		OWLDataProperty username = df.getOWLDataProperty(IOR + "#username");
+		OWLDataPropertyDomainAxiom username_domain = df.getOWLDataPropertyDomainAxiom(username, user);
+		appOntology.add(username_domain);
+		OWLDataPropertyRangeAxiom username_range = df.getOWLDataPropertyRangeAxiom(username, stringDatatype);
+		appOntology.add(username_range);
+		OWLFunctionalDataPropertyAxiom fun_username = df.getOWLFunctionalDataPropertyAxiom(username);
+		appOntology.add(fun_username);
+		
+		OWLDataProperty id = df.getOWLDataProperty(IOR + "#id");
+		OWLDataPropertyDomainAxiom id_domain = df.getOWLDataPropertyDomainAxiom(id, product);
+		appOntology.add(id_domain);
+		OWLDataPropertyRangeAxiom id_range = df.getOWLDataPropertyRangeAxiom(id, stringDatatype);
+		appOntology.add(id_range);
+		OWLFunctionalDataPropertyAxiom fun_id = df.getOWLFunctionalDataPropertyAxiom(id);
+		appOntology.add(fun_id);
+		
+		OWLDataProperty price = df.getOWLDataProperty(IOR + "#price");
+		OWLDataPropertyDomainAxiom price_domain = df.getOWLDataPropertyDomainAxiom(price, product);
+		appOntology.add(price_domain);
+		OWLDataPropertyRangeAxiom price_range = df.getOWLDataPropertyRangeAxiom(price, stringDatatype);
+		appOntology.add(price_range);
+		OWLFunctionalDataPropertyAxiom price_id = df.getOWLFunctionalDataPropertyAxiom(price);
+		appOntology.add(price_id);
+		
+		HashSet<OWLClass> disclasses = new HashSet<>();
+		disclasses.add(user);
+		disclasses.add(product);
+		OWLDisjointClassesAxiom discla = df.getOWLDisjointClassesAxiom(disclasses);
+	    appOntology.add(discla);
+	    
+		HashSet<OWLClass> disclassesProducts = new HashSet<>();
+		disclassesProducts.add(productA);
+		disclassesProducts.add(productB);
+		disclassesProducts.add(productC);
+		OWLDisjointClassesAxiom discla2 = df.getOWLDisjointClassesAxiom(disclassesProducts);
+	    appOntology.add(discla2);
+	    
+	    HashSet<OWLClass> disclassesUsers = new HashSet<>();
+	    disclassesUsers.add(guest);
+	    disclassesUsers.add(simpleCustomer);
+	    disclassesUsers.add(vipCustomer);
+		OWLDisjointClassesAxiom disclaUsers = df.getOWLDisjointClassesAxiom(disclassesUsers);
+	    appOntology.add(disclaUsers);
+	    
+	    OWLClass popularProduct = declareClass("PopularProduct");
+	    OWLSubClassOfAxiom pp_sub_p = df.getOWLSubClassOfAxiom(popularProduct, product);
+		appOntology.add(pp_sub_p);
+		OWLClass popularProductSC = declareClass("PopularProductSC");
+	    OWLSubClassOfAxiom ppsc_sub_p = df.getOWLSubClassOfAxiom(popularProductSC, popularProduct);
+		appOntology.add(ppsc_sub_p);
+		OWLClass popularProductVC = declareClass("PopularProductVC");
+	    OWLSubClassOfAxiom ppvc_sub_p = df.getOWLSubClassOfAxiom(popularProductVC, popularProduct);
+		appOntology.add(ppvc_sub_p);
+		
+		OWLEquivalentClassesAxiom e_ppSC = df.getOWLEquivalentClassesAxiom(popularProductSC, df.getOWLObjectMinCardinality(2,
+				df.getOWLObjectInverseOf(df.getOWLObjectProperty(IOR + "#interestedIn")),
+				df.getOWLClass(IOR + "#SimpleCustomer")));
+		appOntology.add(e_ppSC);
+		OWLEquivalentClassesAxiom e_ppVC = df.getOWLEquivalentClassesAxiom(popularProductVC, df.getOWLObjectMinCardinality(2,
+				df.getOWLObjectInverseOf(df.getOWLObjectProperty(IOR + "#interestedIn")),
+				df.getOWLClass(IOR + "#VIPCustomer")));
+		appOntology.add(e_ppVC);
 		
 	    saveOntology();
 	    
@@ -163,14 +175,25 @@ public class ESOntologyHandler extends OntologyHandler implements ReasoningServe
 	}
 	
 	/**
-	 * Query the reasoner to obtain instances of artists creating artworks.
-	 * @return instances of artists creating artworks.
+	 * Return all individuals targeted by more than {@code card} relations of type {@code objectPropertyId}.
+	 * Reasoning enabled.<br>
+	 * Manchester syntax DL query: inverse {@code objectPropertyId} min {@code <card>} {@code classId}
+	 * @param objectPropertyId	IRI fragment of the property
+	 * @param int	min cardinality value
+	 * @param classId	If null OWLThing is considered
+	 * @return individuals of the class defined by the query
 	 */
-	public NodeSet<OWLNamedIndividual> getInstancesArtistsCreatingArtworks(){
+	public NodeSet<OWLNamedIndividual> getInstancesGreaterCardInvObjectProperty(String objectPropertyId, int card,  String classId){
 		
 		r.flush();
-		return r.getInstances(df.getOWLObjectSomeValuesFrom(df.getOWLObjectProperty(IOR + "#a_crafts_a"),
-				df.getOWLThing()));
+		if (classId != null) {
+			return r.getInstances(df.getOWLObjectMinCardinality(card,
+				df.getOWLObjectInverseOf(df.getOWLObjectProperty(IOR + "#" + objectPropertyId)),
+				df.getOWLClass(IOR + "#" + classId)));
+		} else {
+			return r.getInstances(df.getOWLObjectMinCardinality(card,
+					df.getOWLObjectInverseOf(df.getOWLObjectProperty(IOR + "#" + objectPropertyId))));
+		}
 	
 	}
 	
@@ -183,26 +206,30 @@ public class ESOntologyHandler extends OntologyHandler implements ReasoningServe
 		if (consistent) {
 			System.out.println("\nReasoning Routine");
 			
-			System.out.println("\nPainter(x)");
-			getInstances("Painter").forEach(System.out::println);
+			System.out.println("\nGuest(*)");
+			getInstances("Guest").forEach(System.out::println);
 			
-			System.out.println("\nPaint(x)");
-			getInstances("Paint").forEach(System.out::println);
+			System.out.println("\nCustomer(*)");
+			getInstances("Customer").forEach(System.out::println);
 			
-			System.out.println("\nThing(x)");
-			getInstances("Thing").forEach(System.out::println);
+			System.out.println("\nproductOnOffer(*)");
+			getInstances("productOnOffer", null).forEach(System.out::println);
 			
-			System.out.println("\nsome produces(x,y)");
-			getInstances("produces", null).forEach(System.out::println);
+			System.out.println("\nproductOnOffer(*) some ProductB");
+			getInstances("productOnOffer", "ProductB").forEach(System.out::println);
 			
-			System.out.println("\nsome paints(x,y.Paint)");
-			getInstances("paints", null).forEach(System.out::println);
+			System.out.println("\nPopularProduct (equivalent to: inverse interestedIn min 2)");
+			getInstances("PopularProduct").forEach(System.out::println);
 			
-			System.out.println("\nsome crafts(x,y.Sculpt)");
-			getInstances("crafts", "Sculpt").forEach(System.out::println);
+			System.out.println("\nPopularProductSC (equivalent to: inverse interestedIn min 2 SimpleCustomer)");
+			getInstances("PopularProductSC").forEach(System.out::println);
 			
-			System.out.println("\nq(x) := Artist(x) and creates(x,y) and ArtWork(y)");
-			getInstancesArtistsCreatingArtworks().forEach(System.out::println);
+			System.out.println("\nPopularProductVC (equivalent to: inverse interestedIn min 2 VIPCustomer)");
+			getInstances("PopularProductVC").forEach(System.out::println);
+			
+			System.out.println("\ninverse interestedIn some Guest");
+			getInstancesGreaterCardInvObjectProperty("interestedIn", 1, "Guest").forEach(System.out::println);
+			
 		}
 		
 		System.out.println("*******************************************************");

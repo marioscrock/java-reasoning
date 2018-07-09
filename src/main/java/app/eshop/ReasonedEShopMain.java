@@ -28,13 +28,13 @@ public class ReasonedEShopMain {
 		//Actual application execution
 		EShop eshop = new EShop();
 		
-		//Emulate execution session1
+		//Emulate an execution session
 		eshop.startApp(1);
 		//Clear references active users
-		eshop.startApp(3);
-		//Emulate execution session1 and session2
-		eshop.startApp(1);
 		eshop.startApp(2);
+		//Emulate another execution session
+		eshop.startApp(1);
+
 		
 		System.out.println("\nStopping app!");
 		

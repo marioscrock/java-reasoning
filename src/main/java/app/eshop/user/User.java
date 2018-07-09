@@ -24,4 +24,9 @@ public abstract class User {
 		return interestedIn;
 	}
 	
+	public void interestedIn(Product p) {
+		if (!interestedIn.contains(p))
+			interestedIn.add(p);
+	}
+	
 }

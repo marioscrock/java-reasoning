@@ -22,22 +22,17 @@ public class EShop {
 	/**
 	 * Main method of the example application
 	 * @param session 	Integer parameter to switch modalities of execution
-	 * 		1: Execute first session
-	 * 		2: Execute second session
+	 * 		1: Execute session
 	 * 		3: Clear data active users (delete references)
 	 */
 	public void startApp(int session) {
 		
 		switch (session) {
 			case 1:
-				System.out.println("\n****  Execution session 1  ****");
+				System.out.println("\n****  Execution session  ****");
 				execSession1();
 				break;
 			case 2:
-				System.out.println("\n****  Execution session 2  ****");
-				execSession2();
-				break;
-			case 3:
 				System.out.println("\n****  Deleting Data Active Users  ****");
 				customers.clear();
 				guests.clear();		
@@ -50,7 +45,7 @@ public class EShop {
 	}
 	
 	/**
-	 * Method to emulate execution session 1.
+	 * Method to emulate an execution session.
 	 */
 	private void execSession1() {
 		
@@ -75,8 +70,10 @@ public class EShop {
 		Product pC0119 = new ProductA("pC0119", 60);
 		products.add(pC0119);
 		
-		Guest guest = new Guest();
-		guests.add(guest);
+		Guest guest1 = new Guest();
+		guests.add(guest1);
+		Guest guest2 = new Guest();
+		guests.add(guest2);
 		
 		SimpleCustomer username1 = new SimpleCustomer("username1");
 		customers.add(username1);
@@ -84,32 +81,39 @@ public class EShop {
 		customers.add(username2);
 		SimpleCustomer username3 = new SimpleCustomer("username3");
 		customers.add(username3);
+		SimpleCustomer username4 = new SimpleCustomer("username4");
+		customers.add(username4);
 		
 		VIPCustomer vip_username1 = new VIPCustomer("vip_username1");
 		customers.add(vip_username1);
 		VIPCustomer vip_username2 = new VIPCustomer("vip_username2");
 		customers.add(vip_username2);
+		VIPCustomer vip_username3 = new VIPCustomer("vip_username3");
+		customers.add(vip_username3);
 		
-		for(int i=0; i < customers.size() * 2; i++) {
+		//Generate offers at random
+		for(int i=0; i < customers.size(); i++) {
 			Random r = new Random();
 			Customer c = customers.get(r.nextInt(customers.size()));
 			Product p = products.get(r.nextInt(products.size()));
-			c.productOnOffer(p, r.nextBoolean());
+			boolean vip = r.nextBoolean();
+			c.productOnOffer(p, vip);
+			System.out.println(c.getUsername() + " productInOffer " + p.getIdentifier() + " vip:" + vip);
 		}
 		
-			
-	}
-	
-	/**
-	 * Method to emulate execution session 2.
-	 */
-	private void execSession2() {
+		List<User> users = new ArrayList<>();
+		users.addAll(customers);
+		users.addAll(guests);
 		
-
-			
+		//Generate preferences at random
+		for(int i=0; i < (users.size() * 2); i++) {
+			Random r = new Random();
+			User u = users.get(r.nextInt(users.size()));
+			Product p = products.get(r.nextInt(products.size()));
+			u.interestedIn(p);
+			System.out.println(u.getUsername() + " interestedIn " + p.getIdentifier());
+		}
+				
 	}
-	
-	
-
 
 }

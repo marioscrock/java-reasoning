@@ -182,7 +182,7 @@ public class OntologyHandler {
 	/**
 	 * Return all individuals having a property with IRI fragment as input objectPropertyId string
 	 * and targeting a class with IRI fragment classId in the ontology. Reasoning enabled.<br>
-	 * Manchester syntax DL query: {@code classId} some {@code objectPropertyId}
+	 * Manchester syntax DL query: {@code objectPropertyId} some {@code classId}
 	 * @param objectPropertyId	IRI fragment of the property
 	 * @param classId	If null OWLThing is considered
 	 * @return individuals of the class defined by the query
@@ -229,6 +229,9 @@ public class OntologyHandler {
 		
 		r.flush();
 		
+		//DEBUG
+		//System.out.println("Is consistent? " + isConsistent() + " " + idFrom + " " + idTo + " " + propertyName);
+		
 	}
 	
 	/**
@@ -250,6 +253,9 @@ public class OntologyHandler {
 		
 		r.flush();
 		
+		//DEBUG
+		//System.out.println("Is consistent? " + isConsistent() + " " + idFrom + " " + toValue + " " + propertyName);
+		
 	}
 	
 	/**
@@ -268,6 +274,9 @@ public class OntologyHandler {
 		bufferAxioms.add(ax);
 		
 		r.flush();
+		
+		//DEBUG
+		//System.out.println("Is consistent? " + isConsistent() + " " + id + " " + classId);
 		
 	}
 	
@@ -369,6 +378,7 @@ public class OntologyHandler {
 	 */
 	public void deleteFromOntAxiomsInBuffer() {		
 		appOntology.remove(bufferAxioms);
+		r.flush();
 		emptyBuffer();	
 	}
 	

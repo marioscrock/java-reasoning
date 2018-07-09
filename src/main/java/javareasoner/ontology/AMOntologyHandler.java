@@ -183,25 +183,25 @@ public class AMOntologyHandler extends OntologyHandler implements ReasoningServe
 		if (consistent) {
 			System.out.println("\nReasoning Routine");
 			
-			System.out.println("\nPainter(x)");
+			System.out.println("\nPainter(*)");
 			getInstances("Painter").forEach(System.out::println);
 			
-			System.out.println("\nPaint(x)");
+			System.out.println("\nPaint(*)");
 			getInstances("Paint").forEach(System.out::println);
 			
-			System.out.println("\nThing(x)");
+			System.out.println("\nThing(*)");
 			getInstances("Thing").forEach(System.out::println);
 			
-			System.out.println("\nsome produces(x,y)");
+			System.out.println("\nproduces(*)");
 			getInstances("produces", null).forEach(System.out::println);
 			
-			System.out.println("\nsome paints(x,y.Paint)");
+			System.out.println("\npaints some Paint(*)");
 			getInstances("paints", null).forEach(System.out::println);
 			
-			System.out.println("\nsome crafts(x,y.Sculpt)");
+			System.out.println("\ncrafts some Sculpt(*)");
 			getInstances("crafts", "Sculpt").forEach(System.out::println);
 			
-			System.out.println("\nq(x) := Artist(x) and creates(x,y) and ArtWork(y)");
+			System.out.println("\nisArtist o creates o isArtWork (*)");
 			getInstancesArtistsCreatingArtworks().forEach(System.out::println);
 		}
 		

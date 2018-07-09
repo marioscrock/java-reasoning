@@ -3,9 +3,9 @@ package javareasoner.inspect;
 import java.util.HashMap;
 import java.util.Map;
 
-import app.artmarket.ArtMarket;
-
 import app.eshop.EShop;
+import app.eshop.user.*;
+import app.eshop.product.*;
 import javareasoner.ontology.OntologyHandler;
 
 /**
@@ -46,17 +46,16 @@ public class ReasonedEShopInspector extends InspectToAxiom {
 	protected Map<String, String> getMapClassToFieldId() {
 		
 		Map<String, String> classToFieldId = new HashMap<>();
-//		classToFieldId.put("Person", "name");
-//		classToFieldId.put("Painter", "name");
-//		classToFieldId.put("Artist", "name");
-//		classToFieldId.put("Artisan", "name");
-//		classToFieldId.put("Sculptor", "name");
-//		classToFieldId.put("Thing", "id");
-//		classToFieldId.put("ArtWork", "id");
-//		classToFieldId.put("Paint", "id");
-//		classToFieldId.put("Product", "id");
-//		classToFieldId.put("Sculpt", "id");
-//		
+		classToFieldId.put("User", "username");
+		classToFieldId.put("Customer", "username");
+		classToFieldId.put("Guest", "username");
+		classToFieldId.put("SimpleCustomer", "username");
+		classToFieldId.put("VIPCustomer", "username");
+		classToFieldId.put("Product", "id");
+		classToFieldId.put("ProductA", "id");
+		classToFieldId.put("ProductB", "id");
+		classToFieldId.put("ProductC", "id");
+	
 		return classToFieldId;
 		
 	}
@@ -65,17 +64,16 @@ public class ReasonedEShopInspector extends InspectToAxiom {
 	protected Map<String, String> getMapOntToAppClasses() {
 		
 		Map<String, String> ontToAppClasses = new HashMap<>();
-//		ontToAppClasses.put("Person", Person.class.getName());
-//		ontToAppClasses.put("Painter", Painter.class.getName());
-//		ontToAppClasses.put("Artist", Artist.class.getName());
-//		ontToAppClasses.put("Artisan", Artisan.class.getName());
-//		ontToAppClasses.put("Sculptor", Sculptor.class.getName());
-//		ontToAppClasses.put("Thing", Thing.class.getName());
-//		ontToAppClasses.put("ArtWork", ArtWork.class.getName());
-//		ontToAppClasses.put("Paint", Paint.class.getName());
-//		ontToAppClasses.put("Product", Product.class.getName());
-//		ontToAppClasses.put("Sculpt", Sculpt.class.getName());
-//		
+		ontToAppClasses.put("User", User.class.getName());
+		ontToAppClasses.put("Customer", Customer.class.getName());
+		ontToAppClasses.put("Guest", Guest.class.getName());
+		ontToAppClasses.put("VIPCustomer", VIPCustomer.class.getName());
+		ontToAppClasses.put("SimpleCustomer", SimpleCustomer.class.getName());
+		ontToAppClasses.put("Product", Product.class.getName());
+		ontToAppClasses.put("ProductA", ProductA.class.getName());
+		ontToAppClasses.put("ProductB", ProductB.class.getName());
+		ontToAppClasses.put("ProductC", ProductC.class.getName());
+		
 		return ontToAppClasses;
 		
 	}
@@ -84,12 +82,12 @@ public class ReasonedEShopInspector extends InspectToAxiom {
 	protected Map<String, String[]> getMapClassToObjProp() {
 		
 		Map<String, String[]> classToProp = new HashMap<>();
-//		classToProp.put("Person", new String[0]);
-//		classToProp.put("Painter", new String[]{"paints"});
-//		classToProp.put("Artist", new String[]{"crafts"});
-//		classToProp.put("Artisan", new String[]{"produces"});
-//		classToProp.put("Sculptor", new String[]{"sculpts"});
-//		
+		classToProp.put("User", new String[]{"interestedIn"});
+		classToProp.put("Guest", new String[]{"interestedIn"});
+		classToProp.put("Customer", new String[]{"productOnOffer", "interestedIn"});
+		classToProp.put("SimpleCustomer", new String[]{"productOnOffer", "perc10Offer", "interestedIn"});
+		classToProp.put("VIPCustomer", new String[]{"productOnOffer", "perc10Offer", "interestedIn"});
+		
 		return classToProp;
 		
 	}
@@ -98,16 +96,15 @@ public class ReasonedEShopInspector extends InspectToAxiom {
 	protected Map<String, String[]> getMapClassToDataProp() {
 		
 		Map<String, String[]> classToProp = new HashMap<>();
-//		classToProp.put("Person", new String[]{"name"});
-//		classToProp.put("Painter", new String[]{"name"});
-//		classToProp.put("Artist", new String[]{"name"});
-//		classToProp.put("Artisan", new String[]{"name"});
-//		classToProp.put("Sculptor", new String[]{"name"});
-//		classToProp.put("Thing", new String[]{"id"});
-//		classToProp.put("ArtWork", new String[]{"id"});
-//		classToProp.put("Paint", new String[]{"id"});
-//		classToProp.put("Product", new String[]{"id"});
-//		classToProp.put("Sculpt", new String[]{"id"});
+		classToProp.put("User", new String[]{"username"});
+		classToProp.put("Customer", new String[]{"username"});
+		classToProp.put("Guest", new String[]{"username"});
+		classToProp.put("SimpleCustomer", new String[]{"username"});
+		classToProp.put("VIPCustomer", new String[]{"username"});
+		classToProp.put("Product", new String[]{"id", "price"});
+		classToProp.put("ProductA", new String[]{"id", "price"});
+		classToProp.put("ProductB", new String[]{"id", "price"});
+		classToProp.put("ProductC", new String[]{"id", "price"});
 		
 		return classToProp;
 		

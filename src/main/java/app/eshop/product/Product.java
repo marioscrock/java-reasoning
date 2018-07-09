@@ -1,6 +1,6 @@
 package app.eshop.product;
 
-public class Product {
+public abstract class Product {
 	
 	private String id;
 	private float price;
