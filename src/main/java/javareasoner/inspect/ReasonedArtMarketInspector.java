@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import app.artmarket.ArtMarket;
-import app.person.*;
-import app.thing.*;
+import app.artmarket.person.*;
+import app.artmarket.thing.*;
 import javareasoner.ontology.OntologyHandler;
 
 /**

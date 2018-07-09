@@ -6,115 +6,96 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
+import org.semanticweb.owlapi.io.OWLParserException;
+import org.semanticweb.owlapi.model.OWLOntologyChangeException;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
+import org.semanticweb.owlapi.model.UnloadableImportException;
 
 import com.sun.jdi.AbsentInformationException;
 import com.sun.jdi.IncompatibleThreadStateException;
 import com.sun.jdi.connect.IllegalConnectorArgumentsException;
 
 import javareasoner.inspect.InspectToAxiom;
-import javareasoner.inspect.ReasonedArtMarketInspector;
-import javareasoner.ontology.AMOntologyHandler;
-import javareasoner.ontology.DLQueryEngine;
+import javareasoner.ontology.OntologyHandler;
+import javareasoner.server.ReasoningServer;
 
-
+/**
+ * Common method for Main classes to run {@code javareasoner} package.
+ * @author Mario
+ *
+ */
 public class Main {
 	
-	private static AMOntologyHandler oh;
-	private static InspectToAxiom app;
-	private static DLQueryEngine query;
-	
 	/**
-	 * Example Main to deal with ArtMarket ontology and related java application.
-	 * @param args	If no args: init default ontology, if {@code args.length} equal to 1:
-	 * 1st arg specifies the serialization type to save the ontology (functional, manchester,
-	 * rdfxml, turtle), if {@code args.length} equal to 2: 2nd arg is used as file path to load the ontology 
-	 * instead of default one
-	 * @throws OWLOntologyCreationException
-	 * @throws OWLOntologyStorageException
+	 * Enable parsing loop asking if user want to parse a file to add axioms to the ontology.	
+	 * @param oh OntologyHandler related to the ontology I want to add axioms to
+	 * @param rs ReasoningServer providing reasoning routine
+	 * @param scan Scanner to receive inputs (usually System.in)
+	 * @param filepath File path of the file to parse
+	 * @throws FileNotFoundException
 	 * @throws IOException
-	 * @throws InterruptedException
 	 */
-	public static void main(String[] args) throws OWLOntologyCreationException, OWLOntologyStorageException, IOException, InterruptedException {
-		
-		oh = new AMOntologyHandler();
-		
-		//Init ontology and determine serialization type from args
-		initOntologyHandler(args);
-		
-		oh.printOntology();
-		System.out.println("\nConceptual Model loaded\n");
-		
-		oh.reasoningRoutine();
-		
-		System.out.println("Parsing file input-rdfxml.owl");
-		parseAxioms("input-rdfxml.owl", SerializationType.RDFXML);
-		System.out.println("Axioms ADDED");
-		oh.reasoningRoutine();
-		
-		System.out.println("Parsing file input-functional.owl");
-		parseAxioms("input-functional.owl", SerializationType.FUNCTIONAL);
-		System.out.println("\nAxioms ADDED");
-		oh.reasoningRoutine();
-		oh.saveOntology();
-		
-		//Ask for connection to debuggable app
-		Scanner scan = new Scanner(System.in);
-		initDebugger(scan);	
+	public static void parsingLoop(OntologyHandler oh, ReasoningServer rs, Scanner scan, String filepath) throws FileNotFoundException, IOException {
 		
 		while (true) {
 			
-			System.out.println("\nDo you want me to read <input.owl> to parse additional axioms?\n"
-					+ "If NO type \"exit\"\nFor RDFXML write \"RDFXML\" (any other string FUNCTIONAL parsing)");
+			System.out.println("\nDo you want me to read <" + filepath + "> to parse additional axioms?\n"
+					+ "Type serialization format (if not recognised FUNCTIONAL parsing)\nType x to exit");
+			
 			String s;
 			s = scan.next();
+			boolean done = false;
 			
-			if (s.toLowerCase().equals("exit")) {
+			if (s.equalsIgnoreCase("x")) {
 				break;
 			}
-			else {
-				if (s.toLowerCase().equals("rdfxml")) {
-					parseAxioms("input.owl", SerializationType.RDFXML);
-				}
-				else {
-					parseAxioms("input.owl", SerializationType.FUNCTIONAL);
-				}
+			
+			switch (s.toLowerCase()) {
+				case "rdfxml":
+					done = parseAxioms(oh, filepath, SerializationType.RDFXML);
+					break;
+				case "manchester":
+					done = parseAxioms(oh, filepath, SerializationType.MANCHESTER);
+					break;
+				case "turtle":
+					done = parseAxioms(oh, filepath, SerializationType.TURTLE);
+					break;
+				default:
+					done = parseAxioms(oh, filepath, SerializationType.FUNCTIONAL);
+					break;
 			}
 			
-			System.out.println("\nAxioms ADDED");
-			oh.reasoningRoutine();
-			    
+			if (done) {
+				System.out.println("\nAxioms ADDED");
+				rs.reasoningRoutine();
+			}
+			
 		}
-		
-		query = new DLQueryEngine(oh);
-		query.doQueryLoop();
-		
-		oh.saveOntology();
-		scan.close();
-		
+		    
 	}
 	
 	/**
 	 * Manage connection to observed java application
-	 * @param scan Scanner to receive inputs (usually System.in)
+	 * @param inspector	Inspector to manage application
+	 * @param rs	ReasoningServer to call routines at breakpoints
+	 * @param scan	Scanner to receive inputs (usually System.in)
 	 * @throws InterruptedException
 	 */
-	private static void initDebugger(Scanner scan) throws InterruptedException {
+	public static void initDebugger(InspectToAxiom inspector, ReasoningServer rs, Scanner scan) throws InterruptedException {
 		
 		System.out.println("Do you want to attach to application (y/n)");
 		String s = scan.next();
 		
 		if (s.toLowerCase().equals("y")) {
 			
-			app = new ReasonedArtMarketInspector(oh);
 			Thread debugger = new Thread(new Runnable() {
 				
 				@Override
 				public void run() {
 					try {
 						
-						DebugAttach.startDebug(app, oh);
+						DebugAttach.startDebug(inspector, rs);
 						
 					} catch (IOException | IllegalConnectorArgumentsException | InterruptedException
 							| IncompatibleThreadStateException | AbsentInformationException e) {
@@ -129,18 +110,17 @@ public class Main {
 			
 		}
 		
-		return;
-		
 	}
 	
 	/**
 	 * Parse args of main.
-	 * @param args Args of main method
+	 * @param oh	OntologyHandler to initialize
+	 * @param args	Args of main method
 	 * @throws OWLOntologyCreationException
 	 * @throws OWLOntologyStorageException
 	 * @throws FileNotFoundException
 	 */
-	private static void initOntologyHandler(String[] args) throws OWLOntologyCreationException, OWLOntologyStorageException, FileNotFoundException {
+	public static void initOntologyHandler(OntologyHandler oh, String[] args) throws OWLOntologyCreationException, OWLOntologyStorageException, FileNotFoundException {
 
 		switch (args.length) {
 			case 1:
@@ -168,12 +148,14 @@ public class Main {
 	
 	/**
 	 * Parse axioms from file.
+	 * @param filePath	OntologyHandler related to ontology you want to add axioms to
 	 * @param filePath	File path of the file to be parsed
 	 * @param serType	Serialization type to identify correct parser
+	 * @return {@code true} if file correctly parsed, {@code false} otherwise 
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	private static void parseAxioms(String filePath, SerializationType serType) throws FileNotFoundException, IOException {
+	public static boolean parseAxioms(OntologyHandler oh, String filePath, SerializationType serType) throws FileNotFoundException, IOException {
 		
 		try(BufferedReader br = new BufferedReader(new FileReader(filePath))) {
 			
@@ -187,7 +169,15 @@ public class Main {
 		    }
 		    
 		    String content = sb.toString();
-		    oh.addStringAxiom(content, serType);
+		    
+		    try {
+		    	oh.addStringAxiom(content, serType);
+		    	return true;    	
+		    } catch (OWLParserException | OWLOntologyChangeException | UnloadableImportException e) {
+		    	System.out.println("Cannot parse file!");
+		    	System.out.println(e.getMessage() + "\n" + e.getClass());
+		    	return false;
+		    }
 		    
 		}
 		

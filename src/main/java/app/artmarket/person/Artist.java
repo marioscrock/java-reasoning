@@ -1,9 +1,9 @@
-package app.person;
+package app.artmarket.person;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import app.thing.ArtWork;
+import app.artmarket.thing.ArtWork;
 
 public abstract class Artist extends Person {
 

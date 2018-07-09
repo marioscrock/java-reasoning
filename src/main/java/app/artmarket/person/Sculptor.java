@@ -1,9 +1,9 @@
-package app.person;
+package app.artmarket.person;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import app.thing.Sculpt;
+import app.artmarket.thing.Sculpt;
 
 public class Sculptor extends Artist {
 	

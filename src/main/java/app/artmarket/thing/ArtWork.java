@@ -1,4 +1,4 @@
-package app.thing;
+package app.artmarket.thing;
 
 public class ArtWork extends Thing {
 

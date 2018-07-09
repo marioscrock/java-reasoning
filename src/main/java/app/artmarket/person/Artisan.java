@@ -1,9 +1,9 @@
-package app.person;
+package app.artmarket.person;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import app.thing.Product;
+import app.artmarket.thing.Product;
 
 public class Artisan extends Person {
 

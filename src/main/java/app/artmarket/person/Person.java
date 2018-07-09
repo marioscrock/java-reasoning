@@ -1,4 +1,4 @@
-package app.person;
+package app.artmarket.person;
 
 public abstract class Person {
 	

@@ -3,8 +3,8 @@ package app.artmarket;
 import java.util.ArrayList;
 import java.util.List;
 
-import app.person.*;
-import app.thing.*;
+import app.artmarket.person.*;
+import app.artmarket.thing.*;
 /**
  * Example Application related to the ArtMarket ontology.
  * @author Mario

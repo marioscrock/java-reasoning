@@ -61,6 +61,7 @@ public class DLQueryEngine {
     public void doQueryLoop() throws IOException {
         while (true) {
             // Prompt the user to enter a class expression
+        	System.out.println("\n*** QUERY ENGINE ***\n");
             System.out
                     .println("Please type a class expression in Manchester Syntax and press Enter (or press x to exit):");
             System.out.println("");
