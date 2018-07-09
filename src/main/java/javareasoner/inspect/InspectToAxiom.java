@@ -31,7 +31,8 @@ import javareasoner.ontology.OntologyHandler;
  * 
  * The methods inspectClass() and inspectClasses() actually analyze the vm to
  * populate the ontology managed by the OnologyHandler given when building the instance.
- * A default implementation of those two methods is provided under the following ASSUMPTIONS:
+ * A default implementation of those two methods is provided under the ASSUMPTION that the following 
+ * methods are described as specified:
  * <ul>
    <li> {@link #getMapOntToAppClasses()}: returns a map binding short identifier of ontology's classes
    	 to fully qualified name of application java classes. Not all classes of the ontology 

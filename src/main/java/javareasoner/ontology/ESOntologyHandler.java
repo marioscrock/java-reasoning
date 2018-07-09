@@ -3,7 +3,6 @@ package javareasoner.ontology;
 import java.io.FileNotFoundException;
 import java.util.HashSet;
 
-import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLDataPropertyDomainAxiom;
@@ -27,6 +26,10 @@ import javareasoner.server.ReasoningServer;
 
 public class ESOntologyHandler extends OntologyHandler implements ReasoningServer {
 	
+	public ESOntologyHandler() {
+		super();
+	}
+	
 	/**
 	 * Override the method specifying the EShop ontology's axioms through
 	 * the OWLAPI.
@@ -34,7 +37,6 @@ public class ESOntologyHandler extends OntologyHandler implements ReasoningServe
 	@Override
 	public void initOntology() throws OWLOntologyStorageException, FileNotFoundException, OWLOntologyCreationException {
 		
-		manager = OWLManager.createOWLOntologyManager();
 		appOntology = manager.createOntology(IOR);
 		
 		df = appOntology.getOWLOntologyManager().getOWLDataFactory();

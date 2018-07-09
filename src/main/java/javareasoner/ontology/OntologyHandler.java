@@ -62,6 +62,10 @@ public class OntologyHandler {
 
 	private List<OWLAxiom> bufferAxioms = new ArrayList<>();
 	
+	public OntologyHandler() {
+		manager = OWLManager.createOWLOntologyManager();
+	}
+	
 	/**
 	 * Load a remote ontology given the string of the IRI.
 	 * @param stringIRI
@@ -71,7 +75,6 @@ public class OntologyHandler {
 	 */
 	public void loadRemoteOntology(String stringIRI) throws OWLOntologyCreationException, OWLOntologyStorageException, FileNotFoundException {
 		
-		manager = OWLManager.createOWLOntologyManager();
 		IRI importOntology = IRI.create(stringIRI);
 		appOntology = manager.loadOntology(importOntology);
 		
@@ -90,7 +93,6 @@ public class OntologyHandler {
 	 */
 	public void loadOntologyFromFile(String filePath) throws OWLOntologyCreationException, OWLOntologyStorageException, FileNotFoundException {
 		
-		manager = OWLManager.createOWLOntologyManager();
 		appOntology =  manager.loadOntologyFromOntologyDocument(new File(filePath));
 		
 		saveOntology();
@@ -108,7 +110,6 @@ public class OntologyHandler {
 	public void initOntology() throws OWLOntologyStorageException, FileNotFoundException, OWLOntologyCreationException {
 		
 		//EMPTY ONTOLOGY
-		manager = OWLManager.createOWLOntologyManager();
 		appOntology = manager.createOntology(IOR);
 		
 		df = appOntology.getOWLOntologyManager().getOWLDataFactory();

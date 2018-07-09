@@ -115,7 +115,10 @@ public class Main {
 	/**
 	 * Parse args of main.
 	 * @param oh	OntologyHandler to initialize
-	 * @param args	Args of main method
+	 * @param args	Args of main method: If no args initialise default ontology, if {@code args.length} equal to 1:
+	 * 1st arg specifies the serialization type to save the ontology (functional, manchester,
+	 * rdfxml, turtle), if {@code args.length} equal to 2: 2nd arg is used as file path to load the ontology 
+	 * instead of default one
 	 * @throws OWLOntologyCreationException
 	 * @throws OWLOntologyStorageException
 	 * @throws FileNotFoundException

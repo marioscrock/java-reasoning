@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLDataPropertyDomainAxiom;
@@ -28,6 +27,10 @@ import javareasoner.server.ReasoningServer;
 
 public class AMOntologyHandler extends OntologyHandler implements ReasoningServer {
 	
+	public AMOntologyHandler() {
+		super();
+	}
+	
 	/**
 	 * Override the method specifying the ArtMarket ontology's axioms through
 	 * the OWLAPI.
@@ -35,7 +38,6 @@ public class AMOntologyHandler extends OntologyHandler implements ReasoningServe
 	@Override
 	public void initOntology() throws OWLOntologyStorageException, FileNotFoundException, OWLOntologyCreationException {
 		
-		manager = OWLManager.createOWLOntologyManager();
 		appOntology = manager.createOntology(IOR);
 		
 		df = appOntology.getOWLOntologyManager().getOWLDataFactory();
