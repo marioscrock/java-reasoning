@@ -12,6 +12,9 @@ Given a Java application we would like to connect it to a __javareasoner__ compo
 * **Static Analysis**
    * Let the user add other axioms (parsing from file) to generated knowledge base
    * Let the user interactively ask DL queries to the reasoner synched with the knowledge base
+* **Inter-software consistency**
+  * Mapping a Java application model to an ontology enables the possibility to describe inter-software consistency constraints between data models of different applications. 
+  * Exploiting the reasoner backend to manage semantics from different applications mapped to the same ontology makes possible to check also at runtime consistency of their integration.
 
 ## How to run the demo ##
 
