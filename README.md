@@ -4,7 +4,7 @@ A java project exploiting [Java Debug Interface](https://docs.oracle.com/javase/
 
 ## Project Goals ##
 Given a Java application we would like to connect it to a __javareasoner__ component able to:
-* Exploit an ontology describing same domain to **reason about active instances of application classes** instanciated at runtime:
+* **Reason about active instances of application classes** instanciated at runtime exploiting an ontology describing same domain:
    * Map java classes' instances to individuals in the ontology
    * Integrate ABox axioms generated with given knowledge base
    * Check no inconsistencies are generated at runtime
