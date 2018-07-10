@@ -89,6 +89,6 @@ Contains useful method to build Main classes for a ```javareasoner``` applicatio
 
 * Extend ```InspectToAxiom``` providing an implementation of methods as specified above.
 * Extend ```OntologyHandler``` providing a default ontology through OWLAPI overriding the ```initOntology``` method (follow the same structure of examples provided) or load your ontology from file.
-* Build a ```Main``` method to execute the ```javareasoner``` components.
-* Run your Java application in debug mode (listening for remote connection) and the *main* method of the reasoner backend.
+* Build a ```Main``` class for reasoning backend managing execution of ```javareasoner``` components.
+* Run your Java application in debug mode (listening for remote connection) and the *main* method of the backend.
 
