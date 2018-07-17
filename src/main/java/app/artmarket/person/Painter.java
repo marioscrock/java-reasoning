@@ -7,10 +7,11 @@ import app.artmarket.thing.Paint;
 
 public class Painter extends Artist {
 
-	private List<Paint> paints = new ArrayList<>();
+	private List<Paint> paints;
 	
 	public Painter(String name) {
 		super(name);
+		paints = new ArrayList<>();
 	}
 
 	public void paints(Paint paint) {

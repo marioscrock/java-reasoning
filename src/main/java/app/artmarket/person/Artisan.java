@@ -7,10 +7,11 @@ import app.artmarket.thing.Product;
 
 public class Artisan extends Person {
 
-	private List<Product> produces = new ArrayList<>();
+	private List<Product> produces;
 	
 	public Artisan(String name) {
 		super(name);
+		produces = new ArrayList<>();
 	}
 	
 	public void produces(Product product) {

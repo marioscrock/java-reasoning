@@ -7,10 +7,11 @@ import app.artmarket.thing.ArtWork;
 
 public abstract class Artist extends Person {
 
-	private List<ArtWork> crafts = new ArrayList<>();
+	private List<ArtWork> crafts;
 	
 	public Artist(String name) {
 		super(name);
+		crafts = new ArrayList<>();
 	}
 	
 	public void crafts(ArtWork artwork) {

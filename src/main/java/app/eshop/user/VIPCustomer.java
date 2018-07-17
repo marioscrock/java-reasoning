@@ -7,11 +7,13 @@ import app.eshop.product.Product;
 
 public class VIPCustomer extends Customer {
 	
-	private List<Product> perc10Offer = new ArrayList<>();
-	private List<Product> perc20Offer = new ArrayList<>();
+	private List<Product> perc10Offer;
+	private List<Product> perc20Offer;
 	
 	public VIPCustomer(String username) {
 		super(username);
+		perc10Offer = new ArrayList<>();
+		perc20Offer = new ArrayList<>();
 	}
 
 	@Override

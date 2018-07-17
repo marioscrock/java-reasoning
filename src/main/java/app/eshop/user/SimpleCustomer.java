@@ -7,10 +7,11 @@ import app.eshop.product.Product;
 
 public class SimpleCustomer extends Customer {
 	
-	private List<Product> perc10Offer = new ArrayList<>();
+	private List<Product> perc10Offer;
 	
 	public SimpleCustomer(String username) {
 		super(username);
+		perc10Offer = new ArrayList<>();
 	}
 	
 	@Override
