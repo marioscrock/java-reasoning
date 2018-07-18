@@ -10,6 +10,7 @@ import org.semanticweb.owlapi.model.OWLDataPropertyRangeAxiom;
 import org.semanticweb.owlapi.model.OWLDatatype;
 import org.semanticweb.owlapi.model.OWLDeclarationAxiom;
 import org.semanticweb.owlapi.model.OWLDisjointClassesAxiom;
+import org.semanticweb.owlapi.model.OWLDisjointUnionAxiom;
 import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
 import org.semanticweb.owlapi.model.OWLFunctionalDataPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
@@ -127,15 +128,20 @@ public class ESOntologyHandler extends OntologyHandler implements ReasoningServe
 		disclassesProducts.add(productA);
 		disclassesProducts.add(productB);
 		disclassesProducts.add(productC);
-		OWLDisjointClassesAxiom discla2 = df.getOWLDisjointClassesAxiom(disclassesProducts);
-	    appOntology.add(discla2);
+		OWLDisjointClassesAxiom disclaProducts = df.getOWLDisjointClassesAxiom(disclassesProducts);
+	    appOntology.add(disclaProducts);
 	    
-	    HashSet<OWLClass> disclassesUsers = new HashSet<>();
-	    disclassesUsers.add(guest);
-	    disclassesUsers.add(simpleCustomer);
-	    disclassesUsers.add(vipCustomer);
-		OWLDisjointClassesAxiom disclaUsers = df.getOWLDisjointClassesAxiom(disclassesUsers);
-	    appOntology.add(disclaUsers);
+	    HashSet<OWLClass> disuni = new HashSet<>();
+	    disuni.add(guest);
+	    disuni.add(customer);
+	    OWLDisjointUnionAxiom du_u_gc = df.getOWLDisjointUnionAxiom(user, disuni);
+	    appOntology.add(du_u_gc);  
+	       
+	    HashSet<OWLClass> disclassesCustomers = new HashSet<>();
+	    disclassesCustomers.add(simpleCustomer);
+	    disclassesCustomers.add(vipCustomer);
+		OWLDisjointClassesAxiom disclaCustomers = df.getOWLDisjointClassesAxiom(disclassesCustomers);
+	    appOntology.add(disclaCustomers);  
 	    
 	    OWLClass popularProduct = declareClass("PopularProduct");
 	    OWLSubClassOfAxiom pp_sub_p = df.getOWLSubClassOfAxiom(popularProduct, product);
