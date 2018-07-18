@@ -29,8 +29,11 @@ public class VIPCustomer extends Customer {
 		} else {
 			if (!perc10Offer.contains(p)) 
 				perc10Offer.add(p);
-		}
-		
+		}		
+	}
+	
+	public List<Product> getProductOnOfferVIP() {
+		return perc20Offer;
 	}
 
 }

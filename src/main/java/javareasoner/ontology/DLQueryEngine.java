@@ -217,7 +217,7 @@ public class DLQueryEngine {
 	            System.out.println(sb.toString());
 	            
         	} catch (ParserException e){
-        		System.out.println("Wrong query!");
+        		System.out.println("Wrong query! " + e.getMessage());
         	}     
         }
     }

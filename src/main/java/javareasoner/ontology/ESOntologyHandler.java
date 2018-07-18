@@ -108,10 +108,11 @@ public class ESOntologyHandler extends OntologyHandler implements ReasoningServe
 		OWLFunctionalDataPropertyAxiom fun_id = df.getOWLFunctionalDataPropertyAxiom(id);
 		appOntology.add(fun_id);
 		
+		OWLDatatype floatDatatype = df.getFloatOWLDatatype();
 		OWLDataProperty price = df.getOWLDataProperty(IOR + "#price");
 		OWLDataPropertyDomainAxiom price_domain = df.getOWLDataPropertyDomainAxiom(price, product);
 		appOntology.add(price_domain);
-		OWLDataPropertyRangeAxiom price_range = df.getOWLDataPropertyRangeAxiom(price, stringDatatype);
+		OWLDataPropertyRangeAxiom price_range = df.getOWLDataPropertyRangeAxiom(price, floatDatatype);
 		appOntology.add(price_range);
 		OWLFunctionalDataPropertyAxiom price_id = df.getOWLFunctionalDataPropertyAxiom(price);
 		appOntology.add(price_id);

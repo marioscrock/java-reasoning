@@ -1,9 +1,7 @@
 package javareasoner.ontology;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataProperty;
@@ -12,16 +10,14 @@ import org.semanticweb.owlapi.model.OWLDataPropertyRangeAxiom;
 import org.semanticweb.owlapi.model.OWLDatatype;
 import org.semanticweb.owlapi.model.OWLDeclarationAxiom;
 import org.semanticweb.owlapi.model.OWLDisjointClassesAxiom;
-import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
 import org.semanticweb.owlapi.model.OWLFunctionalDataPropertyAxiom;
-import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLObjectPropertyDomainAxiom;
+import org.semanticweb.owlapi.model.OWLObjectPropertyRangeAxiom;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 import org.semanticweb.owlapi.model.OWLSubObjectPropertyOfAxiom;
-import org.semanticweb.owlapi.model.OWLSubPropertyChainOfAxiom;
-import org.semanticweb.owlapi.reasoner.NodeSet;
 
 import javareasoner.server.ReasoningServer;
 
@@ -75,10 +71,25 @@ public class AMOntologyHandler extends OntologyHandler implements ReasoningServe
 		
 		//OBJECT PROPERTIES
 		OWLObjectProperty crafts = df.getOWLObjectProperty(IOR + "#crafts");
-		//OWLObjectPropertyRangeAxiom c_range = df.getOWLObjectPropertyRangeAxiom(crafts, artwork);
+		OWLObjectPropertyRangeAxiom c_range = df.getOWLObjectPropertyRangeAxiom(crafts, artwork);
+		appOntology.add(c_range);
+		OWLObjectPropertyDomainAxiom c_domain = df.getOWLObjectPropertyDomainAxiom(crafts, artist);
+		appOntology.add(c_domain);
 		OWLObjectProperty produces = df.getOWLObjectProperty(IOR + "#produces");
+		OWLObjectPropertyRangeAxiom p_range = df.getOWLObjectPropertyRangeAxiom(produces, product);
+		appOntology.add(p_range);
+		OWLObjectPropertyDomainAxiom p_domain = df.getOWLObjectPropertyDomainAxiom(produces, artisan);
+		appOntology.add(p_domain);
 		OWLObjectProperty paints = df.getOWLObjectProperty(IOR + "#paints");
+		OWLObjectPropertyRangeAxiom pa_range = df.getOWLObjectPropertyRangeAxiom(paints, paint);
+		appOntology.add(pa_range);
+		OWLObjectPropertyDomainAxiom pa_domain = df.getOWLObjectPropertyDomainAxiom(paints, painter);
+		appOntology.add(pa_domain);
 		OWLObjectProperty sculpts = df.getOWLObjectProperty(IOR + "#sculpts");
+		OWLObjectPropertyRangeAxiom s_range = df.getOWLObjectPropertyRangeAxiom(sculpts, sculpt);
+		appOntology.add(s_range);
+		OWLObjectPropertyDomainAxiom s_domain = df.getOWLObjectPropertyDomainAxiom(sculpts, sculptor);
+		appOntology.add(s_domain);
 		
 		OWLSubObjectPropertyOfAxiom p_sub_c = df.getOWLSubObjectPropertyOfAxiom(paints, crafts);
 		appOntology.add(p_sub_c);
@@ -103,15 +114,6 @@ public class AMOntologyHandler extends OntologyHandler implements ReasoningServe
 		OWLFunctionalDataPropertyAxiom fun_id = df.getOWLFunctionalDataPropertyAxiom(identifier);
 		appOntology.add(fun_id);
 		
-		OWLSubClassOfAxiom a_some_ca = df.getOWLSubClassOfAxiom(df.getOWLObjectSomeValuesFrom(crafts, artwork), artist);
-		appOntology.add(a_some_ca);
-		OWLSubClassOfAxiom a_some_pp = df.getOWLSubClassOfAxiom(df.getOWLObjectSomeValuesFrom(produces, product), artisan);
-		appOntology.add(a_some_pp);
-		OWLSubClassOfAxiom p_some_pp = df.getOWLSubClassOfAxiom(df.getOWLObjectSomeValuesFrom(paints, paint), painter);
-		appOntology.add(p_some_pp);
-		OWLSubClassOfAxiom s_some_ss = df.getOWLSubClassOfAxiom(df.getOWLObjectSomeValuesFrom(sculpts, sculpt), sculptor);
-		appOntology.add(s_some_ss);
-		
 		HashSet<OWLClass> disclasses = new HashSet<>();
 		disclasses.add(person);
 		disclasses.add(thing);
@@ -124,24 +126,6 @@ public class AMOntologyHandler extends OntologyHandler implements ReasoningServe
 		disclassesThings.add(product);
 		OWLDisjointClassesAxiom discla2 = df.getOWLDisjointClassesAxiom(disclassesThings);
 	    appOntology.add(discla2);
-	    
-		OWLObjectProperty isArtist = df.getOWLObjectProperty(IOR + "#isArtist");
-		OWLEquivalentClassesAxiom is_a_self = df.getOWLEquivalentClassesAxiom(artist,
-				df.getOWLObjectHasSelf(isArtist));
-		appOntology.add(is_a_self);
-		
-		OWLObjectProperty isArtwork = df.getOWLObjectProperty(IOR + "#isArtWork");
-		OWLEquivalentClassesAxiom is_aw_self = df.getOWLEquivalentClassesAxiom(artwork,
-				df.getOWLObjectHasSelf(isArtwork));
-		appOntology.add(is_aw_self);
-		
-		OWLObjectProperty a_crafts_a = df.getOWLObjectProperty(IOR + "#a_crafts_a");
-		List<OWLObjectProperty> chain = new ArrayList<>();
-		chain.add(isArtist);
-		chain.add(crafts);
-		chain.add(isArtwork);
-		OWLSubPropertyChainOfAxiom s_a_c_a = df.getOWLSubPropertyChainOfAxiom(chain, a_crafts_a);
-		appOntology.add(s_a_c_a);
 		
 	    saveOntology();
 	    
@@ -162,18 +146,6 @@ public class AMOntologyHandler extends OntologyHandler implements ReasoningServe
 		
 		return owlClass;
 		
-	}
-	
-	/**
-	 * Query the reasoner to obtain instances of artists creating artworks.
-	 * @return instances of artists creating artworks.
-	 */
-	public NodeSet<OWLNamedIndividual> getInstancesArtistsCreatingArtworks(){
-		
-		r.flush();
-		return r.getInstances(df.getOWLObjectSomeValuesFrom(df.getOWLObjectProperty(IOR + "#a_crafts_a"),
-				df.getOWLThing()));
-	
 	}
 	
 	@Override
@@ -203,8 +175,8 @@ public class AMOntologyHandler extends OntologyHandler implements ReasoningServe
 			System.out.println("\ncrafts some Sculpt(*)");
 			getInstances("crafts", "Sculpt").forEach(System.out::println);
 			
-			System.out.println("\nisArtist o creates o isArtWork (*)");
-			getInstancesArtistsCreatingArtworks().forEach(System.out::println);
+			System.out.println("\nArtist and (crafts some ArtWork) (*)");
+			getInstances("crafts", "ArtWork").forEach(System.out::println);
 		}
 		
 		System.out.println("*******************************************************");

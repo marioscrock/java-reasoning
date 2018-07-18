@@ -42,6 +42,7 @@ import org.semanticweb.owlapi.reasoner.NodeSet;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 
+import javareasoner.DataPropertyType;
 import javareasoner.SerializationType;
 
 /**
@@ -242,13 +243,34 @@ public class OntologyHandler {
 	 * @param idFrom	IRI fragment of the source individual
 	 * @param toValue	String representing data value
 	 * @param propertyName	IRI fragment of the property
+	 * @type Type of the data property
 	 */
-	public void addDataProperty(String idFrom, String toValue, String propertyName) {
+	public void addDataProperty(String idFrom, Object toValue, String propertyName, DataPropertyType type) {
 		
 		OWLNamedIndividual idFromInd = df.getOWLNamedIndividual(IOR + "#" + idFrom.replaceAll("\\s","-"));
 		OWLDataProperty property = df.getOWLDataProperty(IOR + "#" + propertyName.replaceAll("\\s","-"));
 		
-		OWLDataPropertyAssertionAxiom p_ass = df.getOWLDataPropertyAssertionAxiom(property, idFromInd, toValue);
+		OWLDataPropertyAssertionAxiom p_ass;
+		switch (type) {
+			case STRING:
+				p_ass = df.getOWLDataPropertyAssertionAxiom(property, idFromInd, (String) toValue);
+				break;
+			case INTEGER:
+				p_ass = df.getOWLDataPropertyAssertionAxiom(property, idFromInd, (int) toValue);
+				break;
+			case DOUBLE:
+				p_ass = df.getOWLDataPropertyAssertionAxiom(property, idFromInd, (double) toValue);
+				break;
+			case FLOAT:
+				p_ass = df.getOWLDataPropertyAssertionAxiom(property, idFromInd, (float) toValue);
+				break;
+			case BOOLEAN:
+				p_ass = df.getOWLDataPropertyAssertionAxiom(property, idFromInd, (boolean) toValue);
+				break;
+			default:
+				return;
+		}
+		
 		appOntology.add(p_ass);
 		bufferAxioms.add(p_ass);
 		

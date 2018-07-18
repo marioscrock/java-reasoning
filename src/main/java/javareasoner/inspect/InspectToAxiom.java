@@ -8,19 +8,16 @@ import org.semanticweb.owlapi.model.OWLClass;
 
 import com.sun.jdi.ArrayReference;
 import com.sun.jdi.IntegerValue;
-import com.sun.jdi.LongValue;
-import com.sun.jdi.CharValue;
 import com.sun.jdi.DoubleValue;
 import com.sun.jdi.FloatValue;
 import com.sun.jdi.ObjectReference;
 import com.sun.jdi.ReferenceType;
-import com.sun.jdi.ShortValue;
 import com.sun.jdi.BooleanValue;
-import com.sun.jdi.ByteValue;
 import com.sun.jdi.StringReference;
 import com.sun.jdi.Value;
 import com.sun.jdi.VirtualMachine;
 
+import javareasoner.DataPropertyType;
 import javareasoner.ontology.OntologyHandler;
 /**
  * Abstract class representing an inspector component able to build up ABox
@@ -44,7 +41,7 @@ import javareasoner.ontology.OntologyHandler;
      to the class fields names representing a data property of the ontology. We assume
      the name of each field corresponds to the IRI fragment (identifier) of the data property in the 
      ontology, otherwise another map must be exploited to correlate them. We consider as data 
-     properties all fields of type integer, long, double, float, short, byte, boolean, char and String.
+     properties all fields of type integer, double, float, boolean and String.
    <li> {@link #getMapClassToObjProp()}: returns a map binding short identifier of ontology's classes
      to the class fields names representing an object property of the ontology. We assume
      the name of each field corresponds to the IRI fragment (identifier) of the object property in the 
@@ -118,12 +115,8 @@ public abstract class InspectToAxiom {
 		        			
 		        			Value valData = objRef.getValue(refType.fieldByName(dataProperty));
 		        			
-		        			if (valData != null) {
-				        		String data = dataToString(valData);
-				        		if (data != null) 
-				        			oh.addDataProperty(instanceId, data, dataProperty);
-				        	
-		        			}
+		        			if (valData != null)
+				        		valToDataProperty(valData, dataProperty, instanceId);		
 		        			
 		        		}
 		        	
@@ -179,33 +172,29 @@ public abstract class InspectToAxiom {
 	}
 	
 	/**
-	 * Check all possible types of data for a given value returning a string
-	 * representation of the data in {@code Value valData}.
+	 * Check all possible types of data for a given value adding the right
+	 * type of data properties for data in {@code Value valData} for the specified individual.
 	 * @param valData	The value to be transformed
-	 * @return	The value of valData as string
+	 * @param dataProperty	IRI Fragment identifying the data property
+	 * @param instanceId	IRI Fragment identifying the individual
 	 */
-	private String dataToString(Value valData) {
+	private void valToDataProperty(Value valData, String dataProperty, String instanceId) {
 
-		if (valData instanceof StringReference)
-		   return ( (StringReference) valData).value();
-		else if (valData instanceof IntegerValue)
-			return Integer.toString(((IntegerValue) valData).value());
-		else if (valData instanceof BooleanValue)
-			return Boolean.toString(((BooleanValue) valData).value());
-		else if (valData instanceof FloatValue)
-			return Float.toString(((FloatValue) valData).value());
-		else if (valData instanceof CharValue)
-			return String.valueOf(((CharValue) valData).value());			        			
-		else if (valData instanceof DoubleValue)
-			return Double.toString(((DoubleValue) valData).value());
-		else if (valData instanceof ByteValue)
-			return Byte.toString(((ByteValue) valData).value());
-		else if (valData instanceof LongValue)
-			return Long.toString(((LongValue) valData).value());
-		else if (valData instanceof ShortValue)
-			return Short.toString(((ShortValue) valData).value());
-		else {
-			return null;
+		if (valData instanceof StringReference) {
+			String toValue = ( (StringReference) valData).value();
+			oh.addDataProperty(instanceId, toValue, dataProperty, DataPropertyType.STRING);
+		} else if (valData instanceof IntegerValue) {
+			int toValue = ((IntegerValue) valData).value();
+			oh.addDataProperty(instanceId, toValue, dataProperty, DataPropertyType.INTEGER);
+		} else if (valData instanceof BooleanValue) {
+			boolean toValue = ((BooleanValue) valData).value();
+			oh.addDataProperty(instanceId, toValue, dataProperty, DataPropertyType.BOOLEAN);
+		} else if (valData instanceof FloatValue) {
+			float toValue = ((FloatValue) valData).value();
+			oh.addDataProperty(instanceId, toValue, dataProperty, DataPropertyType.FLOAT);
+		} else if (valData instanceof DoubleValue) {
+			double toValue = ((DoubleValue) valData).value();
+			oh.addDataProperty(instanceId, toValue, dataProperty, DataPropertyType.DOUBLE);
 		}
 		
 	}
@@ -305,7 +294,7 @@ public abstract class InspectToAxiom {
 	 names representing a data property of the ontology. We assume the name of each
 	 field corresponds to the IRI fragment (identifier) of the data property in the 
      ontology, otherwise another map must be exploited to correlate them. We consider as data 
-     properties all fields of type integer, long, double, float, short, byte, boolean, char and String.
+     properties all fields of type integer, double, float, boolean and String.
 	 * @return map binding short identifier of ontology's classes
      to the class fields names representing a data property of the ontology
 	 */
