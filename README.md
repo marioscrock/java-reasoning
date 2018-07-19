@@ -2,13 +2,13 @@
 A java project exploiting [Java Debug Interface](https://docs.oracle.com/javase/7/docs/jdk/api/jpda/jdi/) and 
 [OWL API](https://github.com/owlcs/owlapi) to reason on active instances of a running Java application.
 
+## Project Goals ##
 Complex Java applications often contain a data model representing the domain they are related to.
 
 <p align="center"><img src="/img/architecture.png" alt="Architecture" width="600"></p>
 
 Our idea is to give to the programmer the possibility to check the java application model and the runtime evolution of its instances against an OWL2 ontology and a related knowledge base.
 
-## Project Goals ##
 Given a Java application we would like to connect it to a _java-reasoner_ component able to:
 * **Reason about active instances of application classes** instantiated at runtime making use of an ontology describing same domain
    * Map java classes' instances to individuals in the ontology
@@ -44,7 +44,7 @@ Through the JDI API we are able remotely to:
 
 <p align="center"><img src="/img/java-reasoner.png" alt="Architecture" width="600"></p>
 
-Notes:
+_Notes_
 * Ontologies can be loaded from file, from remote IRI or from coded function defining axioms through OWL API
 * Additional axioms can be added to the ontology through file parsing before/after the application monitoring
 * Syntaxes supported are RDFXML, Manchester, Functional, Turtle (also to save ontology)
@@ -107,7 +107,7 @@ The two applications are two toy example and their execution is managed respecti
 
 ### Java Reasoner ###
 
-The ```javareasoner``` package contains the main components of the debugger connecting to the application that can be executed respectively through the classes ```MainAM``` and ```MainES```.
+The ```javareasoner``` package contains the main classes of the _java-reasoner_ component. Two implementations, one for each example application can be executed respectively through the classes ```MainAM``` and ```MainES```.
 
  * Both examples show how the ontology changes with respect to the runtime evolution of the application.
  * ```MainAM``` shows in particular examples of integration between ABox axioms parsed from file and ABox axioms generated from active instances.
