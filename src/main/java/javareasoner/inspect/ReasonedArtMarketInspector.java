@@ -121,7 +121,7 @@ public class ReasonedArtMarketInspector extends InspectToAxiom {
 		classToProp.put("Sculptor", setName);
 		
 		HashSet<Pair<String,String>> setId = new HashSet<>();
-		setName.add(new Pair<String, String>("id", "id"));
+		setId.add(new Pair<String, String>("id", "id"));
 		classToProp.put("Thing", setId);
 		classToProp.put("ArtWork", setId);
 		classToProp.put("Paint", setId);

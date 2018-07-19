@@ -102,7 +102,6 @@ public class ReasonedEShopInspector extends InspectToAxiom {
 		HashSet<Pair<String,String>> setVIPCustomer = new HashSet<>();
 		setVIPCustomer.addAll(setSimpleCustomer);
 		setVIPCustomer.add(new Pair<String, String>("perc20Offer", "perc20Offer"));	
-		classToProp.put("SimpleCustomer", setVIPCustomer);
 		classToProp.put("VIPCustomer", setVIPCustomer);
 		
 		return classToProp;
