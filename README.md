@@ -9,7 +9,7 @@ Complex Java applications often contain a data model representing the domain the
 Our idea is to give to the programmer the possibility to check the java application model and the runtime evolution of its instances against an OWL2 ontology and a related knowledge base.
 
 ## Project Goals ##
-Given a Java application we would like to connect it to a __javareasoner__ component able to:
+Given a Java application we would like to connect it to a _java-reasoner_ component able to:
 * **Reason about active instances of application classes** instantiated at runtime making use of an ontology describing same domain
    * Map java classes' instances to individuals in the ontology
    * Integrate ABox axioms generated with given knowledge base
@@ -24,27 +24,32 @@ Given a Java application we would like to connect it to a __javareasoner__ compo
   * Mapping a Java application model to an ontology enables the possibility to describe inter-software consistency constraints between data models of different applications. 
   * Exploiting the reasoner backend to manage semantics from different applications mapped to the same ontology makes possible to check also at runtime consistency of their integration.
 
-## How to run the demo ##
+## Overview ##
 
 ### The application ###
-The project contains two example application in packages ```app.artmarket``` and ```app.eshop```. For each application an ontology is described through the OWLAPI in the respective extension of ```OntologyHandler``` ( ```AMOntologyHandler``` and ```ESOntologyHandler```).
+Given a generic Java application we would like to connect it to a _java-reasoner_ component able to monitor it providing runtime snapshots of active instances running in the JVM. We exploit the Java Debug Interface (JDI) running the application in debug mode and connecting to it remotely through socket and ```AttachingConnector```.
 
-The two applications are two toy example and their execution is managed respectively by ```ReasonedArtMarketMain``` and ```ReasonedEshopMain``` that must be run with following options to enable remote debug mode:
-
+To run the java application in debug virtual machine it must be run with options:
 ```-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=y```
+
+Through the JDI API we are able remotely to:
+* **Attach** to the Java Application listening on a given port
+* **Dialogue with the class loader** to ensure classes of interest are loaded
+* **Place in-code breakpoints** and listen for breakpoints event
+* **Suspend VM execution** and **inspect stack variables and class/instance variables** (this tree structure)
+* Resume VM execution
+* Detect application termination and detach from it
 
 ### Java Reasoner ###
 
-The ```javareasoner``` package contains the main components of the debugger connecting to the application that can be executed respectively through the classes ```MainAM``` and ```MainES```.
+<p align="center"><img src="/img/java-reasoner.png" alt="Architecture" width="600"></p>
 
- * Both examples show how the ontology changes with respect to the runtime evolution of the application.
- * ```MainAM``` shows in particular examples of integration between ABox axioms parsed from file and ABox axioms generated from active instances.
- * ```MainEs``` shows in particular how a higher level ontology can be exploited to extract information from the application (e.g. classes not represented in the application).
+Notes:
+* Ontologies can be loaded from file, from remote IRI or from coded function defining axioms through OWL API
+* Additional axioms can be added to the ontology through file parsing before/after the application monitoring
+* Syntaxes supported are RDFXML, Manchester, Functional, Turtle (also to save ontology)
 
-**Note** The user is expected to provide inputs from the console in both running executables to enable connection and ensure debugger is ready when the application actually starts its execution.
-
-
-## Main components ##
+Let's now see in details java classes defining the _java-reasoner_ component.
 
 #### ```InspectToAxiom``` ####
 
@@ -91,6 +96,24 @@ Contains useful methods to build Main classes for a ```javareasoner``` applicati
     * If empty array initialize default ontology through ```initOntology``` method
     * If ```args.length``` equal to 1: 1st arg specifies the serialization type to save the ontology (can be ```functional```, ```manchester```, ```rdfxml```, ```turtle```)
     * If ```args.length``` equal to 2: 2nd arg is used as file path to load the ontology instead of the default one
+
+
+## How to run the demo ##
+
+### The application ###
+The project contains two example application in packages ```app.artmarket``` and ```app.eshop```. For each application an ontology is described through the OWLAPI in the respective extension of ```OntologyHandler``` ( ```AMOntologyHandler``` and ```ESOntologyHandler```).
+
+The two applications are two toy example and their execution is managed respectively by ```ReasonedArtMarketMain``` and ```ReasonedEshopMain``` that must be run with above specified options to enable remote debug mode.
+
+### Java Reasoner ###
+
+The ```javareasoner``` package contains the main components of the debugger connecting to the application that can be executed respectively through the classes ```MainAM``` and ```MainES```.
+
+ * Both examples show how the ontology changes with respect to the runtime evolution of the application.
+ * ```MainAM``` shows in particular examples of integration between ABox axioms parsed from file and ABox axioms generated from active instances.
+ * ```MainEs``` shows in particular how a higher level ontology can be exploited to extract information from the application (e.g. classes not represented in the application).
+
+**Note** The user is expected to provide inputs from the console in both running executables to enable connection and ensure debugger is ready when the application actually starts its execution.
 
 ## How to connect your own application ##
 
