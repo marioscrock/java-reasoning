@@ -64,8 +64,7 @@ Abstract class representing an inspector component able to build up ABox axioms 
      
      (e.g. friendOf property in class Person -> ```private List<Object> friendOf = new ArrayList<>();```
      
-     **Note** that the type of objects in the list can be Object or specific types given that dynamic type at
-     runtime is exploited to determine the class of the individual to be the target of the relation.
+     **Note** that the type of objects in the list can be Object or specific types given that at runtime dynamic type is checked to determine the class of the individual to be the target of the relation.
 
 #### ```OntologyHandler``` ####
 Ontology handler provides a high-level API to deal with OWL API and may contain the coded axioms of the ontology.
