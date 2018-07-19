@@ -10,13 +10,13 @@ Our idea is to give to the programmer the possibility to check the java applicat
 
 ## Project Goals ##
 Given a Java application we would like to connect it to a __javareasoner__ component able to:
-* **Reason about active instances of application classes** instanciated at runtime making use of an ontology describing same domain:
+* **Reason about active instances of application classes** instanciated at runtime making use of an ontology describing same domain
    * Map java classes' instances to individuals in the ontology
    * Integrate ABox axioms generated with given knowledge base
    * Check no inconsistencies are generated at runtime
    * Obtain and model concepts (e.g. high-level ones) not expressed by the application structure through a more comprehensive ontology hiding implementation details on behalf of domain logic coherence
 * **Dynamic Analysis** 
-   * Execute periodic reasoning routines checking runtime consistency of the application
+   * Execute periodic reasoning routines while the application is running checking runtime consistency of the application
 * **Static Analysis** on the last snapshot of the application
    * Let the user add other axioms (parsing from file) to generated knowledge base
    * Let the user interactively ask DL queries through the reasoner synched with the knowledge base
@@ -56,8 +56,8 @@ Abstract class representing an inspector component able to build up ABox axioms 
     * ```getMapClassToFieldId()``` returns a map binding short identifier of ontology's classes to
         the class field name that must be used as IRI fragment (identifier)
         of the named individual in the ontology.
-    * ```getMapClassToDataProp()``` returns a map binding short identifier of ontology's classes to the class fields names representing a data property of the ontology. We assume the name of each field corresponds to the IRI fragment (identifier) of the data property in the ontology, otherwise another map must be exploited to correlate them. We consider as data properties all fields of type integer, double, float, boolean and String.
-    * ```getMapClassToObjProp()``` returns a map binding short identifier of ontology's classes to the class fields names representing an object property of the ontology. We assume the name of each field corresponds to the IRI fragment (identifier) of the object property in the ontology, otherwise another map must be exploited to correlate them. We consider as object properties all fields relating to a fully qualified class bound to an ontology class in the map returned from getMapOntToAppClasses() method.
+    * ```getMapClassToDataProp()``` returns a map binding short identifier of ontology's classes to the class fields names representing a data property of the ontology. For each class, provide a set of pairs binding the name of each field to the IRI fragment (identifier) of the data property in the ontology. We consider as data properties all fields of type integer, double, float, boolean and String.
+    * ```getMapClassToObjProp()``` returns a map binding short identifier of ontology's classes to the class fields names representing an object property of the ontology. For each class, provide a set of pairs binding the name of each field to the IRI fragment (identifier) of the data property in the ontology. We consider as object properties all fields relating to a fully qualified class bound to an ontology class in the map returned from getMapOntToAppClasses() method.
      
      We also assume multiple property binary relations from the same instance are stored in ArrayList
      fields named as the property:
@@ -76,7 +76,7 @@ Ontology handler provides a high-level API to deal with OWL API and may contain 
 Interface that can be implemented by ```OntologyHandler``` component that provides a reasoning routine executed each time the virtual machine is suspended.
 
 #### ```DebugAttach``` ####
-Manage the JDI API to place the breakpoint. It notifies the inspector and runs the reasoning routine each time receive the breakpoint event.
+Manage the JDI API to place the breakpoint. It notifies the inspector and runs the reasoning routine each time it receives a breakpoint event.
 
 **Note** The application executed in the Virtual Machine is suspended until the inspection and the routine are completed.
 
@@ -84,7 +84,7 @@ Manage the JDI API to place the breakpoint. It notifies the inspector and runs t
 Allow enabling a query loop in the console asking for and replying to submitted Manchester syntax DL queries.
 
 #### ```Main``` ####
-Contains useful method to build Main classes for a ```javareasoner``` application.
+Contains useful methods to build Main classes for a ```javareasoner``` application.
   * ```parsingLoop``` Method to enable a parsing loop asking if user want to parse a file to add axioms to the ontology (functional syntax, rdfxml, manchester syntax and turtle syntax are supported).
   * ```parsingAxioms``` Method to directly parse a file containing axioms.
   * ```initDebugger``` Method to manage connection through a ```DebugAttach``` instance.
