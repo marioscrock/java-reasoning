@@ -1,6 +1,7 @@
 package javareasoner.inspect;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import app.eshop.EShop;
@@ -79,32 +80,57 @@ public class ReasonedEShopInspector extends InspectToAxiom {
 	}
 	
 	@Override
-	protected Map<String, String[]> getMapClassToObjProp() {
+	protected Map<String, HashSet<Pair<String,String>>> getMapClassToObjProp() {
 		
-		Map<String, String[]> classToProp = new HashMap<>();
-		classToProp.put("User", new String[]{"interestedIn"});
-		classToProp.put("Guest", new String[]{"interestedIn"});
-		classToProp.put("Customer", new String[]{"productOnOffer", "interestedIn"});
-		classToProp.put("SimpleCustomer", new String[]{"productOnOffer", "perc10Offer", "interestedIn"});
-		classToProp.put("VIPCustomer", new String[]{"productOnOffer", "perc10Offer", "interestedIn"});
+		Map<String, HashSet<Pair<String,String>>> classToProp = new HashMap<>();
+		
+		HashSet<Pair<String,String>> setUser = new HashSet<>();
+		setUser.add(new Pair<String, String>("interestedIn", "interestedIn"));
+		classToProp.put("User", setUser);
+		classToProp.put("Guest", setUser);
+		
+		HashSet<Pair<String,String>> setCustomer = new HashSet<>();
+		setCustomer.add(new Pair<String, String>("interestedIn", "interestedIn"));
+		setCustomer.add(new Pair<String, String>("productOnOffer", "productOnOffer"));
+		classToProp.put("Customer", setCustomer);
+		
+		HashSet<Pair<String,String>> setSimpleCustomer = new HashSet<>();
+		setSimpleCustomer.addAll(setCustomer);
+		setSimpleCustomer.add(new Pair<String, String>("perc10Offer", "perc10Offer"));	
+		classToProp.put("SimpleCustomer", setSimpleCustomer);
+		
+		HashSet<Pair<String,String>> setVIPCustomer = new HashSet<>();
+		setVIPCustomer.addAll(setSimpleCustomer);
+		setVIPCustomer.add(new Pair<String, String>("perc20Offer", "perc20Offer"));	
+		classToProp.put("SimpleCustomer", setVIPCustomer);
+		classToProp.put("VIPCustomer", setVIPCustomer);
 		
 		return classToProp;
 		
 	}
 	
 	@Override
-	protected Map<String, String[]> getMapClassToDataProp() {
+	protected Map<String, HashSet<Pair<String,String>>> getMapClassToDataProp() {
 		
-		Map<String, String[]> classToProp = new HashMap<>();
-		classToProp.put("User", new String[]{"username"});
-		classToProp.put("Customer", new String[]{"username"});
-		classToProp.put("Guest", new String[]{"username"});
-		classToProp.put("SimpleCustomer", new String[]{"username"});
-		classToProp.put("VIPCustomer", new String[]{"username"});
-		classToProp.put("Product", new String[]{"id", "price"});
-		classToProp.put("ProductA", new String[]{"id", "price"});
-		classToProp.put("ProductB", new String[]{"id", "price"});
-		classToProp.put("ProductC", new String[]{"id", "price"});
+		Map<String, HashSet<Pair<String,String>>> classToProp = new HashMap<>();
+		
+		HashSet<Pair<String,String>> setUser = new HashSet<>();
+		setUser.add(new Pair<String, String>("username", "username"));
+
+		classToProp.put("User", setUser);
+		classToProp.put("Customer", setUser);
+		classToProp.put("Guest", setUser);
+		classToProp.put("SimpleCustomer", setUser);
+		classToProp.put("VIPCustomer", setUser);
+		
+		HashSet<Pair<String,String>> setProduct = new HashSet<>();
+		setProduct.add(new Pair<String, String>("id", "id"));
+		setProduct.add(new Pair<String, String>("price", "price"));
+		
+		classToProp.put("Product", setProduct);
+		classToProp.put("ProductA", setProduct);
+		classToProp.put("ProductB", setProduct);
+		classToProp.put("ProductC", setProduct);
 		
 		return classToProp;
 		

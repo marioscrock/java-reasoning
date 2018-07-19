@@ -1,5 +1,6 @@
 package javareasoner.inspect;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,14 +39,14 @@ import javareasoner.ontology.OntologyHandler;
    	 the class field name that must be used as IRI fragment (identifier)
    	 of the named individual in the ontology.
    <li> {@link #getMapClassToDataProp()}: returns a map binding short identifier of ontology's classes
-     to the class fields names representing a data property of the ontology. We assume
-     the name of each field corresponds to the IRI fragment (identifier) of the data property in the 
-     ontology, otherwise another map must be exploited to correlate them. We consider as data 
+     to the class fields names representing a data property of the ontology. For each class, provide a set
+	 of {@link javareasoner.inspect.Pair Pair}s binding the name of each field to the IRI fragment (identifier) 
+	 of the data property in the ontology. We consider as data 
      properties all fields of type integer, double, float, boolean and String.
    <li> {@link #getMapClassToObjProp()}: returns a map binding short identifier of ontology's classes
-     to the class fields names representing an object property of the ontology. We assume
-     the name of each field corresponds to the IRI fragment (identifier) of the object property in the 
-     ontology, otherwise another map must be exploited to correlate them. We consider as object 
+     to the class fields names representing an object property of the ontology. For each class, provide a set
+	 of {@link javareasoner.inspect.Pair Pair}s  binding the name of each field to the IRI fragment (identifier) 
+	 of the data property in the ontology. We consider as object 
      properties all fields relating to a fully qualified class bound to an ontology class in the map
      returned from getMapOntToAppClasses() method.<br>
      We also assume multiple property binary relations from the same instance are stored in ArrayList
@@ -82,12 +83,12 @@ public abstract class InspectToAxiom {
 	 * 					Refers to the java Class related to the ontology's class
 	 * @param fieldId	Field name of the java class to be used as IRI fragment for each individual
 	 * 				  of the given class created.
-	 * @param objProperties	Fields names of the java class representing an object property of the ontology
-	 * @param dataProperties	Fields names of the java class representing a data property of the ontology
+	 * @param objProperties	Set of pairs binding field names of the java class to object properties of the ontology
+	 * @param dataProperties	Set of pairs binding field names of the java class to data properties of the ontology
 	 * @requires Implementation of {@link #getMapClassToFieldId()} as described.
 	 */
 	public void inspectClass(VirtualMachine vm, String ontClassId, String className,
-			String fieldId, String[] objProperties, String[] dataProperties) {
+			String fieldId, HashSet<Pair<String,String>> objProperties, HashSet<Pair<String,String>> dataProperties) {
 		
 		//Get all classes matching a given string
 		List<ReferenceType> classesByName = vm.classesByName(className);
@@ -110,22 +111,22 @@ public abstract class InspectToAxiom {
 		        	oh.createIndividual(instanceId, ontClassId);
 		        	
 		        	//Create data properties
-		        	if (dataProperties != null && dataProperties.length > 0)
-		        		for (String dataProperty : dataProperties) {
+		        	if (dataProperties != null && dataProperties.size() > 0)
+		        		for (Pair<String,String> dataProperty : dataProperties) {
 		        			
-		        			Value valData = objRef.getValue(refType.fieldByName(dataProperty));
+		        			Value valData = objRef.getValue(refType.fieldByName(dataProperty.getLeft()));
 		        			
 		        			if (valData != null)
-				        		valToDataProperty(valData, dataProperty, instanceId);		
+				        		valToDataProperty(valData, dataProperty.getRight(), instanceId);		
 		        			
 		        		}
 		        	
 		        	//Create object properties: assuming each property refers to an object or an ArrayList of 
 		        	//objects related through the property (same name of the field) with the instance
-		        	if (objProperties != null && objProperties.length > 0)
-		        		for (String objProperty : objProperties) {
+		        	if (objProperties != null && objProperties.size() > 0)
+		        		for (Pair<String,String> objProperty : objProperties) {
 		        			
-		        			Value valObj = objRef.getValue(refType.fieldByName(objProperty));
+		        			Value valObj = objRef.getValue(refType.fieldByName(objProperty.getLeft()));
 		        			
 		        			//Check if it is an object property
 		        			if (valObj instanceof ObjectReference) { 	
@@ -148,7 +149,7 @@ public abstract class InspectToAxiom {
 				        				//Check if target type refers to an object of a java class mapped to an ontology class
 				        				if (fieldIdTargetEl != null) {
 				        					Value valElId = objRefEl.getValue(refTypeEl.fieldByName(fieldIdTargetEl));
-				        					oh.addObjectProperty(instanceId, ( (StringReference) valElId).value(), objProperty);
+				        					oh.addObjectProperty(instanceId, ( (StringReference) valElId).value(), objProperty.getRight());
 				        				}
 				        			}
 				        			
@@ -158,7 +159,7 @@ public abstract class InspectToAxiom {
 			        				//Check if target type refers to an object of a java class mapped to an ontology class
 			        				if (fieldIdTarget != null) {
 			        					Value valElId = objProp.getValue(refTypeProp.fieldByName(fieldIdTarget));
-			        					oh.addObjectProperty(instanceId, ( (StringReference) valElId).value(), objProperty);
+			        					oh.addObjectProperty(instanceId, ( (StringReference) valElId).value(), objProperty.getRight());
 			        				}
 			        				
 			        			}
@@ -235,8 +236,8 @@ public abstract class InspectToAxiom {
 		Set<OWLClass> set = oh.allClassesInOntology();
 		Map<String, String> ontToAppClasses = getMapOntToAppClasses();
 		Map<String, String> classToFieldId = getMapClassToFieldId();
-		Map<String, String[]> classToObjProp = getMapClassToObjProp();
-		Map<String, String[]> classToDataProp = getMapClassToDataProp();
+		Map<String, HashSet<Pair<String,String>>> classToObjProp = getMapClassToObjProp();
+		Map<String, HashSet<Pair<String,String>>> classToDataProp = getMapClassToDataProp();
 	
 		for (OWLClass c : set) {
 			
@@ -291,20 +292,20 @@ public abstract class InspectToAxiom {
 	
 	/**
 	 * Get a map binding short identifier of ontology's classes to the class fields
-	 names representing a data property of the ontology. We assume the name of each
-	 field corresponds to the IRI fragment (identifier) of the data property in the 
-     ontology, otherwise another map must be exploited to correlate them. We consider as data 
+	 names representing a data property of the ontology. For each class, provide a set
+	 of {@link javareasoner.inspect.Pair Pair}s  binding the name of each field to the IRI 
+	 fragment (identifier) of the data property in the ontology. We consider as data 
      properties all fields of type integer, double, float, boolean and String.
 	 * @return map binding short identifier of ontology's classes
      to the class fields names representing a data property of the ontology
 	 */
-	protected abstract Map<String, String[]> getMapClassToDataProp();
+	protected abstract Map<String, HashSet<Pair<String,String>>> getMapClassToDataProp();
 	
 	/**
 	 * Get a map binding short identifier of ontology's classes
-     to the class fields names representing an object property of the ontology. We assume
-     the name of each field corresponds to the IRI fragment (identifier) of the object property in the 
-     ontology, otherwise another map must be exploited to correlate them. We consider as object 
+     to the class fields names representing an object property of the ontology. For each class, provide a set
+	 of {@link javareasoner.inspect.Pair Pair}s  binding the name of each field to the IRI fragment 
+	 (identifier) of the data property in the ontology. We consider as object 
      properties all fields relating to a fully qualified class bound to an ontology class in the map
      returned from getMapOntToAppClasses() method.
      We also assume multiple property binary relations from the same instance are stored in ArrayList
@@ -315,6 +316,6 @@ public abstract class InspectToAxiom {
 	 * @return map binding short identifier of ontology's classes
      to the class fields names representing an object property of the ontology
 	 */
-	protected abstract Map<String, String[]> getMapClassToObjProp();
+	protected abstract Map<String, HashSet<Pair<String,String>>> getMapClassToObjProp();
 	
 }

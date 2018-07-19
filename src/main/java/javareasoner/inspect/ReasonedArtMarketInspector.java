@@ -1,6 +1,7 @@
 package javareasoner.inspect;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import app.artmarket.ArtMarket;
@@ -81,33 +82,51 @@ public class ReasonedArtMarketInspector extends InspectToAxiom {
 	}
 	
 	@Override
-	protected Map<String, String[]> getMapClassToObjProp() {
+	protected Map<String, HashSet<Pair<String,String>>> getMapClassToObjProp() {
 		
-		Map<String, String[]> classToProp = new HashMap<>();
-		classToProp.put("Person", new String[0]);
-		classToProp.put("Painter", new String[]{"paints"});
-		classToProp.put("Artist", new String[]{"crafts"});
-		classToProp.put("Artisan", new String[]{"produces"});
-		classToProp.put("Sculptor", new String[]{"sculpts"});
+		Map<String, HashSet<Pair<String,String>>> classToProp = new HashMap<>();
+		classToProp.put("Person", new HashSet<>());
+		
+		HashSet<Pair<String,String>> setPainter = new HashSet<>();
+		setPainter.add(new Pair<String, String>("paints", "paints"));
+		classToProp.put("Painter", setPainter);
+		
+		HashSet<Pair<String,String>> setArtist = new HashSet<>();
+		setArtist.add(new Pair<String, String>("crafts", "crafts"));
+		classToProp.put("Artist", setArtist);
+		
+		HashSet<Pair<String,String>> setArtisan = new HashSet<>();
+		setArtisan.add(new Pair<String, String>("produces", "produces"));
+		classToProp.put("Artisan", setArtisan);
+		
+		HashSet<Pair<String,String>> setSculptor = new HashSet<>();
+		setSculptor.add(new Pair<String, String>("sculpts", "sculpts"));
+		classToProp.put("Sculptor", setSculptor);
 		
 		return classToProp;
 		
 	}
 	
 	@Override
-	protected Map<String, String[]> getMapClassToDataProp() {
+	protected Map<String, HashSet<Pair<String,String>>> getMapClassToDataProp() {
 		
-		Map<String, String[]> classToProp = new HashMap<>();
-		classToProp.put("Person", new String[]{"name"});
-		classToProp.put("Painter", new String[]{"name"});
-		classToProp.put("Artist", new String[]{"name"});
-		classToProp.put("Artisan", new String[]{"name"});
-		classToProp.put("Sculptor", new String[]{"name"});
-		classToProp.put("Thing", new String[]{"id"});
-		classToProp.put("ArtWork", new String[]{"id"});
-		classToProp.put("Paint", new String[]{"id"});
-		classToProp.put("Product", new String[]{"id"});
-		classToProp.put("Sculpt", new String[]{"id"});
+		Map<String, HashSet<Pair<String,String>>> classToProp = new HashMap<>();
+		
+		HashSet<Pair<String,String>> setName = new HashSet<>();
+		setName.add(new Pair<String, String>("name", "name"));
+		classToProp.put("Person", setName);
+		classToProp.put("Painter", setName);
+		classToProp.put("Artist", setName);
+		classToProp.put("Artisan", setName);
+		classToProp.put("Sculptor", setName);
+		
+		HashSet<Pair<String,String>> setId = new HashSet<>();
+		setName.add(new Pair<String, String>("id", "id"));
+		classToProp.put("Thing", setId);
+		classToProp.put("ArtWork", setId);
+		classToProp.put("Paint", setId);
+		classToProp.put("Product", setId);
+		classToProp.put("Sculpt", setId);
 		
 		return classToProp;
 		
