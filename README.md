@@ -2,6 +2,12 @@
 A java project exploiting [Java Debug Interface](https://docs.oracle.com/javase/7/docs/jdk/api/jpda/jdi/) and 
 [OWL API](https://github.com/owlcs/owlapi) to reason on active instances of a running Java application.
 
+Complex Java applications often contain a data model representing the domain they are related to.
+
+![Architecture](/img/architecture.png)
+
+Our idea is to give to the programmer the possibility to check the java application model and the runtime evolution of its instances against an OWL2 ontology and a related knowledge base.
+
 ## Project Goals ##
 Given a Java application we would like to connect it to a __javareasoner__ component able to:
 * **Reason about active instances of application classes** instanciated at runtime making use of an ontology describing same domain:
