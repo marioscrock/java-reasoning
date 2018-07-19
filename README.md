@@ -4,7 +4,7 @@ A java project exploiting [Java Debug Interface](https://docs.oracle.com/javase/
 
 Complex Java applications often contain a data model representing the domain they are related to.
 
-![Architecture](/img/architecture.png)
+<p align="center"><img src="/img/architecture.png" alt="Architecture" width="600"></p>
 
 Our idea is to give to the programmer the possibility to check the java application model and the runtime evolution of its instances against an OWL2 ontology and a related knowledge base.
 
