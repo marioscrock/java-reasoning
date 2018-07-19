@@ -32,7 +32,8 @@ public class ReasonedEShopMain {
 		eshop.startApp(1);
 		//Clear references active users
 		eshop.startApp(2);
-		//Emulate another execution session
+		//Emulate other 2 execution sessions
+		eshop.startApp(1);
 		eshop.startApp(1);
 
 		

@@ -57,7 +57,7 @@ public class MainAM {
 		inspector = new ReasonedArtMarketInspector(oh);
 		Main.initDebugger(inspector, oh, scan);
 		
-		Main.parsingLoop(oh, oh, scan, "input.owl");
+		Main.parsingLoop(oh, oh, scan, "inputAM.owl");
 		
 		query = new DLQueryEngine(oh);
 		query.doQueryLoop();

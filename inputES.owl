@@ -1,0 +1,2 @@
+SubClassOf(ObjectIntersectionOf(ObjectHasValue(ObjectInverseOf(:interestedIn) :username1)
+	ObjectHasValue(ObjectInverseOf(:perc10Offer) :username1)) :interestAndOfferUsername1)
