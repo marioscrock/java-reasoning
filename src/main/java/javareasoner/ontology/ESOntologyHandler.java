@@ -153,9 +153,9 @@ public class ESOntologyHandler extends OntologyHandler implements ReasoningServe
 	    OWLSubClassOfAxiom ppvc_sub_p = df.getOWLSubClassOfAxiom(popularProductVC, popularProduct);
 		appOntology.add(ppvc_sub_p);
 		
-		OWLEquivalentClassesAxiom e_pp = df.getOWLEquivalentClassesAxiom(popularProductSC, df.getOWLObjectMinCardinality(2,
+		OWLEquivalentClassesAxiom e_pp = df.getOWLEquivalentClassesAxiom(popularProduct, df.getOWLObjectMinCardinality(2,
 				df.getOWLObjectInverseOf(df.getOWLObjectProperty(IOR + "#interestedIn")),
-				df.getOWLClass(IOR + "#Customer")));
+				df.getOWLClass(IOR + "#User")));
 		appOntology.add(e_pp);
 		OWLEquivalentClassesAxiom e_ppSC = df.getOWLEquivalentClassesAxiom(popularProductSC, df.getOWLObjectMinCardinality(2,
 				df.getOWLObjectInverseOf(df.getOWLObjectProperty(IOR + "#interestedIn")),
