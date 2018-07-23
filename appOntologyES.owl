@@ -1,0 +1,616 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://projects.ke.appOntology#"
+     xml:base="http://projects.ke.appOntology"
+     xmlns:projects="http://projects.ke.appOntology#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://projects.ke.appOntology"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+
+    
+
+
+    <!-- http://projects.ke.appOntology#interestedIn -->
+
+
+    <owl:ObjectProperty rdf:about="http://projects.ke.appOntology#interestedIn">
+        <rdfs:domain rdf:resource="http://projects.ke.appOntology#User"/>
+        <rdfs:range rdf:resource="http://projects.ke.appOntology#Product"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://projects.ke.appOntology#perc10Offer -->
+
+
+    <owl:ObjectProperty rdf:about="http://projects.ke.appOntology#perc10Offer">
+        <rdfs:subPropertyOf rdf:resource="http://projects.ke.appOntology#productOnOffer"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://projects.ke.appOntology#perc20Offer -->
+
+
+    <owl:ObjectProperty rdf:about="http://projects.ke.appOntology#perc20Offer">
+        <rdfs:subPropertyOf rdf:resource="http://projects.ke.appOntology#productOnOffer"/>
+        <rdfs:domain rdf:resource="http://projects.ke.appOntology#VIPCustomer"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://projects.ke.appOntology#productOnOffer -->
+
+
+    <owl:ObjectProperty rdf:about="http://projects.ke.appOntology#productOnOffer">
+        <rdfs:domain rdf:resource="http://projects.ke.appOntology#Customer"/>
+        <rdfs:range rdf:resource="http://projects.ke.appOntology#Product"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+
+    
+
+
+    <!-- http://projects.ke.appOntology#id -->
+
+
+    <owl:DatatypeProperty rdf:about="http://projects.ke.appOntology#id">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://projects.ke.appOntology#Product"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://projects.ke.appOntology#price -->
+
+
+    <owl:DatatypeProperty rdf:about="http://projects.ke.appOntology#price">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://projects.ke.appOntology#Product"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://projects.ke.appOntology#username -->
+
+
+    <owl:DatatypeProperty rdf:about="http://projects.ke.appOntology#username">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://projects.ke.appOntology#User"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+
+    
+
+
+    <!-- http://projects.ke.appOntology#Customer -->
+
+
+    <owl:Class rdf:about="http://projects.ke.appOntology#Customer">
+        <rdfs:subClassOf rdf:resource="http://projects.ke.appOntology#User"/>
+    </owl:Class>
+    
+
+
+    <!-- http://projects.ke.appOntology#Guest -->
+
+
+    <owl:Class rdf:about="http://projects.ke.appOntology#Guest">
+        <rdfs:subClassOf rdf:resource="http://projects.ke.appOntology#User"/>
+    </owl:Class>
+    
+
+
+    <!-- http://projects.ke.appOntology#PopularProduct -->
+
+
+    <owl:Class rdf:about="http://projects.ke.appOntology#PopularProduct">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty>
+                    <rdf:Description>
+                        <owl:inverseOf rdf:resource="http://projects.ke.appOntology#interestedIn"/>
+                    </rdf:Description>
+                </owl:onProperty>
+                <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">2</owl:minQualifiedCardinality>
+                <owl:onClass rdf:resource="http://projects.ke.appOntology#User"/>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://projects.ke.appOntology#Product"/>
+    </owl:Class>
+    
+
+
+    <!-- http://projects.ke.appOntology#PopularProductSC -->
+
+
+    <owl:Class rdf:about="http://projects.ke.appOntology#PopularProductSC">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty>
+                    <rdf:Description>
+                        <owl:inverseOf rdf:resource="http://projects.ke.appOntology#interestedIn"/>
+                    </rdf:Description>
+                </owl:onProperty>
+                <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">2</owl:minQualifiedCardinality>
+                <owl:onClass rdf:resource="http://projects.ke.appOntology#SimpleCustomer"/>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://projects.ke.appOntology#PopularProduct"/>
+    </owl:Class>
+    
+
+
+    <!-- http://projects.ke.appOntology#PopularProductVC -->
+
+
+    <owl:Class rdf:about="http://projects.ke.appOntology#PopularProductVC">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty>
+                    <rdf:Description>
+                        <owl:inverseOf rdf:resource="http://projects.ke.appOntology#interestedIn"/>
+                    </rdf:Description>
+                </owl:onProperty>
+                <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">2</owl:minQualifiedCardinality>
+                <owl:onClass rdf:resource="http://projects.ke.appOntology#VIPCustomer"/>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://projects.ke.appOntology#PopularProduct"/>
+    </owl:Class>
+    
+
+
+    <!-- http://projects.ke.appOntology#Product -->
+
+
+    <owl:Class rdf:about="http://projects.ke.appOntology#Product">
+        <owl:disjointWith rdf:resource="http://projects.ke.appOntology#User"/>
+    </owl:Class>
+    
+
+
+    <!-- http://projects.ke.appOntology#ProductA -->
+
+
+    <owl:Class rdf:about="http://projects.ke.appOntology#ProductA">
+        <rdfs:subClassOf rdf:resource="http://projects.ke.appOntology#Product"/>
+    </owl:Class>
+    
+
+
+    <!-- http://projects.ke.appOntology#ProductB -->
+
+
+    <owl:Class rdf:about="http://projects.ke.appOntology#ProductB">
+        <rdfs:subClassOf rdf:resource="http://projects.ke.appOntology#Product"/>
+    </owl:Class>
+    
+
+
+    <!-- http://projects.ke.appOntology#ProductC -->
+
+
+    <owl:Class rdf:about="http://projects.ke.appOntology#ProductC">
+        <rdfs:subClassOf rdf:resource="http://projects.ke.appOntology#Product"/>
+    </owl:Class>
+    
+
+
+    <!-- http://projects.ke.appOntology#SimpleCustomer -->
+
+
+    <owl:Class rdf:about="http://projects.ke.appOntology#SimpleCustomer">
+        <rdfs:subClassOf rdf:resource="http://projects.ke.appOntology#Customer"/>
+        <owl:disjointWith rdf:resource="http://projects.ke.appOntology#VIPCustomer"/>
+    </owl:Class>
+    
+
+
+    <!-- http://projects.ke.appOntology#User -->
+
+
+    <owl:Class rdf:about="http://projects.ke.appOntology#User">
+        <owl:disjointUnionOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://projects.ke.appOntology#Customer"/>
+            <rdf:Description rdf:about="http://projects.ke.appOntology#Guest"/>
+        </owl:disjointUnionOf>
+    </owl:Class>
+    
+
+
+    <!-- http://projects.ke.appOntology#VIPCustomer -->
+
+
+    <owl:Class rdf:about="http://projects.ke.appOntology#VIPCustomer">
+        <rdfs:subClassOf rdf:resource="http://projects.ke.appOntology#Customer"/>
+    </owl:Class>
+    
+
+
+    <!-- http://projects.ke.appOntology#interestAndOfferUsername1 -->
+
+
+    <owl:Class rdf:about="http://projects.ke.appOntology#interestAndOfferUsername1"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+
+    
+
+
+    <!-- http://projects.ke.appOntology#Guest1803574638 -->
+
+
+    <owl:NamedIndividual rdf:about="http://projects.ke.appOntology#Guest1803574638">
+        <rdf:type rdf:resource="http://projects.ke.appOntology#Guest"/>
+        <username rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Guest1803574638</username>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://projects.ke.appOntology#Guest2145714199 -->
+
+
+    <owl:NamedIndividual rdf:about="http://projects.ke.appOntology#Guest2145714199">
+        <rdf:type rdf:resource="http://projects.ke.appOntology#Guest"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pA0568"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pC0118"/>
+        <username rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Guest2145714199</username>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://projects.ke.appOntology#Guest690638116 -->
+
+
+    <owl:NamedIndividual rdf:about="http://projects.ke.appOntology#Guest690638116">
+        <rdf:type rdf:resource="http://projects.ke.appOntology#Guest"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pA0569"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pB0344"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pC0117"/>
+        <username rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Guest690638116</username>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://projects.ke.appOntology#Guest849704529 -->
+
+
+    <owl:NamedIndividual rdf:about="http://projects.ke.appOntology#Guest849704529">
+        <rdf:type rdf:resource="http://projects.ke.appOntology#Guest"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pA0568"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pC0119"/>
+        <username rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Guest849704529</username>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://projects.ke.appOntology#pA0567 -->
+
+
+    <owl:NamedIndividual rdf:about="http://projects.ke.appOntology#pA0567">
+        <rdf:type rdf:resource="http://projects.ke.appOntology#ProductA"/>
+        <id rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pA0567</id>
+        <price rdf:datatype="http://www.w3.org/2001/XMLSchema#float">20.0</price>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://projects.ke.appOntology#pA0568 -->
+
+
+    <owl:NamedIndividual rdf:about="http://projects.ke.appOntology#pA0568">
+        <rdf:type rdf:resource="http://projects.ke.appOntology#ProductA"/>
+        <id rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pA0568</id>
+        <price rdf:datatype="http://www.w3.org/2001/XMLSchema#float">20.0</price>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://projects.ke.appOntology#pA0569 -->
+
+
+    <owl:NamedIndividual rdf:about="http://projects.ke.appOntology#pA0569">
+        <rdf:type rdf:resource="http://projects.ke.appOntology#ProductA"/>
+        <id rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pA0569</id>
+        <price rdf:datatype="http://www.w3.org/2001/XMLSchema#float">20.0</price>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://projects.ke.appOntology#pB0343 -->
+
+
+    <owl:NamedIndividual rdf:about="http://projects.ke.appOntology#pB0343">
+        <rdf:type rdf:resource="http://projects.ke.appOntology#ProductB"/>
+        <id rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pB0343</id>
+        <price rdf:datatype="http://www.w3.org/2001/XMLSchema#float">40.0</price>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://projects.ke.appOntology#pB0344 -->
+
+
+    <owl:NamedIndividual rdf:about="http://projects.ke.appOntology#pB0344">
+        <rdf:type rdf:resource="http://projects.ke.appOntology#ProductB"/>
+        <id rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pB0344</id>
+        <price rdf:datatype="http://www.w3.org/2001/XMLSchema#float">40.0</price>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://projects.ke.appOntology#pB0345 -->
+
+
+    <owl:NamedIndividual rdf:about="http://projects.ke.appOntology#pB0345">
+        <rdf:type rdf:resource="http://projects.ke.appOntology#ProductB"/>
+        <id rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pB0345</id>
+        <price rdf:datatype="http://www.w3.org/2001/XMLSchema#float">40.0</price>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://projects.ke.appOntology#pC0117 -->
+
+
+    <owl:NamedIndividual rdf:about="http://projects.ke.appOntology#pC0117">
+        <rdf:type rdf:resource="http://projects.ke.appOntology#ProductA"/>
+        <id rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pC0117</id>
+        <price rdf:datatype="http://www.w3.org/2001/XMLSchema#float">60.0</price>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://projects.ke.appOntology#pC0118 -->
+
+
+    <owl:NamedIndividual rdf:about="http://projects.ke.appOntology#pC0118">
+        <rdf:type rdf:resource="http://projects.ke.appOntology#ProductA"/>
+        <id rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pC0118</id>
+        <price rdf:datatype="http://www.w3.org/2001/XMLSchema#float">60.0</price>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://projects.ke.appOntology#pC0119 -->
+
+
+    <owl:NamedIndividual rdf:about="http://projects.ke.appOntology#pC0119">
+        <rdf:type rdf:resource="http://projects.ke.appOntology#ProductA"/>
+        <id rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pC0119</id>
+        <price rdf:datatype="http://www.w3.org/2001/XMLSchema#float">60.0</price>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://projects.ke.appOntology#username1 -->
+
+
+    <owl:NamedIndividual rdf:about="http://projects.ke.appOntology#username1">
+        <rdf:type rdf:resource="http://projects.ke.appOntology#SimpleCustomer"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pA0567"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pB0343"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pB0344"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pB0345"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pC0117"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pC0119"/>
+        <perc10Offer rdf:resource="http://projects.ke.appOntology#pA0567"/>
+        <perc10Offer rdf:resource="http://projects.ke.appOntology#pA0569"/>
+        <perc10Offer rdf:resource="http://projects.ke.appOntology#pB0345"/>
+        <productOnOffer rdf:resource="http://projects.ke.appOntology#pA0567"/>
+        <productOnOffer rdf:resource="http://projects.ke.appOntology#pA0569"/>
+        <productOnOffer rdf:resource="http://projects.ke.appOntology#pB0345"/>
+        <username rdf:datatype="http://www.w3.org/2001/XMLSchema#string">username1</username>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://projects.ke.appOntology#username2 -->
+
+
+    <owl:NamedIndividual rdf:about="http://projects.ke.appOntology#username2">
+        <rdf:type rdf:resource="http://projects.ke.appOntology#SimpleCustomer"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pB0343"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pC0118"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pC0119"/>
+        <perc10Offer rdf:resource="http://projects.ke.appOntology#pB0343"/>
+        <perc10Offer rdf:resource="http://projects.ke.appOntology#pB0345"/>
+        <perc10Offer rdf:resource="http://projects.ke.appOntology#pC0119"/>
+        <productOnOffer rdf:resource="http://projects.ke.appOntology#pB0343"/>
+        <productOnOffer rdf:resource="http://projects.ke.appOntology#pB0345"/>
+        <productOnOffer rdf:resource="http://projects.ke.appOntology#pC0119"/>
+        <username rdf:datatype="http://www.w3.org/2001/XMLSchema#string">username2</username>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://projects.ke.appOntology#username3 -->
+
+
+    <owl:NamedIndividual rdf:about="http://projects.ke.appOntology#username3">
+        <rdf:type rdf:resource="http://projects.ke.appOntology#SimpleCustomer"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pA0568"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pB0344"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pB0345"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pC0119"/>
+        <perc10Offer rdf:resource="http://projects.ke.appOntology#pA0567"/>
+        <perc10Offer rdf:resource="http://projects.ke.appOntology#pA0568"/>
+        <perc10Offer rdf:resource="http://projects.ke.appOntology#pC0118"/>
+        <productOnOffer rdf:resource="http://projects.ke.appOntology#pA0567"/>
+        <productOnOffer rdf:resource="http://projects.ke.appOntology#pA0568"/>
+        <productOnOffer rdf:resource="http://projects.ke.appOntology#pC0118"/>
+        <username rdf:datatype="http://www.w3.org/2001/XMLSchema#string">username3</username>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://projects.ke.appOntology#username4 -->
+
+
+    <owl:NamedIndividual rdf:about="http://projects.ke.appOntology#username4">
+        <rdf:type rdf:resource="http://projects.ke.appOntology#SimpleCustomer"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pA0567"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pA0568"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pC0117"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pC0118"/>
+        <perc10Offer rdf:resource="http://projects.ke.appOntology#pA0567"/>
+        <perc10Offer rdf:resource="http://projects.ke.appOntology#pA0568"/>
+        <productOnOffer rdf:resource="http://projects.ke.appOntology#pA0567"/>
+        <productOnOffer rdf:resource="http://projects.ke.appOntology#pA0568"/>
+        <username rdf:datatype="http://www.w3.org/2001/XMLSchema#string">username4</username>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://projects.ke.appOntology#vip_username1 -->
+
+
+    <owl:NamedIndividual rdf:about="http://projects.ke.appOntology#vip_username1">
+        <rdf:type rdf:resource="http://projects.ke.appOntology#VIPCustomer"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pA0567"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pA0568"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pA0569"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pB0343"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pB0344"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pC0119"/>
+        <perc10Offer rdf:resource="http://projects.ke.appOntology#pA0569"/>
+        <perc10Offer rdf:resource="http://projects.ke.appOntology#pB0345"/>
+        <perc10Offer rdf:resource="http://projects.ke.appOntology#pC0119"/>
+        <productOnOffer rdf:resource="http://projects.ke.appOntology#pA0569"/>
+        <productOnOffer rdf:resource="http://projects.ke.appOntology#pB0345"/>
+        <productOnOffer rdf:resource="http://projects.ke.appOntology#pC0119"/>
+        <username rdf:datatype="http://www.w3.org/2001/XMLSchema#string">vip_username1</username>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://projects.ke.appOntology#vip_username2 -->
+
+
+    <owl:NamedIndividual rdf:about="http://projects.ke.appOntology#vip_username2">
+        <rdf:type rdf:resource="http://projects.ke.appOntology#VIPCustomer"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pA0568"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pA0569"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pB0343"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pB0345"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pC0119"/>
+        <perc10Offer rdf:resource="http://projects.ke.appOntology#pB0345"/>
+        <productOnOffer rdf:resource="http://projects.ke.appOntology#pB0345"/>
+        <username rdf:datatype="http://www.w3.org/2001/XMLSchema#string">vip_username2</username>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://projects.ke.appOntology#vip_username3 -->
+
+
+    <owl:NamedIndividual rdf:about="http://projects.ke.appOntology#vip_username3">
+        <rdf:type rdf:resource="http://projects.ke.appOntology#VIPCustomer"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pA0568"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pB0344"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pB0345"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pC0117"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pC0118"/>
+        <interestedIn rdf:resource="http://projects.ke.appOntology#pC0119"/>
+        <perc10Offer rdf:resource="http://projects.ke.appOntology#pA0567"/>
+        <perc10Offer rdf:resource="http://projects.ke.appOntology#pA0568"/>
+        <perc20Offer rdf:resource="http://projects.ke.appOntology#pB0345"/>
+        <productOnOffer rdf:resource="http://projects.ke.appOntology#pA0567"/>
+        <productOnOffer rdf:resource="http://projects.ke.appOntology#pA0568"/>
+        <productOnOffer rdf:resource="http://projects.ke.appOntology#pB0345"/>
+        <username rdf:datatype="http://www.w3.org/2001/XMLSchema#string">vip_username3</username>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // General axioms
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+
+    <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+            <owl:Restriction>
+                <owl:onProperty>
+                    <rdf:Description>
+                        <owl:inverseOf rdf:resource="http://projects.ke.appOntology#interestedIn"/>
+                    </rdf:Description>
+                </owl:onProperty>
+                <owl:hasValue rdf:resource="http://projects.ke.appOntology#username1"/>
+            </owl:Restriction>
+            <owl:Restriction>
+                <owl:onProperty>
+                    <rdf:Description>
+                        <owl:inverseOf rdf:resource="http://projects.ke.appOntology#perc10Offer"/>
+                    </rdf:Description>
+                </owl:onProperty>
+                <owl:hasValue rdf:resource="http://projects.ke.appOntology#username1"/>
+            </owl:Restriction>
+        </owl:intersectionOf>
+        <rdfs:subClassOf rdf:resource="http://projects.ke.appOntology#interestAndOfferUsername1"/>
+    </owl:Class>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://projects.ke.appOntology#ProductA"/>
+            <rdf:Description rdf:about="http://projects.ke.appOntology#ProductB"/>
+            <rdf:Description rdf:about="http://projects.ke.appOntology#ProductC"/>
+        </owl:members>
+    </rdf:Description>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 5.1.0.2017-03-29T23:31:42Z) https://github.com/owlcs/owlapi/ -->
+
+
