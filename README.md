@@ -20,6 +20,7 @@ Given a Java application we would like to connect it to a _java-reasoner_ compon
 * **Static Analysis** on the last snapshot of the application
    * Let the user add other axioms (parsing from file) to generated knowledge base
    * Let the user interactively ask DL queries through the reasoner synched with the knowledge base
+   * Enable SPARQL queries (e.g path-based, aggregations) on RDF graph generated
 * **Inter-software consistency**
   * Mapping a Java application model to an ontology enables the possibility to describe inter-software consistency constraints between data models of different applications. 
   * Exploiting the reasoner backend to manage semantics from different applications mapped to the same ontology makes possible to check also at runtime consistency of their integration.
@@ -96,8 +97,16 @@ Contains useful methods to build Main classes for a ```javareasoner``` applicati
     * If empty array initialize default ontology through ```initOntology``` method
     * If ```args.length``` equal to 1: 1st arg specifies the serialization type to save the ontology (can be ```functional```, ```manchester```, ```rdfxml```, ```turtle```)
     * If ```args.length``` equal to 2: 2nd arg is used as file path to load the ontology instead of the default one
+    
+### SPARQL Engine ###
 
+[Jena ARQ](https://jena.apache.org/documentation/query/) is a query engine that supports the SPARQL RDF Query language. An interface to make _select_ queries is provided with class ```SPARQLEngine``` through method ```askQuery```.
 
+More or less expressive SPARQL queries can be done against Jena Models (RDF graphs) more or less efficiently with respect to the reasoner enabled if the pre-reasoning saved knowledge base is used as model (_Jena Reasoners_ : RDFS / OWL rule-based reasoner)
+  
+We can save the KB axioms (TBox, RBox, ABox) managed by the ```javareasoner``` as a RDF document through the  ```OntologyHandler``` component and use it as Jena model. 
+```SPARQLEngine``` class also offers the method ```shouldCreateInferredAxioms``` to save a dump of the knowledge base and all inferable axioms. Using post-reasoning saved knowledge base as model enables full expressivity also without enabling Jena Reasoners but it's unfeasible for large KBs.
+  
 ## How to run the demo ##
 
 ### The application ###
@@ -115,10 +124,13 @@ The ```javareasoner``` package contains the main classes of the _java-reasoner_ 
 
 **Note** The user is expected to provide inputs from the console in both running executables to enable connection and ensure debugger is ready when the application actually starts its execution.
 
+### SPARQL Engine ###
+
+The ```sparql``` package contains the main class ```MainSPARQLDemo``` that shows (through an example KB obtained by running the EShop demo and saved in ```appOntologyES.owl``` file) the tradeoff between expressivity of queries and model/reasoning enabled.
+
 ## How to connect your own application ##
 
 * Extend ```InspectToAxiom``` providing an implementation of methods as specified above.
 * Extend ```OntologyHandler``` providing a default ontology through OWLAPI overriding the ```initOntology``` method (follow the same structure of examples provided) or load your ontology from file.
 * Build a ```Main``` class for reasoning backend managing execution of ```javareasoner``` components.
 * Run your Java application in debug mode (listening for remote connection) and the *main* method of the backend.
-
