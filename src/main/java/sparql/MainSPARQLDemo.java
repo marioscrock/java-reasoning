@@ -23,7 +23,7 @@ public class MainSPARQLDemo {
 	public static void main(String[] args) throws OWLOntologyCreationException,
     OWLOntologyStorageException, FileNotFoundException {
 			
-		//SPARQLEngine.shouldCreateInferredAxioms("appOntologyES.owl", "inferredAppOntologyES.owl");
+		SPARQLEngine.shouldCreateInferredAxioms("appOntologyES.owl", "inferredAppOntologyES.owl");
 		
 		Model modelPre = FileManager.get().loadModel("appOntologyES.owl", "RDFXML");
 		Model modelPost = FileManager.get().loadModel("inferredAppOntologyES.owl", "RDFXML");
