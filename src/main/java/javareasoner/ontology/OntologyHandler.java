@@ -58,7 +58,7 @@ public class OntologyHandler {
 	protected OWLReasoner r;
 	
 	protected final IRI IOR = IRI.create("http://projects.ke.appOntology");
-	protected File fileout = new File("appOntology.owl");
+	protected File fileout = new File("owl/appOntology.owl");
 	protected SerializationType serializationType = SerializationType.RDFXML;
 
 	private List<OWLAxiom> bufferAxioms = new ArrayList<>();

@@ -42,12 +42,12 @@ public class MainAM {
 		oh.reasoningRoutine();
 		
 		System.out.println("Parsing file input-rdfxml.owl");
-		Main.parseAxioms(oh, "input-rdfxml.owl", SerializationType.RDFXML);
+		Main.parseAxioms(oh, "owl/input-rdfxml.owl", SerializationType.RDFXML);
 		System.out.println("Axioms ADDED");
 		oh.reasoningRoutine();
 		
 		System.out.println("Parsing file input-functional.owl");
-		Main.parseAxioms(oh, "input-functional.owl", SerializationType.FUNCTIONAL);
+		Main.parseAxioms(oh, "owl/input-functional.owl", SerializationType.FUNCTIONAL);
 		System.out.println("\nAxioms ADDED");
 		oh.reasoningRoutine();
 		oh.saveOntology();
@@ -57,7 +57,7 @@ public class MainAM {
 		inspector = new ReasonedArtMarketInspector(oh);
 		Main.initDebugger(inspector, oh, scan);
 		
-		Main.parsingLoop(oh, oh, scan, "inputAM.owl");
+		Main.parsingLoop(oh, oh, scan, "owl/inputAM.owl");
 		
 		query = new DLQueryEngine(oh);
 		query.doQueryLoop();
