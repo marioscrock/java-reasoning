@@ -46,7 +46,7 @@ public class MainES {
 		inspector = new ReasonedEShopInspector(oh);
 		Main.initDebugger(inspector, oh, scan);
 		
-		Main.parsingLoop(oh, oh, scan, "owl/inputES.owl");
+		//Main.parsingLoop(oh, oh, scan, "owl/inputES.owl");
 		
 		query = new DLQueryEngine(oh);
 		query.doQueryLoop();

@@ -41,7 +41,7 @@ public class MainSPARQLDemo {
 				" 	?y ex:perc20Offer ?x .\n" +
 				"}" ;
 		
-		System.out.println("For each VIPCustomer Products he's interestedIn and he can buy with a vip discount");
+		System.out.println("For each VIPCustomer, products he's interestedIn and he can buy with a vip discount");
 		System.out.println(queryString + "\n");
 		System.out.println("Pre-reasoning model");
 		SPARQLEngine.askQuery(queryString, modelPre);
@@ -56,7 +56,7 @@ public class MainSPARQLDemo {
 				"}\n"
 				+ "GROUP BY ?y" ;
 		
-		System.out.println("For each Guest prices sum for products he's interestedIn");
+		System.out.println("For each Guest, prices sum for products he's interestedIn");
 		System.out.println(queryString + "\n");
 		System.out.println("Pre-reasoning model");
 		SPARQLEngine.askQuery(queryString, modelPre);
@@ -71,7 +71,7 @@ public class MainSPARQLDemo {
 				"	?x ex:productOnOffer ?y .\n" +
 				"}" ;
 		
-		System.out.println("For each Customer products he's interestedIn and he can buy with a discount");
+		System.out.println("For each Customer, products he's interestedIn and he can buy with a discount");
 		System.out.println(queryString + "\n");
 		System.out.println("Pre-reasoning model");
 		SPARQLEngine.askQuery(queryString, modelPre);
@@ -89,7 +89,7 @@ public class MainSPARQLDemo {
 				"}\n"
 				+ "GROUP BY ?y" ;
 		
-		System.out.println("For each Customer prices sum for PopularProducts he's interestedIn");
+		System.out.println("For each Customer, prices sum for PopularProducts he's interestedIn");
 		System.out.println(queryString + "\n");
 		System.out.println("Pre-reasoning model");
 		SPARQLEngine.askQuery(queryString, modelPre);
