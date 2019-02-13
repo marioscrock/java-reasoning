@@ -209,8 +209,6 @@ public abstract class InspectToAxiom {
 	 */
 	private String classValueName(Value val) {
 		
-		//
-		//
 		String[] classSignatureName = val.type().signature().replaceFirst("L", "").split("/");
 		String classTargetName = classSignatureName[classSignatureName.length - 1].replace(";", "");
 		
