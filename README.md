@@ -120,7 +120,7 @@ The ```javareasoner``` package contains the main classes of the _java-reasoner_ 
 
  * Both examples show how the ontology changes with respect to the runtime evolution of the application.
  * ```MainAM``` shows in particular examples of integration between ABox axioms parsed from file and ABox axioms generated from active instances.
- * ```MainEs``` shows in particular how a higher level ontology can be exploited to extract information from the application (e.g. classes not represented in the application).
+ * ```MainES``` shows in particular how a higher level ontology can be exploited to extract information from the application (e.g. classes not represented in the application).
 
 **Note** The user is expected to provide inputs from the console in both running executables to enable connection and ensure debugger is ready when the application actually starts its execution.
 
