@@ -1,4 +1,5 @@
-# java-reasoning
+# Java Knowledge Interface (JKI)
+
 A java project exploiting [Java Debug Interface](https://docs.oracle.com/javase/7/docs/jdk/api/jpda/jdi/) and 
 [OWL API](https://github.com/owlcs/owlapi) to reason on active instances of a running Java application.
 
