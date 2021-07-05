@@ -123,6 +123,8 @@ The ```javareasoner``` package contains the main classes of the _java-reasoner_ 
  * ```MainAM``` shows in particular examples of integration between ABox axioms parsed from file and ABox axioms generated from active instances.
  * ```MainES``` shows in particular how a higher level ontology can be exploited to extract information from the application (e.g. classes not represented in the application).
 
+Example reasoning routines are defined for the [```app.artmarket```](https://github.com/marioscrock/java-reasoning/blob/448d258b943db2b51b8bf3e8701e71b8cac31a86/src/main/java/javareasoner/ontology/AMOntologyHandler.java#L152) and the [```app.eshop```](https://github.com/marioscrock/java-reasoning/blob/448d258b943db2b51b8bf3e8701e71b8cac31a86/src/main/java/javareasoner/ontology/ESOntologyHandler.java#L214). An example [snapshot](https://github.com/marioscrock/java-reasoning/blob/master/owl/appOntologyES.owl) of the knowledge base for the ```app.eshop``` (including the semantically lifted runtime state) is also available.
+
 **Note** The user is expected to provide inputs from the console in both running executables to enable connection and ensure debugger is ready when the application actually starts its execution.
 
 ### SPARQL Engine ###
