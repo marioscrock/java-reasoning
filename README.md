@@ -4,13 +4,11 @@ A java project exploiting [Java Debug Interface](https://docs.oracle.com/javase/
 [OWL API](https://github.com/owlcs/owlapi) to reason on active instances of a running Java application.
 
 ## Project Goals ##
-Complex Java applications often contain a data model representing the domain they are related to.
+Complex Java applications often contain a data model representing the domain they are related to. Our idea is to give to the programmer the possibility to check the java application model and the runtime evolution of its instances against an OWL2 ontology and a related knowledge base.
 
-<p align="center"><img src="/img/architecture.png" alt="Architecture" width="600"></p>
+<p align="center"><img src="/docs/architecture.png" alt="Architecture" width="600"></p>
 
-Our idea is to give to the programmer the possibility to check the java application model and the runtime evolution of its instances against an OWL2 ontology and a related knowledge base.
-
-Given a Java application we would like to connect it to a _java-reasoner_ component able to:
+Given a Java application we would like to connect it to a _JKI_ component able to:
 * **Reason about active instances of application classes** instantiated at runtime making use of an ontology describing same domain
    * Map java classes' instances to individuals in the ontology
    * Integrate ABox axioms generated with given knowledge base
@@ -26,10 +24,10 @@ Given a Java application we would like to connect it to a _java-reasoner_ compon
   * Mapping a Java application model to an ontology enables the possibility to describe inter-software consistency constraints between data models of different applications. 
   * Exploiting the reasoner backend to manage semantics from different applications mapped to the same ontology makes possible to check also at runtime consistency of their integration.
 
-## Overview ##
+## Implementation ##
 
 ### The application ###
-Given a generic Java application we would like to connect it to a _java-reasoner_ component able to monitor it providing runtime snapshots of active instances running in the JVM. We exploit the Java Debug Interface (JDI) running the application in debug mode and connecting to it remotely through socket and ```AttachingConnector```.
+Given a generic Java application we would like to connect it to a _JKI_ component able to monitor it providing runtime snapshots of active instances running in the JVM. We exploit the Java Debug Interface (JDI) running the application in debug mode and connecting to it remotely through socket and ```AttachingConnector```.
 
 To run the java application in debug virtual machine it must be run with options:
 ```-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=y```
@@ -44,7 +42,9 @@ Through the JDI API we are able remotely to:
 
 ### Java Reasoner ###
 
-<p align="center"><img src="/img/java-reasoner.png" alt="Architecture" width="600"></p>
+The _java-reasoner_ is a proof-of-concept (POC) of the described _JKI_.
+
+<p align="center"><img src="/docs/java-reasoner.png" alt="Architecture" width="600"></p>
 
 _Notes_
 * Ontologies can be loaded from file, from remote IRI or from coded function defining axioms through OWL API
@@ -114,6 +114,8 @@ We can save the KB axioms (TBox, RBox, ABox) managed by the ```javareasoner``` a
 The project contains two example application in packages ```app.artmarket``` and ```app.eshop```. For each application an ontology is described through the OWLAPI in the respective extension of ```OntologyHandler``` ( ```AMOntologyHandler``` and ```ESOntologyHandler```).
 
 The two applications are two toy example and their execution is managed respectively by ```ReasonedArtMarketMain``` and ```ReasonedEshopMain``` that must be run with above specified options to enable remote debug mode.
+
+A document describing the two Java applications, the defined ontologies and the peculiarities of each demo is available in the ```docs``` folder.
 
 ### Java Reasoner ###
 
