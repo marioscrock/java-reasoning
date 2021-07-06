@@ -115,7 +115,7 @@ The project contains two example application in packages ```app.artmarket``` and
 
 The two applications are two toy example and their execution is managed respectively by ```ReasonedArtMarketMain``` and ```ReasonedEshopMain``` that must be run with above specified options to enable remote debug mode.
 
-A document describing the two Java applications, the defined ontologies and the peculiarities of each demo is available in the ```docs``` folder.
+A [document](https://github.com/marioscrock/java-reasoning/blob/master/docs/demo-docs.pdf) describing the two Java applications, the defined ontologies and the peculiarities of each demo is available in the ```docs``` folder.
 
 ### Java Reasoner ###
 
