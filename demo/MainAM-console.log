@@ -1,0 +1,377 @@
+SubObjectPropertyOf(<http://projects.ke.appOntology#paints> <http://projects.ke.appOntology#crafts>)
+SubObjectPropertyOf(<http://projects.ke.appOntology#sculpts> <http://projects.ke.appOntology#crafts>)
+DataPropertyRange(<http://projects.ke.appOntology#name> xsd:string)
+DataPropertyRange(<http://projects.ke.appOntology#id> xsd:string)
+SubClassOf(<http://projects.ke.appOntology#Artist> <http://projects.ke.appOntology#Person>)
+SubClassOf(<http://projects.ke.appOntology#Artisan> <http://projects.ke.appOntology#Person>)
+SubClassOf(<http://projects.ke.appOntology#Painter> <http://projects.ke.appOntology#Artist>)
+SubClassOf(<http://projects.ke.appOntology#Sculptor> <http://projects.ke.appOntology#Artist>)
+SubClassOf(<http://projects.ke.appOntology#ArtWork> <http://projects.ke.appOntology#Thing>)
+SubClassOf(<http://projects.ke.appOntology#Product> <http://projects.ke.appOntology#Thing>)
+SubClassOf(<http://projects.ke.appOntology#Paint> <http://projects.ke.appOntology#ArtWork>)
+SubClassOf(<http://projects.ke.appOntology#Sculpt> <http://projects.ke.appOntology#ArtWork>)
+ObjectPropertyRange(<http://projects.ke.appOntology#crafts> <http://projects.ke.appOntology#ArtWork>)
+ObjectPropertyRange(<http://projects.ke.appOntology#produces> <http://projects.ke.appOntology#Product>)
+ObjectPropertyRange(<http://projects.ke.appOntology#paints> <http://projects.ke.appOntology#Paint>)
+ObjectPropertyRange(<http://projects.ke.appOntology#sculpts> <http://projects.ke.appOntology#Sculpt>)
+DisjointClasses(<http://projects.ke.appOntology#Person> <http://projects.ke.appOntology#Thing>)
+DisjointClasses(<http://projects.ke.appOntology#Paint> <http://projects.ke.appOntology#Product> <http://projects.ke.appOntology#Sculpt>)
+DataPropertyDomain(<http://projects.ke.appOntology#name> <http://projects.ke.appOntology#Person>)
+DataPropertyDomain(<http://projects.ke.appOntology#id> <http://projects.ke.appOntology#Thing>)
+FunctionalDataProperty(<http://projects.ke.appOntology#name>)
+FunctionalDataProperty(<http://projects.ke.appOntology#id>)
+ObjectPropertyDomain(<http://projects.ke.appOntology#crafts> <http://projects.ke.appOntology#Artist>)
+ObjectPropertyDomain(<http://projects.ke.appOntology#produces> <http://projects.ke.appOntology#Artisan>)
+ObjectPropertyDomain(<http://projects.ke.appOntology#paints> <http://projects.ke.appOntology#Painter>)
+ObjectPropertyDomain(<http://projects.ke.appOntology#sculpts> <http://projects.ke.appOntology#Sculptor>)
+
+Conceptual Model loaded
+
+Is ontology still consistent? true
+
+Reasoning Routine
+
+Painter(*)
+
+Paint(*)
+
+Thing(*)
+
+produces(*)
+
+paints some Paint(*)
+
+crafts some Sculpt(*)
+
+Artist and (crafts some ArtWork) (*)
+*******************************************************
+Parsing file input-rdfxml.owl
+Axioms ADDED
+
+Is ontology still consistent? true
+
+Reasoning Routine
+
+Painter(*)
+Node( <http://projects.ke.appOntology#Leonardo> )
+
+Paint(*)
+Node( <http://projects.ke.appOntology#Cenacolo> )
+
+Thing(*)
+Node( <http://projects.ke.appOntology#Cenacolo> )
+
+produces(*)
+
+paints some Paint(*)
+Node( <http://projects.ke.appOntology#Leonardo> )
+
+crafts some Sculpt(*)
+
+Artist and (crafts some ArtWork) (*)
+Node( <http://projects.ke.appOntology#Leonardo> )
+*******************************************************
+Parsing file input-functional.owl
+
+Axioms ADDED
+
+Is ontology still consistent? true
+
+Reasoning Routine
+
+Painter(*)
+Node( <http://projects.ke.appOntology#Leonardo> )
+Node( <http://projects.ke.appOntology#VanGogh> )
+
+Paint(*)
+Node( <http://projects.ke.appOntology#Cenacolo> )
+Node( <http://projects.ke.appOntology#StanzaAdArles> )
+
+Thing(*)
+Node( <http://projects.ke.appOntology#Cenacolo> )
+Node( <http://projects.ke.appOntology#StanzaAdArles> )
+
+produces(*)
+
+paints some Paint(*)
+Node( <http://projects.ke.appOntology#Leonardo> )
+Node( <http://projects.ke.appOntology#VanGogh> )
+
+crafts some Sculpt(*)
+
+Artist and (crafts some ArtWork) (*)
+Node( <http://projects.ke.appOntology#Leonardo> )
+Node( <http://projects.ke.appOntology#VanGogh> )
+*******************************************************
+Do you want to attach to application (y/n)
+Attached to process 'Java HotSpot(TM) 64-Bit Server VM'
+
+Is ontology still consistent? true
+
+Reasoning Routine
+
+Painter(*)
+Node( <http://projects.ke.appOntology#Leonardo> )
+Node( <http://projects.ke.appOntology#VanGogh> )
+
+Paint(*)
+Node( <http://projects.ke.appOntology#Cenacolo> )
+Node( <http://projects.ke.appOntology#MonnaLisa> )
+Node( <http://projects.ke.appOntology#StanzaAdArles> )
+
+Thing(*)
+Node( <http://projects.ke.appOntology#Cenacolo> )
+Node( <http://projects.ke.appOntology#Product05714> )
+Node( <http://projects.ke.appOntology#MonnaLisa> )
+Node( <http://projects.ke.appOntology#David> )
+Node( <http://projects.ke.appOntology#StanzaAdArles> )
+
+produces(*)
+Node( <http://projects.ke.appOntology#Belfiore> )
+
+paints some Paint(*)
+Node( <http://projects.ke.appOntology#Leonardo> )
+Node( <http://projects.ke.appOntology#VanGogh> )
+
+crafts some Sculpt(*)
+Node( <http://projects.ke.appOntology#Bernini> )
+
+Artist and (crafts some ArtWork) (*)
+Node( <http://projects.ke.appOntology#Bernini> )
+Node( <http://projects.ke.appOntology#Leonardo> )
+Node( <http://projects.ke.appOntology#VanGogh> )
+*******************************************************
+
+Is ontology still consistent? true
+
+Reasoning Routine
+
+Painter(*)
+Node( <http://projects.ke.appOntology#Leonardo> )
+Node( <http://projects.ke.appOntology#VanGogh> )
+
+Paint(*)
+Node( <http://projects.ke.appOntology#Cenacolo> )
+Node( <http://projects.ke.appOntology#StanzaAdArles> )
+
+Thing(*)
+Node( <http://projects.ke.appOntology#Cenacolo> )
+Node( <http://projects.ke.appOntology#StanzaAdArles> )
+
+produces(*)
+
+paints some Paint(*)
+Node( <http://projects.ke.appOntology#Leonardo> )
+Node( <http://projects.ke.appOntology#VanGogh> )
+
+crafts some Sculpt(*)
+
+Artist and (crafts some ArtWork) (*)
+Node( <http://projects.ke.appOntology#Leonardo> )
+Node( <http://projects.ke.appOntology#VanGogh> )
+*******************************************************
+
+Is ontology still consistent? true
+
+Reasoning Routine
+
+Painter(*)
+Node( <http://projects.ke.appOntology#Leonardo> )
+Node( <http://projects.ke.appOntology#VanGogh> )
+
+Paint(*)
+Node( <http://projects.ke.appOntology#Cenacolo> )
+Node( <http://projects.ke.appOntology#MonnaLisa> )
+Node( <http://projects.ke.appOntology#StanzaAdArles> )
+
+Thing(*)
+Node( <http://projects.ke.appOntology#Cenacolo> )
+Node( <http://projects.ke.appOntology#Product05714> )
+Node( <http://projects.ke.appOntology#MonnaLisa> )
+Node( <http://projects.ke.appOntology#David> )
+Node( <http://projects.ke.appOntology#StanzaAdArles> )
+
+produces(*)
+Node( <http://projects.ke.appOntology#Belfiore> )
+
+paints some Paint(*)
+Node( <http://projects.ke.appOntology#Leonardo> )
+Node( <http://projects.ke.appOntology#VanGogh> )
+
+crafts some Sculpt(*)
+Node( <http://projects.ke.appOntology#Bernini> )
+
+Artist and (crafts some ArtWork) (*)
+Node( <http://projects.ke.appOntology#Bernini> )
+Node( <http://projects.ke.appOntology#Leonardo> )
+Node( <http://projects.ke.appOntology#VanGogh> )
+*******************************************************
+
+Is ontology still consistent? true
+
+Reasoning Routine
+
+Painter(*)
+Node( <http://projects.ke.appOntology#Leonardo> )
+Node( <http://projects.ke.appOntology#VanGogh> )
+Node( <http://projects.ke.appOntology#Caravaggio> )
+
+Paint(*)
+Node( <http://projects.ke.appOntology#Cenacolo> )
+Node( <http://projects.ke.appOntology#MonnaLisa> )
+Node( <http://projects.ke.appOntology#Vocazione-di-san-Matteo> )
+Node( <http://projects.ke.appOntology#StanzaAdArles> )
+
+Thing(*)
+Node( <http://projects.ke.appOntology#Cenacolo> )
+Node( <http://projects.ke.appOntology#Product05714> )
+Node( <http://projects.ke.appOntology#MonnaLisa> )
+Node( <http://projects.ke.appOntology#Vocazione-di-san-Matteo> )
+Node( <http://projects.ke.appOntology#David> )
+Node( <http://projects.ke.appOntology#StanzaAdArles> )
+Node( <http://projects.ke.appOntology#Mosaic134> )
+Node( <http://projects.ke.appOntology#Estasi-di-Santa-Teresa> )
+
+produces(*)
+Node( <http://projects.ke.appOntology#Belfiore> )
+Node( <http://projects.ke.appOntology#Travisanutto> )
+
+paints some Paint(*)
+Node( <http://projects.ke.appOntology#Leonardo> )
+Node( <http://projects.ke.appOntology#VanGogh> )
+Node( <http://projects.ke.appOntology#Caravaggio> )
+
+crafts some Sculpt(*)
+Node( <http://projects.ke.appOntology#Bernini> )
+
+Artist and (crafts some ArtWork) (*)
+Node( <http://projects.ke.appOntology#Bernini> )
+Node( <http://projects.ke.appOntology#Leonardo> )
+Node( <http://projects.ke.appOntology#VanGogh> )
+Node( <http://projects.ke.appOntology#Caravaggio> )
+*******************************************************
+Disconnected VM
+
+Do you want me to read <owl/inputAM.owl> to parse additional axioms?
+Type serialization format (if not recognised FUNCTIONAL parsing)
+Type x to exit
+
+Axioms ADDED
+
+Is ontology still consistent? true
+
+Reasoning Routine
+
+Painter(*)
+Node( <http://projects.ke.appOntology#Bernini> )
+Node( <http://projects.ke.appOntology#Belfiore> )
+Node( <http://projects.ke.appOntology#Leonardo> )
+Node( <http://projects.ke.appOntology#VanGogh> )
+Node( <http://projects.ke.appOntology#Caravaggio> )
+
+Paint(*)
+Node( <http://projects.ke.appOntology#Cenacolo> )
+Node( <http://projects.ke.appOntology#MonnaLisa> )
+Node( <http://projects.ke.appOntology#Vocazione-di-san-Matteo> )
+Node( <http://projects.ke.appOntology#PaesaggioUrbano02> )
+Node( <http://projects.ke.appOntology#StanzaAdArles> )
+Node( <http://projects.ke.appOntology#PapaUrbanoVIII> )
+
+Thing(*)
+Node( <http://projects.ke.appOntology#Cenacolo> )
+Node( <http://projects.ke.appOntology#Product05714> )
+Node( <http://projects.ke.appOntology#MonnaLisa> )
+Node( <http://projects.ke.appOntology#Vocazione-di-san-Matteo> )
+Node( <http://projects.ke.appOntology#David> )
+Node( <http://projects.ke.appOntology#PaesaggioUrbano02> )
+Node( <http://projects.ke.appOntology#StanzaAdArles> )
+Node( <http://projects.ke.appOntology#PapaUrbanoVIII> )
+Node( <http://projects.ke.appOntology#Mosaic134> )
+Node( <http://projects.ke.appOntology#Estasi-di-Santa-Teresa> )
+
+produces(*)
+Node( <http://projects.ke.appOntology#Belfiore> )
+Node( <http://projects.ke.appOntology#Travisanutto> )
+
+paints some Paint(*)
+Node( <http://projects.ke.appOntology#Bernini> )
+Node( <http://projects.ke.appOntology#Belfiore> )
+Node( <http://projects.ke.appOntology#Leonardo> )
+Node( <http://projects.ke.appOntology#VanGogh> )
+Node( <http://projects.ke.appOntology#Caravaggio> )
+
+crafts some Sculpt(*)
+Node( <http://projects.ke.appOntology#Bernini> )
+
+Artist and (crafts some ArtWork) (*)
+Node( <http://projects.ke.appOntology#Bernini> )
+Node( <http://projects.ke.appOntology#Belfiore> )
+Node( <http://projects.ke.appOntology#Leonardo> )
+Node( <http://projects.ke.appOntology#VanGogh> )
+Node( <http://projects.ke.appOntology#Caravaggio> )
+*******************************************************
+
+Do you want me to read <owl/inputAM.owl> to parse additional axioms?
+Type serialization format (if not recognised FUNCTIONAL parsing)
+Type x to exit
+
+*** QUERY ENGINE ***
+
+Please type a class expression in Manchester Syntax and press Enter (or press x to exit):
+
+
+--------------------------------------------------------------------------------
+QUERY:   paints some Paint and sculpts some Sculpt
+--------------------------------------------------------------------------------
+
+SuperClasses......................................
+
+	Painter
+	Sculptor
+	Thing
+	Artist
+	Person
+
+EquivalentClasses.................................
+
+	[NONE]
+
+SubClasses........................................
+
+	Nothing
+
+Instances.........................................
+
+	Bernini
+
+
+
+
+*** QUERY ENGINE ***
+
+Please type a class expression in Manchester Syntax and press Enter (or press x to exit):
+
+
+--------------------------------------------------------------------------------
+QUERY:   inverse crafts some (name value "Bernini"^^xsd:string)
+--------------------------------------------------------------------------------
+
+SuperClasses......................................
+
+	Thing
+	Thing
+	ArtWork
+
+EquivalentClasses.................................
+
+	[NONE]
+
+SubClasses........................................
+
+	Nothing
+
+Instances.........................................
+
+	David
+	PapaUrbanoVIII
+	Estasi-di-Santa-Teresa

@@ -1,0 +1,343 @@
+SubObjectPropertyOf(<http://projects.ke.appOntology#perc10Offer> <http://projects.ke.appOntology#productOnOffer>)
+SubObjectPropertyOf(<http://projects.ke.appOntology#perc20Offer> <http://projects.ke.appOntology#productOnOffer>)
+DataPropertyRange(<http://projects.ke.appOntology#username> xsd:string)
+DataPropertyRange(<http://projects.ke.appOntology#id> xsd:string)
+DataPropertyRange(<http://projects.ke.appOntology#price> xsd:float)
+DisjointUnion(<http://projects.ke.appOntology#User> <http://projects.ke.appOntology#Customer> <http://projects.ke.appOntology#Guest> )
+SubClassOf(<http://projects.ke.appOntology#Guest> <http://projects.ke.appOntology#User>)
+SubClassOf(<http://projects.ke.appOntology#Customer> <http://projects.ke.appOntology#User>)
+SubClassOf(<http://projects.ke.appOntology#SimpleCustomer> <http://projects.ke.appOntology#Customer>)
+SubClassOf(<http://projects.ke.appOntology#VIPCustomer> <http://projects.ke.appOntology#Customer>)
+SubClassOf(<http://projects.ke.appOntology#ProductA> <http://projects.ke.appOntology#Product>)
+SubClassOf(<http://projects.ke.appOntology#ProductB> <http://projects.ke.appOntology#Product>)
+SubClassOf(<http://projects.ke.appOntology#ProductC> <http://projects.ke.appOntology#Product>)
+SubClassOf(<http://projects.ke.appOntology#PopularProduct> <http://projects.ke.appOntology#Product>)
+SubClassOf(<http://projects.ke.appOntology#PopularProductSC> <http://projects.ke.appOntology#PopularProduct>)
+SubClassOf(<http://projects.ke.appOntology#PopularProductVC> <http://projects.ke.appOntology#PopularProduct>)
+ObjectPropertyRange(<http://projects.ke.appOntology#interestedIn> <http://projects.ke.appOntology#Product>)
+ObjectPropertyRange(<http://projects.ke.appOntology#productOnOffer> <http://projects.ke.appOntology#Product>)
+DisjointClasses(<http://projects.ke.appOntology#Product> <http://projects.ke.appOntology#User>)
+DisjointClasses(<http://projects.ke.appOntology#ProductA> <http://projects.ke.appOntology#ProductB> <http://projects.ke.appOntology#ProductC>)
+DisjointClasses(<http://projects.ke.appOntology#SimpleCustomer> <http://projects.ke.appOntology#VIPCustomer>)
+DataPropertyDomain(<http://projects.ke.appOntology#username> <http://projects.ke.appOntology#User>)
+DataPropertyDomain(<http://projects.ke.appOntology#id> <http://projects.ke.appOntology#Product>)
+DataPropertyDomain(<http://projects.ke.appOntology#price> <http://projects.ke.appOntology#Product>)
+FunctionalDataProperty(<http://projects.ke.appOntology#username>)
+FunctionalDataProperty(<http://projects.ke.appOntology#id>)
+FunctionalDataProperty(<http://projects.ke.appOntology#price>)
+EquivalentClasses(<http://projects.ke.appOntology#PopularProduct> ObjectMinCardinality(2 ObjectInverseOf(<http://projects.ke.appOntology#interestedIn>) <http://projects.ke.appOntology#User>) )
+EquivalentClasses(<http://projects.ke.appOntology#PopularProductSC> ObjectMinCardinality(2 ObjectInverseOf(<http://projects.ke.appOntology#interestedIn>) <http://projects.ke.appOntology#SimpleCustomer>) )
+EquivalentClasses(<http://projects.ke.appOntology#PopularProductVC> ObjectMinCardinality(2 ObjectInverseOf(<http://projects.ke.appOntology#interestedIn>) <http://projects.ke.appOntology#VIPCustomer>) )
+ObjectPropertyDomain(<http://projects.ke.appOntology#interestedIn> <http://projects.ke.appOntology#User>)
+ObjectPropertyDomain(<http://projects.ke.appOntology#productOnOffer> <http://projects.ke.appOntology#Customer>)
+ObjectPropertyDomain(<http://projects.ke.appOntology#perc20Offer> <http://projects.ke.appOntology#VIPCustomer>)
+
+Conceptual Model loaded
+
+
+Is ontology still consistent? true
+
+Reasoning Routine
+
+Guest(*)
+
+Customer(*)
+
+productOnOffer(*)
+
+productOnOffer(*) some ProductB
+
+PopularProduct (equivalent to: inverse interestedIn min 2)
+
+PopularProductSC (equivalent to: inverse interestedIn min 2 SimpleCustomer)
+
+PopularProductVC (equivalent to: inverse interestedIn min 2 VIPCustomer)
+
+inverse interestedIn some Guest
+*******************************************************
+Do you want to attach to application (y/n)
+Attached to process 'Java HotSpot(TM) 64-Bit Server VM'
+
+Is ontology still consistent? true
+
+Reasoning Routine
+
+Guest(*)
+Node( <http://projects.ke.appOntology#Guest316516071> )
+Node( <http://projects.ke.appOntology#Guest614004381> )
+
+Customer(*)
+Node( <http://projects.ke.appOntology#username3> )
+Node( <http://projects.ke.appOntology#username2> )
+Node( <http://projects.ke.appOntology#username4> )
+Node( <http://projects.ke.appOntology#vip_username2> )
+Node( <http://projects.ke.appOntology#vip_username3> )
+Node( <http://projects.ke.appOntology#username1> )
+Node( <http://projects.ke.appOntology#vip_username1> )
+
+productOnOffer(*)
+Node( <http://projects.ke.appOntology#username3> )
+Node( <http://projects.ke.appOntology#username2> )
+Node( <http://projects.ke.appOntology#vip_username2> )
+Node( <http://projects.ke.appOntology#username1> )
+Node( <http://projects.ke.appOntology#vip_username1> )
+
+productOnOffer(*) some ProductB
+Node( <http://projects.ke.appOntology#username2> )
+Node( <http://projects.ke.appOntology#vip_username2> )
+Node( <http://projects.ke.appOntology#username1> )
+
+PopularProduct (equivalent to: inverse interestedIn min 2)
+Node( <http://projects.ke.appOntology#pC0117> )
+Node( <http://projects.ke.appOntology#pA0569> )
+Node( <http://projects.ke.appOntology#pC0119> )
+Node( <http://projects.ke.appOntology#pB0344> )
+Node( <http://projects.ke.appOntology#pB0345> )
+
+PopularProductSC (equivalent to: inverse interestedIn min 2 SimpleCustomer)
+Node( <http://projects.ke.appOntology#pC0117> )
+Node( <http://projects.ke.appOntology#pC0119> )
+
+PopularProductVC (equivalent to: inverse interestedIn min 2 VIPCustomer)
+Node( <http://projects.ke.appOntology#pA0569> )
+Node( <http://projects.ke.appOntology#pC0119> )
+
+inverse interestedIn some Guest
+Node( <http://projects.ke.appOntology#pA0569> )
+Node( <http://projects.ke.appOntology#pA0567> )
+Node( <http://projects.ke.appOntology#pB0344> )
+Node( <http://projects.ke.appOntology#pB0345> )
+*******************************************************
+
+Is ontology still consistent? true
+
+Reasoning Routine
+
+Guest(*)
+
+Customer(*)
+
+productOnOffer(*)
+
+productOnOffer(*) some ProductB
+
+PopularProduct (equivalent to: inverse interestedIn min 2)
+
+PopularProductSC (equivalent to: inverse interestedIn min 2 SimpleCustomer)
+
+PopularProductVC (equivalent to: inverse interestedIn min 2 VIPCustomer)
+
+inverse interestedIn some Guest
+*******************************************************
+
+Is ontology still consistent? true
+
+Reasoning Routine
+
+Guest(*)
+Node( <http://projects.ke.appOntology#Guest290417458> )
+Node( <http://projects.ke.appOntology#Guest756155710> )
+
+Customer(*)
+Node( <http://projects.ke.appOntology#username3> )
+Node( <http://projects.ke.appOntology#username2> )
+Node( <http://projects.ke.appOntology#username4> )
+Node( <http://projects.ke.appOntology#vip_username2> )
+Node( <http://projects.ke.appOntology#vip_username3> )
+Node( <http://projects.ke.appOntology#username1> )
+Node( <http://projects.ke.appOntology#vip_username1> )
+
+productOnOffer(*)
+Node( <http://projects.ke.appOntology#username3> )
+Node( <http://projects.ke.appOntology#username4> )
+Node( <http://projects.ke.appOntology#vip_username3> )
+Node( <http://projects.ke.appOntology#username1> )
+Node( <http://projects.ke.appOntology#vip_username1> )
+
+productOnOffer(*) some ProductB
+Node( <http://projects.ke.appOntology#username4> )
+
+PopularProduct (equivalent to: inverse interestedIn min 2)
+Node( <http://projects.ke.appOntology#pC0118> )
+Node( <http://projects.ke.appOntology#pA0569> )
+Node( <http://projects.ke.appOntology#pB0343> )
+Node( <http://projects.ke.appOntology#pB0345> )
+
+PopularProductSC (equivalent to: inverse interestedIn min 2 SimpleCustomer)
+Node( <http://projects.ke.appOntology#pB0343> )
+
+PopularProductVC (equivalent to: inverse interestedIn min 2 VIPCustomer)
+Node( <http://projects.ke.appOntology#pB0343> )
+Node( <http://projects.ke.appOntology#pB0345> )
+
+inverse interestedIn some Guest
+Node( <http://projects.ke.appOntology#pC0118> )
+Node( <http://projects.ke.appOntology#pA0569> )
+*******************************************************
+
+Is ontology still consistent? true
+
+Reasoning Routine
+
+Guest(*)
+Node( <http://projects.ke.appOntology#Guest923614696> )
+Node( <http://projects.ke.appOntology#Guest290417458> )
+Node( <http://projects.ke.appOntology#Guest756155710> )
+Node( <http://projects.ke.appOntology#Guest116633761> )
+
+Customer(*)
+Node( <http://projects.ke.appOntology#username3> )
+Node( <http://projects.ke.appOntology#username2> )
+Node( <http://projects.ke.appOntology#username4> )
+Node( <http://projects.ke.appOntology#vip_username2> )
+Node( <http://projects.ke.appOntology#vip_username3> )
+Node( <http://projects.ke.appOntology#username1> )
+Node( <http://projects.ke.appOntology#vip_username1> )
+
+productOnOffer(*)
+Node( <http://projects.ke.appOntology#username3> )
+Node( <http://projects.ke.appOntology#username2> )
+Node( <http://projects.ke.appOntology#username4> )
+Node( <http://projects.ke.appOntology#vip_username2> )
+Node( <http://projects.ke.appOntology#vip_username3> )
+Node( <http://projects.ke.appOntology#username1> )
+Node( <http://projects.ke.appOntology#vip_username1> )
+
+productOnOffer(*) some ProductB
+Node( <http://projects.ke.appOntology#username4> )
+Node( <http://projects.ke.appOntology#vip_username2> )
+Node( <http://projects.ke.appOntology#vip_username3> )
+Node( <http://projects.ke.appOntology#username1> )
+Node( <http://projects.ke.appOntology#vip_username1> )
+
+PopularProduct (equivalent to: inverse interestedIn min 2)
+Node( <http://projects.ke.appOntology#pC0118> )
+Node( <http://projects.ke.appOntology#pC0117> )
+Node( <http://projects.ke.appOntology#pA0569> )
+Node( <http://projects.ke.appOntology#pA0568> )
+Node( <http://projects.ke.appOntology#pC0119> )
+Node( <http://projects.ke.appOntology#pB0344> )
+Node( <http://projects.ke.appOntology#pA0567> )
+Node( <http://projects.ke.appOntology#pB0343> )
+Node( <http://projects.ke.appOntology#pB0345> )
+
+PopularProductSC (equivalent to: inverse interestedIn min 2 SimpleCustomer)
+Node( <http://projects.ke.appOntology#pC0118> )
+Node( <http://projects.ke.appOntology#pC0117> )
+Node( <http://projects.ke.appOntology#pA0569> )
+Node( <http://projects.ke.appOntology#pC0119> )
+Node( <http://projects.ke.appOntology#pA0567> )
+Node( <http://projects.ke.appOntology#pB0343> )
+Node( <http://projects.ke.appOntology#pB0345> )
+
+PopularProductVC (equivalent to: inverse interestedIn min 2 VIPCustomer)
+Node( <http://projects.ke.appOntology#pC0118> )
+Node( <http://projects.ke.appOntology#pB0344> )
+Node( <http://projects.ke.appOntology#pB0343> )
+Node( <http://projects.ke.appOntology#pB0345> )
+
+inverse interestedIn some Guest
+Node( <http://projects.ke.appOntology#pC0118> )
+Node( <http://projects.ke.appOntology#pC0117> )
+Node( <http://projects.ke.appOntology#pA0569> )
+Node( <http://projects.ke.appOntology#pA0568> )
+Node( <http://projects.ke.appOntology#pB0343> )
+Node( <http://projects.ke.appOntology#pB0345> )
+*******************************************************
+Disconnected VM
+
+*** QUERY ENGINE ***
+
+Please type a class expression in Manchester Syntax and press Enter (or press x to exit):
+
+
+--------------------------------------------------------------------------------
+QUERY:   PopularProduct
+--------------------------------------------------------------------------------
+
+SuperClasses......................................
+
+	Product
+	Thing
+
+EquivalentClasses.................................
+
+	[NONE]
+
+SubClasses........................................
+
+	PopularProductSC
+	Nothing
+	PopularProductVC
+
+Instances.........................................
+
+	pC0118
+	pC0117
+	pA0569
+	pA0568
+	pC0119
+	pB0344
+	pA0567
+	pB0343
+	pB0345
+
+
+
+
+*** QUERY ENGINE ***
+
+Please type a class expression in Manchester Syntax and press Enter (or press x to exit):
+
+
+--------------------------------------------------------------------------------
+QUERY:   inverse interestedIn value username1 and inverse perc10Offer value username1
+--------------------------------------------------------------------------------
+
+SuperClasses......................................
+
+	Product
+	Thing
+
+EquivalentClasses.................................
+
+	[NONE]
+
+SubClasses........................................
+
+	Nothing
+
+Instances.........................................
+
+	pC0118
+	pC0117
+	pB0343
+
+
+
+
+*** QUERY ENGINE ***
+
+Please type a class expression in Manchester Syntax and press Enter (or press x to exit):
+
+
+--------------------------------------------------------------------------------
+QUERY:   inverse interestedIn value vip_username1 and inverse perc10Offer value vip_username1
+--------------------------------------------------------------------------------
+
+SuperClasses......................................
+
+	Product
+	Thing
+
+EquivalentClasses.................................
+
+	[NONE]
+
+SubClasses........................................
+
+	Nothing
+
+Instances.........................................
+
+	[NONE]

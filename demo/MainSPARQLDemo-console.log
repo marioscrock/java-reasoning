@@ -1,0 +1,133 @@
+For each VIPCustomer, products he's interestedIn and he can buy with a vip discount
+PREFIX ex: <http://projects.ke.appOntology#> 
+SELECT ?y ?x 
+WHERE {
+ 	?y ex:interestedIn ?x .
+ 	?y a ex:VIPCustomer .
+ 	?y ex:perc20Offer ?x .
+}
+
+Pre-reasoning model
+--------------------------------
+| y                | x         |
+================================
+| ex:vip_username3 | ex:pB0345 |
+--------------------------------
+*********************************************************
+
+
+For each Guest, prices sum for products he's interestedIn
+PREFIX ex: <http://projects.ke.appOntology#> 
+SELECT ?y (SUM(?z) AS ?totPriceInterestedIn) 
+WHERE {
+	?y a ex:Guest .
+ 	?y ex:interestedIn ?x .
+ 	?x ex:price ?z .
+}
+GROUP BY ?y
+
+Pre-reasoning model
+--------------------------------------------------------------------------
+| y                  | totPriceInterestedIn                              |
+==========================================================================
+| ex:Guest849704529  | "80.0"^^<http://www.w3.org/2001/XMLSchema#float>  |
+| ex:Guest2145714199 | "80.0"^^<http://www.w3.org/2001/XMLSchema#float>  |
+| ex:Guest690638116  | "120.0"^^<http://www.w3.org/2001/XMLSchema#float> |
+--------------------------------------------------------------------------
+*********************************************************
+
+
+For each Customer, products he's interestedIn and he can buy with a discount
+PREFIX ex: <http://projects.ke.appOntology#> 
+SELECT ?x ?y
+WHERE {
+	?x a ex:Customer .
+	?y a ex:Product .
+	?x ex:interestedIn ?y .
+	?x ex:productOnOffer ?y .
+}
+
+Pre-reasoning model
+---------
+| x | y |
+=========
+---------
+Pre-reasoning model with RDFS inference
+--------------------------------
+| x                | y         |
+================================
+| ex:username4     | ex:pA0568 |
+| ex:username4     | ex:pA0567 |
+| ex:username3     | ex:pA0568 |
+| ex:username2     | ex:pB0343 |
+| ex:username2     | ex:pC0119 |
+| ex:username1     | ex:pA0567 |
+| ex:username1     | ex:pB0345 |
+| ex:vip_username3 | ex:pA0568 |
+| ex:vip_username3 | ex:pB0345 |
+| ex:vip_username2 | ex:pB0345 |
+| ex:vip_username1 | ex:pA0569 |
+| ex:vip_username1 | ex:pC0119 |
+--------------------------------
+*********************************************************
+
+
+For each Customer, prices sum for PopularProducts he's interestedIn
+PREFIX ex: <http://projects.ke.appOntology#> 
+SELECT ?y (SUM(?z) AS ?totPriceInterestedIn) 
+WHERE {
+   ?x a ex:PopularProduct .
+	?y a ex:Customer .
+ 	?y ex:interestedIn ?x .
+ 	?x ex:price ?z .
+}
+GROUP BY ?y
+
+Pre-reasoning model
+----------------------------
+| y | totPriceInterestedIn |
+============================
+----------------------------
+Pre-reasoning model with RDFS inference
+----------------------------
+| y | totPriceInterestedIn |
+============================
+----------------------------
+Pre-reasoning model with Jena engine OWL inference
+[Cardinality restrictions supported only 0 and 1]
+----------------------------
+| y | totPriceInterestedIn |
+============================
+----------------------------
+Post-reasoning model
+------------------------------------------------------------------------
+| y                | totPriceInterestedIn                              |
+========================================================================
+| ex:username1     | "260.0"^^<http://www.w3.org/2001/XMLSchema#float> |
+| ex:username3     | "160.0"^^<http://www.w3.org/2001/XMLSchema#float> |
+| ex:username2     | "160.0"^^<http://www.w3.org/2001/XMLSchema#float> |
+| ex:vip_username1 | "200.0"^^<http://www.w3.org/2001/XMLSchema#float> |
+| ex:username4     | "160.0"^^<http://www.w3.org/2001/XMLSchema#float> |
+| ex:vip_username3 | "280.0"^^<http://www.w3.org/2001/XMLSchema#float> |
+| ex:vip_username2 | "180.0"^^<http://www.w3.org/2001/XMLSchema#float> |
+------------------------------------------------------------------------
+*********************************************************
+
+
+Check no VIPCustomer can have a perc10Offer and a perc20Offer on same product
+PREFIX ex: <http://projects.ke.appOntology#> 
+SELECT ?x 
+WHERE {
+ 	?y a ex:VIPCustomer .
+ 	?y ex:perc10Offer ?x .
+ 	?y ex:perc20Offer ?x .
+}
+
+Post-reasoning model
+-----
+| x |
+=====
+-----
+*********************************************************
+
+

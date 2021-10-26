@@ -4,7 +4,7 @@ A java project exploiting [Java Debug Interface](https://docs.oracle.com/javase/
 [OWL API](https://github.com/owlcs/owlapi) to reason on active instances of a running Java application.
 
 ## Project Goals ##
-Complex Java applications often contain a data model representing the domain they are related to. Our idea is to give to the programmer the possibility to check the java application model and the runtime evolution of its instances against an OWL2 ontology and a related knowledge base.
+Complex Java applications often contain a data model representing the domain they are related to. Our idea is to give to the programmer the possibility to check the Java application model and the runtime evolution of its instances against an OWL2 ontology and a related knowledge base.
 
 <p align="center"><img src="/docs/architecture.png" alt="Architecture" width="600"></p>
 
@@ -28,9 +28,6 @@ Given a Java application we would like to connect it to a _JKI_ component able t
 
 ### The application ###
 Given a generic Java application we would like to connect it to a _JKI_ component able to monitor it providing runtime snapshots of active instances running in the JVM. We exploit the Java Debug Interface (JDI) running the application in debug mode and connecting to it remotely through socket and ```AttachingConnector```.
-
-To run the java application in debug virtual machine it must be run with options:
-```-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=y```
 
 Through the JDI API we are able remotely to:
 * **Attach** to the Java Application listening on a given port
@@ -110,14 +107,15 @@ We can save the KB axioms (TBox, RBox, ABox) managed by the ```javareasoner``` a
   
 ## How to run the demo ##
 
-### The application ###
+### The demo applications ###
 The project contains two example application in packages ```app.artmarket``` and ```app.eshop```. For each application an ontology is described through the OWLAPI in the respective extension of ```OntologyHandler``` ( ```AMOntologyHandler``` and ```ESOntologyHandler```).
 
-The two applications are two toy example and their execution is managed respectively by ```ReasonedArtMarketMain``` and ```ReasonedEshopMain``` that must be run with above specified options to enable remote debug mode.
+The two applications are two toy examples and their execution is managed respectively by ```ReasonedArtMarketMain``` and ```ReasonedEshopMain``` that must be run in debug mode setting the following arguments for the JVM:
+```
+-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=y
+```
 
-A [document](https://github.com/marioscrock/java-reasoning/blob/master/docs/demo-docs.pdf) describing the two Java applications, the defined ontologies and the peculiarities of each demo is available in the ```docs``` folder.
-
-### Java Reasoner ###
+### The demo Java reasoner ###
 
 The ```javareasoner``` package contains the main classes of the _java-reasoner_ component. Two implementations, one for each example application can be executed respectively through the classes ```MainAM``` and ```MainES```.
 
@@ -129,13 +127,23 @@ Example reasoning routines are defined for the [```app.artmarket```](https://git
 
 **Note** The user is expected to provide inputs from the console in both running executables to enable connection and ensure debugger is ready when the application actually starts its execution.
 
-### SPARQL Engine ###
+### The SPARQL demo ###
 
 The ```sparql``` package contains the main class ```MainSPARQLDemo``` that shows (through an example KB obtained by running the EShop demo and saved in ```appOntologyES.owl``` file) the tradeoff between expressivity of queries and model/reasoning enabled.
 
-## How to connect your own application ##
+### Demo Material ###
+
+A [document](https://github.com/marioscrock/java-reasoning/blob/master/demo/demo-docs.pdf) describing the two Java applications, the defined ontologies and the peculiarities of each demo is available in the ```demo``` folder. The console logs, obtained by running the demo, is also available in the ```demo``` folder.
+
+## How to test JKI with your own application ##
 
 * Extend ```InspectToAxiom``` providing an implementation of methods as specified above.
 * Extend ```OntologyHandler``` providing a default ontology through OWLAPI overriding the ```initOntology``` method (follow the same structure of examples provided) or load your ontology from file.
 * Build a ```Main``` class for reasoning backend managing execution of ```javareasoner``` components.
 * Run your Java application in debug mode (listening for remote connection) and the *main* method of the backend.
+
+## How to cite ##
+
+If you use JKI in your work, please cite the following article:
+
+> Mario Scrocca and Riccardo Tommasini: _Towards a Knowledge Interface for Java Applications_, Proceedings of the ISWC 2021 Posters, Demos and Industry Tracks, CEUR-WS.org, [http://ceur-ws.org/Vol-2980/paper327.pdf](http://ceur-ws.org/Vol-2980/paper327.pdf), 2021.
